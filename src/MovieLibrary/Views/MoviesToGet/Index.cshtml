@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "Movies to get";
+}
+
+@model IEnumerable<MovieLibrary.Logic.Dto.ReadMovieToGetDto>
+
+<h1>Movies to get</h1>
+
+<ul>
+    @foreach (var movie in Model)
+    {
+        <li>@movie.Title</li>
+    }
+</ul>

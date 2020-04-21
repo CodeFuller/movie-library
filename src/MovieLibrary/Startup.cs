@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MovieLibrary.Logic.Extensions;
 
 namespace MovieLibrary
 {
@@ -18,6 +19,8 @@ namespace MovieLibrary
 		public static void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
+
+			services.AddBusinessLogic();
 		}
 
 		public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
