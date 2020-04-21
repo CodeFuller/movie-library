@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MovieLibrary.Logic.Dto;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Logic.Interfaces
 {
 	public interface IMoviesToGetRepository
 	{
-		Task CreateMovieToGet(CreateMovieToGetDto movieToGet, CancellationToken cancellationToken);
+		Task CreateMovieToGet(NewMovieToGetModel movieToGet, CancellationToken cancellationToken);
 
-		IAsyncEnumerable<ReadMovieToGetDto> ReadMoviesToGet(CancellationToken cancellationToken);
+		IAsyncEnumerable<MovieToGetModel> ReadMoviesToGet(CancellationToken cancellationToken);
 	}
 }

@@ -2,13 +2,22 @@
 @{
     ViewData["Title"] = "Movies to get";
 }
-
-@model IEnumerable<MovieLibrary.Logic.Dto.ReadMovieToGetDto>
+@model MovieLibrary.Logic.Models.MoviesToGetModel
 
 <h1>Movies to get</h1>
 
+<form method="post">
+    <div asp-validation-summary="All"></div>
+    <p>
+        <label asp-for="NewMovieToGet.Title">Movie title:</label>
+        <input asp-for="NewMovieToGet.Title" />
+    </p>
+
+    <button type="submit">Add</button>
+</form>
+
 <ul>
-    @foreach (var movie in Model)
+    @foreach (var movie in Model.Movies)
     {
         <li>@movie.Title</li>
     }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MovieLibrary.Logic.Dto
+namespace MovieLibrary.Logic.Models
 {
 	public class MovieId
 	{

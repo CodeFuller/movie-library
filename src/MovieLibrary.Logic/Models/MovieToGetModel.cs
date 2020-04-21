@@ -1,6 +1,6 @@
-﻿namespace MovieLibrary.Logic.Dto
+﻿namespace MovieLibrary.Logic.Models
 {
-	public class ReadMovieToGetDto
+	public class MovieToGetModel
 	{
 		public MovieId Id { get; set; }
 
