@@ -10,23 +10,24 @@ namespace MovieLibrary.Controllers
 {
 	public class MoviesToGetController : Controller
 	{
-		private readonly IMoviesToGetRepository repository;
+		private readonly IMoviesToGetService service;
 
-		public MoviesToGetController(IMoviesToGetRepository repository)
+		public MoviesToGetController(IMoviesToGetService service)
 		{
-			this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+			this.service = service ?? throw new ArgumentNullException(nameof(service));
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
-			var moviesToGet = await repository.ReadMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
+			var moviesToGet = await service.GetMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
 
 			var model = new MoviesToGetModel
 			{
 				Movies = moviesToGet.Select(m => new MovieToGetModel
 				{
-					Title = m.Title,
+					Id = m.Id,
+					MovieInfo = m.MovieInfo,
 				}).ToList(),
 			};
 
@@ -38,16 +39,21 @@ namespace MovieLibrary.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await repository.CreateMovieToGet(model.NewMovieToGet, cancellationToken);
+				var newMovieToGet = model.NewMovieToGet;
+				await service.AddMovieToGetByUrl(newMovieToGet.MovieUri, cancellationToken);
 
 				ModelState.Clear();
 			}
 
-			var moviesToGet = await repository.ReadMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
+			var moviesToGet = await service.GetMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
 
 			var outputModel = new MoviesToGetModel
 			{
-				Movies = moviesToGet,
+				Movies = moviesToGet.Select(x => new MovieToGetModel
+				{
+					Id = x.Id,
+					MovieInfo = x.MovieInfo,
+				}).ToList(),
 			};
 
 			return View(outputModel);

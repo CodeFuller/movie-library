@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MovieLibrary.Logic.Models
 {
 	public class NewMovieToGetModel
 	{
 		[Required]
-		public string Title { get; set; }
+		public Uri MovieUri { get; set; }
 	}
 }

@@ -9,8 +9,8 @@
 <form method="post">
     <div asp-validation-summary="All"></div>
     <p>
-        <label asp-for="NewMovieToGet.Title">Movie title:</label>
-        <input asp-for="NewMovieToGet.Title" />
+        <label asp-for="NewMovieToGet.MovieUri">Movie URL:</label>
+        <input asp-for="NewMovieToGet.MovieUri" />
         <button type="submit">Add</button>
     </p>
 </form>
@@ -18,6 +18,16 @@
 <ul>
     @foreach (var movie in Model.Movies)
     {
-        <li>@movie.Title</li>
+        var movieInfo = movie.MovieInfo;
+        <li>
+            <a href="@movieInfo.MovieUri">@movieInfo.Title</a>
+            <img src="@movieInfo.PosterUri" alt="Poster for movie &quot;@movieInfo.Title&quot;" width="240"/>
+            <ul>
+                @foreach (var genre in movieInfo.Genres)
+                {
+                    <li>@genre</li>
+                }
+            </ul>
+        </li>
     }
 </ul>

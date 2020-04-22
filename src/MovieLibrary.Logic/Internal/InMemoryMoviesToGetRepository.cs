@@ -1,59 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MovieLibrary.Logic.Dto;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
+using MovieLibrary.Logic.MoviesInfo;
 
 namespace MovieLibrary.Logic.Internal
 {
 	public class InMemoryMoviesToGetRepository : IMoviesToGetRepository
 	{
-		private readonly List<MovieToGetModel> movies = new List<MovieToGetModel>();
+		private readonly List<MovieToGetDto> movies = new List<MovieToGetDto>();
 
 		public InMemoryMoviesToGetRepository()
 		{
 			// Seeding some data to play with.
-			movies.Add(new MovieToGetModel
+			movies.Add(new MovieToGetDto
 			{
 				Id = new MovieId("1"),
-				Title = "Pulp Fiction",
+				MovieInfo = new MovieInfo
+				{
+					Title = "Темный рыцарь",
+					MovieUri = new Uri("https://www.kinopoisk.ru/film/111543/"),
+					PosterUri = new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_111543.jpg"),
+					Genres = new[] { "фантастика", "боевик", "триллер", },
+				},
 			});
 
-			movies.Add(new MovieToGetModel
+			movies.Add(new MovieToGetDto
 			{
 				Id = new MovieId("2"),
-				Title = "Gladiator",
+				MovieInfo = new MovieInfo
+				{
+					Title = "Гладиатор",
+					MovieUri = new Uri("https://www.kinopoisk.ru/film/474/"),
+					PosterUri = new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_474.jpg"),
+					Genres = new[] { "боевик", "история", "драма", },
+				},
 			});
 
-			movies.Add(new MovieToGetModel
+			movies.Add(new MovieToGetDto
 			{
 				Id = new MovieId("3"),
-				Title = "Snatch",
+				MovieInfo = new MovieInfo
+				{
+					Title = "Большой куш",
+					MovieUri = new Uri("https://www.kinopoisk.ru/film/342/"),
+					PosterUri = new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_526.jpg"),
+					Genres = new[] { "криминал", "комедия", "боевик", },
+				},
 			});
 		}
 
-		public Task CreateMovieToGet(NewMovieToGetModel movieToGet, CancellationToken cancellationToken)
+		public Task CreateMovieToGet(MovieToGetDto movieToGet, CancellationToken cancellationToken)
 		{
-			var movie = new MovieToGetModel
-			{
-				Id = new MovieId(Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture)),
-				Title = movieToGet.Title,
-			};
-
 			lock (movies)
 			{
-				movies.Add(movie);
+				movies.Add(movieToGet);
 			}
 
 			return Task.CompletedTask;
 		}
 
-		public IAsyncEnumerable<MovieToGetModel> ReadMoviesToGet(CancellationToken cancellationToken)
+		public IAsyncEnumerable<MovieToGetDto> ReadMoviesToGet(CancellationToken cancellationToken)
 		{
-			List<MovieToGetModel> moviesToReturn;
+			List<MovieToGetDto> moviesToReturn;
 
 			lock (movies)
 			{
