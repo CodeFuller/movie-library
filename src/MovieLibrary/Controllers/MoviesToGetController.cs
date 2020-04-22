@@ -39,6 +39,8 @@ namespace MovieLibrary.Controllers
 			if (ModelState.IsValid)
 			{
 				await repository.CreateMovieToGet(model.NewMovieToGet, cancellationToken);
+
+				ModelState.Clear();
 			}
 
 			var moviesToGet = await repository.ReadMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
