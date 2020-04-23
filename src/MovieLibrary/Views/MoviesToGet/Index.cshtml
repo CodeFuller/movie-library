@@ -1,7 +1,7 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Movies to get";
 }
+@using System.Globalization
 @model MovieLibrary.Logic.Models.MoviesToGetModel
 
 <h1>Movies to get</h1>
@@ -15,19 +15,61 @@
     </p>
 </form>
 
-<ul>
+<ul class="movies-list">
     @foreach (var movie in Model.Movies)
     {
         var movieInfo = movie.MovieInfo;
-        <li>
-            <a href="@movieInfo.MovieUri">@movieInfo.Title</a>
-            <img src="@movieInfo.PosterUri" alt="Poster for movie &quot;@movieInfo.Title&quot;" width="240"/>
-            <ul>
-                @foreach (var genre in movieInfo.Genres)
-                {
-                    <li>@genre</li>
-                }
-            </ul>
+        <li class="movie-info">
+            <img class="movie-info-poster" src="@movieInfo.PosterUri" alt="Poster for movie &quot;@movieInfo.Title&quot;" width="240"/>
+            <div class="movie-info-details">
+                <a class="movie-info-title" href="@movieInfo.MovieUri">@movieInfo.Title</a>
+                <table class="movie-info-table">
+                    <tbody>
+                        <tr>
+                            <td class="movie-info-table-key">Genres</td>
+                            <td>
+                                @{
+                                    // TBD: Avoid duplicated code
+                                    var genresList = movieInfo.Genres.ToList();
+                                    for (var i = 0; i < genresList.Count; ++i)
+                                    {
+                                        <span>@genresList[i]</span>@if (i + 1 < genresList.Count)
+                                        {<text>, </text>}
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Director</td>
+                            <td>@movieInfo.Director</td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Cast</td>
+                            <td>
+                                @{
+                                    var castList = movieInfo.Cast.ToList();
+                                    for (var i = 0; i < castList.Count; ++i)
+                                    {
+                                        <span>@castList[i]</span>@if (i + 1 < castList.Count)
+                                        {<text>, </text>}
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Rating</td>
+                            <td>@movieInfo.Rating.Value (@($"{movieInfo.Rating.VotesNumber:N0}"))</td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Duration</td>
+                            <td>@($"{movieInfo.Duration.Value.ToString("hh\\:mm", CultureInfo.InvariantCulture)}")</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    @movieInfo.Summary
+                </p>
+            </div>
         </li>
     }
 </ul>

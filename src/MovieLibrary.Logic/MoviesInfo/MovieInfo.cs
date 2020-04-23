@@ -11,6 +11,16 @@ namespace MovieLibrary.Logic.MoviesInfo
 
 		public Uri PosterUri { get; set; }
 
+		public string Director { get; set; }
+
+		public IReadOnlyCollection<string> Cast { get; set; }
+
+		public MovieRating Rating { get; set; }
+
+		public TimeSpan? Duration { get; set; }
+
 		public IReadOnlyCollection<string> Genres { get; set; }
+
+		public string Summary { get; set; }
 	}
 }
