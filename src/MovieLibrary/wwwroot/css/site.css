@@ -86,6 +86,8 @@ body {
 .movie-info-poster {
   margin-right: 12px;
   flex: none;
+
+  border-radius: 5px;
 }
 
 .movie-info-details {
