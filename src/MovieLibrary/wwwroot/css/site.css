@@ -79,6 +79,8 @@ body {
   flex-direction: row;
 
   padding: 20px;
+
+  border-bottom: 1px solid gray;
 }
 
 .movie-info-poster {
