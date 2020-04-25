@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 using Microsoft.Extensions.Logging;
 using MovieLibrary.Logic.MoviesInfo;
 
@@ -166,10 +166,15 @@ namespace MovieLibrary.Logic.Kinopoisk
 				return null;
 			}
 
-			return new StringBuilder(summary)
-				.Replace("&nbsp;", " ")
-				.Replace("<br>", "\n")
-				.ToString();
+			var htmlDoc = new HtmlDocument();
+			htmlDoc.LoadHtml(summary);
+
+			foreach (var node in htmlDoc.DocumentNode.SelectNodes("//br"))
+			{
+				node.ParentNode.ReplaceChild(htmlDoc.CreateTextNode("\n"), node);
+			}
+
+			return HtmlEntity.DeEntitize(htmlDoc.DocumentNode.InnerText);
 		}
 	}
 }
