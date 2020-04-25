@@ -28,8 +28,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 		{
 			await ProvideCookies(cancellationToken);
 
-			using var request = CreateRequest(pageUri);
-			var response = await ExecuteRequest(request, cancellationToken);
+			using var response = await ExecuteRequest(pageUri, cancellationToken);
 			var content = await response.Content.ReadAsStringAsync();
 
 			return content;
@@ -57,9 +56,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 		{
 			logger.LogInformation("Loading Kinopoisk cookies ...");
 
-			using var request = CreateRequest(new Uri("https://www.kinopoisk.ru/"));
-
-			var response = await ExecuteRequest(request, cancellationToken);
+			using var response = await ExecuteRequest(new Uri("https://www.kinopoisk.ru/"), cancellationToken);
 
 			Cookies = response.Headers
 				.Where(header => header.Key == "Set-Cookie")
@@ -67,6 +64,12 @@ namespace MovieLibrary.Logic.Kinopoisk
 				.ToList();
 
 			logger.LogInformation("Loaded Kinopoisk cookies successfully");
+		}
+
+		private async Task<HttpResponseMessage> ExecuteRequest(Uri uri, CancellationToken cancellationToken)
+		{
+			using var request = CreateRequest(uri);
+			return await ExecuteRequest(request, cancellationToken);
 		}
 
 		private HttpRequestMessage CreateRequest(Uri uri)
@@ -94,8 +97,14 @@ namespace MovieLibrary.Logic.Kinopoisk
 
 		private async Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
-			// TBD: Error handling
 			var response = await httpClient.SendAsync(request, cancellationToken);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				logger.LogWarning("HTTP request to {HttpRequestUri} has failed with code {HttpRequestStatusCode}", request.RequestUri, response.StatusCode);
+				throw new InvalidOperationException($"Request to {request.RequestUri} failed with code {response.StatusCode}");
+			}
+
 			return response;
 		}
 
