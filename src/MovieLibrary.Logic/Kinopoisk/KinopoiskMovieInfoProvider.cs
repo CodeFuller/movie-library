@@ -27,7 +27,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 
 			var htmlContent = await htmlContentProvider.GetHtmlPageContent(movieUri, cancellationToken);
 
-			var movieInfo = movieInfoParser.ParseMovieInfo(htmlContent);
+			var movieInfo = movieInfoParser.ParseMovieInfo(htmlContent, movieUri);
 
 			return movieInfo;
 		}

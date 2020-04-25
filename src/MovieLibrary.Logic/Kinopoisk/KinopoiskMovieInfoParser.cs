@@ -30,7 +30,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public MovieInfo ParseMovieInfo(string content)
+		public MovieInfo ParseMovieInfo(string content, Uri sourceUri)
 		{
 			string title = null;
 			string yearText = null;
@@ -70,7 +70,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 				posterUri = null;
 			}
 
-			return new MovieInfo
+			var movieInfo = new MovieInfo
 			{
 				Title = title,
 				Year = ParseInt(yearText, "year"),
@@ -83,6 +83,23 @@ namespace MovieLibrary.Logic.Kinopoisk
 				Genres = genres,
 				Summary = SanitizeSummary(summary),
 			};
+
+			CheckMovieInfoForRequiredData(movieInfo, sourceUri);
+
+			return movieInfo;
+		}
+
+		private static void CheckMovieInfoForRequiredData(MovieInfo movieInfo, Uri movieUri)
+		{
+			if (String.IsNullOrWhiteSpace(movieInfo.Title))
+			{
+				throw new InvalidOperationException($"Failed to parse movie title from '{movieUri}'");
+			}
+
+			if (movieInfo.MovieUri == null)
+			{
+				throw new InvalidOperationException($"Failed to parse movie URI from '{movieUri}'");
+			}
 		}
 
 		private static string ParseValue(string text, Regex regex)
