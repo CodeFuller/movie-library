@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using MovieLibrary.Logic.MoviesInfo;
 using static System.FormattableString;
 
@@ -9,6 +10,8 @@ namespace MovieLibrary.Logic.Models
 	public class MovieInfoModel
 	{
 		private const string MissingValue = "N/A";
+
+		private const int MaxCollectionLength = 3;
 
 		private readonly MovieInfo movieInfo;
 
@@ -22,7 +25,7 @@ namespace MovieLibrary.Logic.Models
 
 		public IReadOnlyCollection<string> Directors => GetSafeCollection(movieInfo.Directors);
 
-		public IReadOnlyCollection<string> Cast => GetSafeCollection(movieInfo.Directors);
+		public IReadOnlyCollection<string> Cast => GetSafeCollection(movieInfo.Cast);
 
 		public string Rating
 		{
@@ -42,7 +45,7 @@ namespace MovieLibrary.Logic.Models
 
 		public string Duration => movieInfo.Duration == null ? MissingValue : Invariant($"{movieInfo.Duration.Value.ToString("hh\\:mm", CultureInfo.InvariantCulture)}");
 
-		public IReadOnlyCollection<string> Genres => GetSafeCollection(movieInfo.Directors);
+		public IReadOnlyCollection<string> Genres => GetSafeCollection(movieInfo.Genres);
 
 		public string Summary => movieInfo.Summary ?? String.Empty;
 
@@ -53,7 +56,7 @@ namespace MovieLibrary.Logic.Models
 
 		private static IReadOnlyCollection<string> GetSafeCollection(IReadOnlyCollection<string> source)
 		{
-			return source ?? new[] { MissingValue };
+			return source?.Take(MaxCollectionLength).ToArray() ?? new[] { MissingValue };
 		}
 	}
 }
