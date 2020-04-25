@@ -2,13 +2,32 @@
     ViewData["Title"] = "Movies to get";
 }
 
+@using System.Text
 @model MovieLibrary.Logic.Models.MoviesToGetModel
 
 @functions
 {
-    static string GetSafePosterUri(Uri sourceUri)
+    private static string GetSafePosterUri(Uri sourceUri)
     {
         return sourceUri?.OriginalString ?? "/img/no-poster.jpg";
+    }
+
+    private static string FormatCollection(IEnumerable<string> source)
+    {
+        var outputBuilder = new StringBuilder();
+
+        var list = source.ToList();
+        for (var i = 0; i < list.Count; ++i)
+        {
+            outputBuilder.Append($"<span>{list[i]}</span>");
+
+            if (i + 1 < list.Count)
+            {
+                outputBuilder.Append(", ");
+            }
+        }
+
+        return outputBuilder.ToString();
     }
 }
 
@@ -39,44 +58,15 @@
                         </tr>
                         <tr>
                             <td class="movie-info-table-key">Genres</td>
-                            <td>
-                                @{
-                                    // TBD: Avoid duplicated code
-                                    var genresList = movieInfo.Genres.ToList();
-                                    for (var i = 0; i < genresList.Count; ++i)
-                                    {
-                                        <span>@genresList[i]</span>@if (i + 1 < genresList.Count)
-                                        {<text>, </text>}
-                                    }
-                                }
-                            </td>
+                            <td>@Html.Raw(FormatCollection(movieInfo.Genres))</td>
                         </tr>
                         <tr>
                             <td class="movie-info-table-key">Director</td>
-                            <td>
-                                @{
-                                    // TBD: Avoid duplicated code
-                                    var directorsList = movieInfo.Directors.ToList();
-                                    for (var i = 0; i < directorsList.Count; ++i)
-                                    {
-                                        <span>@directorsList[i]</span>@if (i + 1 < directorsList.Count)
-                                        {<text>, </text>}
-                                    }
-                                }
-                            </td>
+                            <td>@Html.Raw(FormatCollection(movieInfo.Directors))</td>
                         </tr>
                         <tr>
                             <td class="movie-info-table-key">Cast</td>
-                            <td>
-                                @{
-                                    var castList = movieInfo.Cast.ToList();
-                                    for (var i = 0; i < castList.Count; ++i)
-                                    {
-                                        <span>@castList[i]</span>@if (i + 1 < castList.Count)
-                                        {<text>, </text>}
-                                    }
-                                }
-                            </td>
+                            <td>@Html.Raw(FormatCollection(movieInfo.Cast))</td>
                         </tr>
                         <tr>
                             <td class="movie-info-table-key">Rating</td>
