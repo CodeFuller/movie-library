@@ -24,11 +24,7 @@ namespace MovieLibrary.Controllers
 
 			var model = new MoviesToGetModel
 			{
-				Movies = moviesToGet.Select(m => new MovieToGetModel
-				{
-					Id = m.Id,
-					MovieInfo = m.MovieInfo,
-				}).ToList(),
+				Movies = moviesToGet.Select(m => new MovieToGetModel(m.Id, m.MovieInfo)).ToList(),
 			};
 
 			return View(model);
@@ -49,11 +45,7 @@ namespace MovieLibrary.Controllers
 
 			var outputModel = new MoviesToGetModel
 			{
-				Movies = moviesToGet.Select(x => new MovieToGetModel
-				{
-					Id = x.Id,
-					MovieInfo = x.MovieInfo,
-				}).ToList(),
+				Movies = moviesToGet.Select(m => new MovieToGetModel(m.Id, m.MovieInfo)).ToList(),
 			};
 
 			return View(outputModel);

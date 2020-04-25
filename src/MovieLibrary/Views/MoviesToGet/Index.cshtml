@@ -1,8 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Movies to get";
 }
-@using System.Globalization
+
 @model MovieLibrary.Logic.Models.MoviesToGetModel
+
+@functions
+{
+    static string GetSafePosterUri(Uri sourceUri)
+    {
+        return sourceUri?.OriginalString ?? "/img/no-poster.jpg";
+    }
+}
 
 <h1>Movies to get</h1>
 
@@ -20,14 +28,14 @@
     {
         var movieInfo = movie.MovieInfo;
         <li class="movie-info">
-            <img class="movie-info-poster" src="@movieInfo.PosterUri" alt="Poster for movie &quot;@movieInfo.Title&quot;" width="240"/>
+            <img class="movie-info-poster" src="@GetSafePosterUri(movieInfo.PosterUri)" alt="Poster for movie &quot;@movieInfo.Title&quot;" width="240" />
             <div class="movie-info-details">
                 <a class="movie-info-title" href="@movieInfo.MovieUri">@movieInfo.Title</a>
                 <table class="movie-info-table">
                     <tbody>
                         <tr>
                             <td class="movie-info-table-key">Year</td>
-                            <td>@movieInfo.Year.Value</td>
+                            <td>@movieInfo.Year</td>
                         </tr>
                         <tr>
                             <td class="movie-info-table-key">Genres</td>
@@ -72,11 +80,11 @@
                         </tr>
                         <tr>
                             <td class="movie-info-table-key">Rating</td>
-                            <td>@movieInfo.Rating.Value (@($"{movieInfo.Rating.VotesNumber:N0}"))</td>
+                            <td>@movieInfo.Rating</td>
                         </tr>
                         <tr>
                             <td class="movie-info-table-key">Duration</td>
-                            <td>@($"{movieInfo.Duration.Value.ToString("hh\\:mm", CultureInfo.InvariantCulture)}")</td>
+                            <td>@movieInfo.Duration</td>
                         </tr>
                     </tbody>
                 </table>

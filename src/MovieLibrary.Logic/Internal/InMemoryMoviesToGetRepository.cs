@@ -76,6 +76,16 @@ namespace MovieLibrary.Logic.Internal
 					          "В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй рассказывается о боксёре Бутче Кулидже, купленном Уоллесом, чтобы сдать бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.",
 				},
 			});
+
+			movies.Add(new MovieToGetDto
+			{
+				Id = new MovieId("4"),
+				MovieInfo = new MovieInfo
+				{
+					Title = "Film with no data",
+					MovieUri = new Uri("https://www.kinopoisk.ru/film/1/"),
+				},
+			});
 		}
 
 		public Task CreateMovieToGet(MovieToGetDto movieToGet, CancellationToken cancellationToken)
