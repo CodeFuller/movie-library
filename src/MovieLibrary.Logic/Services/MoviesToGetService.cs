@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MovieLibrary.Logic.Dto;
 using MovieLibrary.Logic.Interfaces;
-using MovieLibrary.Logic.MoviesInfo;
 
 namespace MovieLibrary.Logic.Services
 {

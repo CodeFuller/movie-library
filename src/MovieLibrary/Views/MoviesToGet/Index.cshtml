@@ -26,6 +26,10 @@
                 <table class="movie-info-table">
                     <tbody>
                         <tr>
+                            <td class="movie-info-table-key">Year</td>
+                            <td>@movieInfo.Year.Value</td>
+                        </tr>
+                        <tr>
                             <td class="movie-info-table-key">Genres</td>
                             <td>
                                 @{
@@ -41,7 +45,17 @@
                         </tr>
                         <tr>
                             <td class="movie-info-table-key">Director</td>
-                            <td>@movieInfo.Director</td>
+                            <td>
+                                @{
+                                    // TBD: Avoid duplicated code
+                                    var directorsList = movieInfo.Directors.ToList();
+                                    for (var i = 0; i < directorsList.Count; ++i)
+                                    {
+                                        <span>@directorsList[i]</span>@if (i + 1 < directorsList.Count)
+                                        {<text>, </text>}
+                                    }
+                                }
+                            </td>
                         </tr>
                         <tr>
                             <td class="movie-info-table-key">Cast</td>

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MovieLibrary.Logic.MoviesInfo;
 
-namespace MovieLibrary.Logic.MoviesInfo
+namespace MovieLibrary.Logic.Interfaces
 {
 	internal interface IMovieInfoProvider
 	{

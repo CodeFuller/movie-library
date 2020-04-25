@@ -23,9 +23,10 @@ namespace MovieLibrary.Logic.Internal
 				MovieInfo = new MovieInfo
 				{
 					Title = "Темный рыцарь",
+					Year = 2008,
 					MovieUri = new Uri("https://www.kinopoisk.ru/film/111543/"),
 					PosterUri = new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_111543.jpg"),
-					Director = "Кристофер Нолан",
+					Directors = new[] { "Кристофер Нолан" },
 					Cast = new[] { "Кристиан Бэйл", "Хит Леджер", "Аарон Экхарт", },
 					Rating = new MovieRating(8.499M, 463508),
 					Duration = TimeSpan.FromMinutes(152),
@@ -40,9 +41,10 @@ namespace MovieLibrary.Logic.Internal
 				MovieInfo = new MovieInfo
 				{
 					Title = "Гладиатор",
+					Year = 2000,
 					MovieUri = new Uri("https://www.kinopoisk.ru/film/474/"),
 					PosterUri = new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_474.jpg"),
-					Director = "Ридли Скотт",
+					Directors = new[] { "Ридли Скотт" },
 					Cast = new[] { "Рассел Кроу", "Хоакин Феникс", "Конни Нильсен", },
 					Rating = new MovieRating(8.576M, 378263),
 					Duration = TimeSpan.FromMinutes(155),
@@ -60,14 +62,15 @@ namespace MovieLibrary.Logic.Internal
 				Id = new MovieId("3"),
 				MovieInfo = new MovieInfo
 				{
-					Title = "Большой куш",
+					Title = "Криминальное чтиво",
+					Year = 1994,
 					MovieUri = new Uri("https://www.kinopoisk.ru/film/342/"),
-					PosterUri = new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_526.jpg"),
-					Director = "Квентин Тарантино",
+					PosterUri = new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_342.jpg"),
+					Directors = new[] { "Квентин Тарантино" },
 					Cast = new[] { "Джон Траволта", "Сэмюэл Л. Джексон", "Брюс Уиллис", },
 					Rating = new MovieRating(8.619M, 439744),
 					Duration = TimeSpan.FromMinutes(154),
-					Genres = new[] { "криминал", "комедия", "боевик", },
+					Genres = new[] { "триллер", "комедия", "криминал", },
 					Summary = "Двое бандитов Винсент Вега и Джулс Винфилд ведут философские беседы в перерывах между разборками и решением проблем с должниками криминального босса Марселласа Уоллеса.\n\n"
 					          +
 					          "В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй рассказывается о боксёре Бутче Кулидже, купленном Уоллесом, чтобы сдать бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.",

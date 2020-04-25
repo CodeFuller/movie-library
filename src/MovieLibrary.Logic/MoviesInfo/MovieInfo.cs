@@ -7,11 +7,13 @@ namespace MovieLibrary.Logic.MoviesInfo
 	{
 		public string Title { get; set; }
 
+		public int? Year { get; set; }
+
 		public Uri MovieUri { get; set; }
 
 		public Uri PosterUri { get; set; }
 
-		public string Director { get; set; }
+		public IReadOnlyCollection<string> Directors { get; set; }
 
 		public IReadOnlyCollection<string> Cast { get; set; }
 

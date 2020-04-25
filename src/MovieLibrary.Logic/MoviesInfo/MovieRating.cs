@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MovieLibrary.Logic.MoviesInfo
+﻿namespace MovieLibrary.Logic.MoviesInfo
 {
 	public class MovieRating
 	{
