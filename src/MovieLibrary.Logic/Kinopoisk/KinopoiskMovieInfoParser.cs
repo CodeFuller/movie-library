@@ -65,6 +65,11 @@ namespace MovieLibrary.Logic.Kinopoisk
 				summary ??= ParseValue(line, SummaryRegex);
 			}
 
+			if (String.Equals(posterUri, "https://st.kp.yandex.net/images/movies/poster_none.png", StringComparison.Ordinal))
+			{
+				posterUri = null;
+			}
+
 			return new MovieInfo
 			{
 				Title = title,
@@ -154,8 +159,13 @@ namespace MovieLibrary.Logic.Kinopoisk
 			return duration != null ? TimeSpan.FromMinutes(duration.Value) : (TimeSpan?)null;
 		}
 
-		private string SanitizeSummary(string summary)
+		private static string SanitizeSummary(string summary)
 		{
+			if (String.IsNullOrWhiteSpace(summary))
+			{
+				return null;
+			}
+
 			return new StringBuilder(summary)
 				.Replace("&nbsp;", " ")
 				.Replace("<br>", "\n")

@@ -1,27 +1,39 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Kinopoisk;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 {
 	[TestClass]
 	public class KinopoiskMovieInfoProviderTests
 	{
-		[TestMethod]
-		public async Task GetMovieInfo_LoadsMovieInfoCorrectly()
+		// Reusing target instance so that cookies are loaded once by KinopoiskHtmlContentProvider.
+		// Using static because MSTest creates new instance of test class for each test method.
+		private static IMovieInfoProvider target;
+
+		public KinopoiskMovieInfoProviderTests()
 		{
-			// Arrange
+			if (target != null)
+			{
+				return;
+			}
 
 			var services = new ServiceCollection();
 			services.AddKinopoiskMovieInfoProvider();
-			await using var serviceProvider = services.BuildServiceProvider();
+			var serviceProvider = services.BuildServiceProvider();
 
-			var target = serviceProvider.GetRequiredService<IMovieInfoProvider>();
+			target = serviceProvider.GetRequiredService<IMovieInfoProvider>();
+		}
+
+		[TestMethod]
+		public async Task GetMovieInfo_AllPropertiesFilled_LoadsMovieInfoCorrectly()
+		{
+			// Arrange
 
 			// Act
 
@@ -57,6 +69,24 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 				"В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй рассказывается о боксёре Бутче Кулидже, купленном Уоллесом, чтобы сдать бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.";
 
 			Assert.AreEqual(expectedSummary, movieInfo.Summary);
+		}
+
+		[TestMethod]
+		public async Task GetMovieInfo_SomePropertiesMissing_LoadsMovieInfoCorrectly()
+		{
+			// Arrange
+
+			// Act
+
+			var movieInfo = await target.GetMovieInfo(new Uri("https://www.kinopoisk.ru/film/1359229/"), CancellationToken.None);
+
+			// Assert
+
+			Assert.IsNull(movieInfo.PosterUri);
+			Assert.IsNull(movieInfo.Directors);
+			Assert.IsNull(movieInfo.Rating);
+			Assert.IsNull(movieInfo.Duration);
+			Assert.IsNull(movieInfo.Summary);
 		}
 	}
 }
