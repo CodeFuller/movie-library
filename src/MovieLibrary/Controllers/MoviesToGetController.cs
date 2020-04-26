@@ -41,6 +41,19 @@ namespace MovieLibrary.Controllers
 			return View(outputModel);
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> MoveToMoviesToSee(string id, CancellationToken cancellationToken)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+			var movieId = new MovieId(id);
+
+			await service.MoveToMoviesToSee(movieId, cancellationToken);
+
+			var model = await GetMoviesToGet(cancellationToken);
+
+			return View("Index", model);
+		}
+
 		private async Task<MoviesToGetModel> GetMoviesToGet(CancellationToken cancellationToken)
 		{
 			var moviesToGet = await service.GetMoviesToGet(cancellationToken).ToListAsync(cancellationToken);

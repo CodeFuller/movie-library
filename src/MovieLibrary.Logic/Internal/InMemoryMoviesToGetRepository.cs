@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MovieLibrary.Logic.Dto;
+using MovieLibrary.Logic.Exceptions;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
 using MovieLibrary.Logic.MoviesInfo;
@@ -14,8 +15,12 @@ namespace MovieLibrary.Logic.Internal
 	{
 		private readonly List<MovieToGetDto> movies = new List<MovieToGetDto>();
 
-		public InMemoryMoviesToGetRepository()
+		private readonly IMoviesToSeeRepository moviesToSeeRepository;
+
+		public InMemoryMoviesToGetRepository(IMoviesToSeeRepository moviesToSeeRepository)
 		{
+			this.moviesToSeeRepository = moviesToSeeRepository ?? throw new ArgumentNullException(nameof(moviesToSeeRepository));
+
 			// Seeding some data to play with.
 			movies.Add(new MovieToGetDto
 			{
@@ -108,6 +113,30 @@ namespace MovieLibrary.Logic.Internal
 			}
 
 			return moviesToReturn.ToAsyncEnumerable();
+		}
+
+		public async Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken)
+		{
+			MovieToSeeDto movieToSeeDto;
+
+			lock (movies)
+			{
+				var movie = movies.FirstOrDefault(m => m.Id == movieId);
+				if (movie == null)
+				{
+					throw new NotFoundException($"The movie with id {movieId} was not found among movies to get");
+				}
+
+				movieToSeeDto = new MovieToSeeDto
+				{
+					Id = movieId,
+					MovieInfo = movie.MovieInfo,
+				};
+
+				movies.Remove(movie);
+			}
+
+			await moviesToSeeRepository.CreateMovieToSee(movieToSeeDto, cancellationToken);
 		}
 	}
 }

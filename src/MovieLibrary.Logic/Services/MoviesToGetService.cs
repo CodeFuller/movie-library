@@ -39,5 +39,10 @@ namespace MovieLibrary.Logic.Services
 				.ReadMoviesToGet(cancellationToken)
 				.Select(m => new MovieToGetModel(m.Id, m.MovieInfo));
 		}
+
+		public Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken)
+		{
+			return repository.MoveToMoviesToSee(movieId, cancellationToken);
+		}
 	}
 }

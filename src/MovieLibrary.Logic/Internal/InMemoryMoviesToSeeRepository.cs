@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using MovieLibrary.Logic.Dto;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
@@ -54,6 +55,16 @@ namespace MovieLibrary.Logic.Internal
 							  "Очнувшись, Уотни обнаруживает, что связь с Землёй отсутствует, но при этом полностью функционирует жилой модуль. Главный герой начинает искать способ продержаться на имеющихся запасах еды, витаминов, воды и воздуха ещё 4 года до прилёта следующей миссии «Арес-4».\n\n",
 				},
 			});
+		}
+
+		public Task CreateMovieToSee(MovieToSeeDto movieToSee, CancellationToken cancellationToken)
+		{
+			lock (movies)
+			{
+				movies.Add(movieToSee);
+			}
+
+			return Task.CompletedTask;
 		}
 
 		public IAsyncEnumerable<MovieToSeeDto> ReadMoviesToSee(CancellationToken cancellationToken)

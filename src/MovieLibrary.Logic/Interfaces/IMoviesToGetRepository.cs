@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MovieLibrary.Logic.Dto;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Logic.Interfaces
 {
@@ -10,5 +11,7 @@ namespace MovieLibrary.Logic.Interfaces
 		Task CreateMovieToGet(MovieToGetDto movieToGet, CancellationToken cancellationToken);
 
 		IAsyncEnumerable<MovieToGetDto> ReadMoviesToGet(CancellationToken cancellationToken);
+
+		Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken);
 	}
 }

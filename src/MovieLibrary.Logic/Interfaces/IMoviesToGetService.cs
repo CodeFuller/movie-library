@@ -11,5 +11,7 @@ namespace MovieLibrary.Logic.Interfaces
 		Task AddMovieToGetByUrl(Uri movieUri, CancellationToken cancellationToken);
 
 		IAsyncEnumerable<MovieToGetModel> GetMoviesToGet(CancellationToken cancellationToken);
+
+		Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken);
 	}
 }

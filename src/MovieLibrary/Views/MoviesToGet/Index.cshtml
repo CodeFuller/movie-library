@@ -82,6 +82,9 @@
                     @movieInfo.Summary
                 </p>
             </div>
+            <div class="movie-actions">
+                <a asp-controller="MoviesToGet" asp-action="MoveToMoviesToSee" asp-route-id="@movie.Id.Value">To See</a>
+            </div>
         </li>
     }
 </ul>
