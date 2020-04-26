@@ -10,8 +10,10 @@ namespace MovieLibrary.Logic.Interfaces
 	{
 		Task CreateMovieToGet(MovieToGetDto movieToGet, CancellationToken cancellationToken);
 
-		IAsyncEnumerable<MovieToGetDto> ReadMoviesToGet(CancellationToken cancellationToken);
+		IAsyncEnumerable<MovieToGetDto> ReadAllMoviesToGet(CancellationToken cancellationToken);
 
-		Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken);
+		Task<MovieToGetDto> ReadMovieToGet(MovieId movieId, CancellationToken cancellationToken);
+
+		Task DeleteMovie(MovieId movieId, CancellationToken cancellationToken);
 	}
 }

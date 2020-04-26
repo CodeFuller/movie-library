@@ -18,6 +18,8 @@ namespace MovieLibrary.Logic.Extensions
 
 			services.AddKinopoiskMovieInfoProvider();
 
+			services.AddSingleton<IClock, Clock>();
+
 			return services;
 		}
 	}

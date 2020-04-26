@@ -13,12 +13,18 @@ namespace MovieLibrary.Logic.Services
 	{
 		private readonly IMovieInfoProvider movieInfoProvider;
 
-		private readonly IMoviesToGetRepository repository;
+		private readonly IMoviesToGetRepository moviesToGetRepository;
 
-		public MoviesToGetService(IMovieInfoProvider movieInfoProvider, IMoviesToGetRepository repository)
+		private readonly IMoviesToSeeRepository moviesToSeeRepository;
+
+		private readonly IClock clock;
+
+		public MoviesToGetService(IMovieInfoProvider movieInfoProvider, IMoviesToGetRepository moviesToGetRepository, IMoviesToSeeRepository moviesToSeeRepository, IClock clock)
 		{
 			this.movieInfoProvider = movieInfoProvider ?? throw new ArgumentNullException(nameof(movieInfoProvider));
-			this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+			this.moviesToGetRepository = moviesToGetRepository ?? throw new ArgumentNullException(nameof(moviesToGetRepository));
+			this.moviesToSeeRepository = moviesToSeeRepository ?? throw new ArgumentNullException(nameof(moviesToSeeRepository));
+			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 		}
 
 		public async Task AddMovieToGetByUrl(Uri movieUri, CancellationToken cancellationToken)
@@ -27,22 +33,35 @@ namespace MovieLibrary.Logic.Services
 
 			var movieToGet = new MovieToGetDto
 			{
+				TimestampOfAddingToGetList = clock.Now,
 				MovieInfo = movieInfo,
 			};
 
-			await repository.CreateMovieToGet(movieToGet, cancellationToken);
+			await moviesToGetRepository.CreateMovieToGet(movieToGet, cancellationToken);
 		}
 
 		public IAsyncEnumerable<MovieToGetModel> ReadMoviesToGet(CancellationToken cancellationToken)
 		{
-			return repository
-				.ReadMoviesToGet(cancellationToken)
-				.Select(m => new MovieToGetModel(m.Id, m.MovieInfo));
+			return moviesToGetRepository
+				.ReadAllMoviesToGet(cancellationToken)
+				.Select(m => new MovieToGetModel(m.Id, m.TimestampOfAddingToGetList, m.MovieInfo))
+				.OrderBy(m => m.TimestampOfAddingToGetList);
 		}
 
-		public Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken)
+		public async Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken)
 		{
-			return repository.MoveToMoviesToSee(movieId, cancellationToken);
+			var movieToGet = await moviesToGetRepository.ReadMovieToGet(movieId, cancellationToken);
+
+			var movieToSee = new MovieToSeeDto
+			{
+				Id = movieId,
+				TimestampOfAddingToSeeList = clock.Now,
+				MovieInfo = movieToGet.MovieInfo,
+			};
+
+			await moviesToSeeRepository.CreateMovieToSee(movieToSee, cancellationToken);
+
+			await moviesToGetRepository.DeleteMovie(movieId, cancellationToken);
 		}
 	}
 }

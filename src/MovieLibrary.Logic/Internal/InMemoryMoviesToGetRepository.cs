@@ -15,16 +15,13 @@ namespace MovieLibrary.Logic.Internal
 	{
 		private readonly List<MovieToGetDto> movies = new List<MovieToGetDto>();
 
-		private readonly IMoviesToSeeRepository moviesToSeeRepository;
-
-		public InMemoryMoviesToGetRepository(IMoviesToSeeRepository moviesToSeeRepository)
+		public InMemoryMoviesToGetRepository()
 		{
-			this.moviesToSeeRepository = moviesToSeeRepository ?? throw new ArgumentNullException(nameof(moviesToSeeRepository));
-
 			// Seeding some data to play with.
 			movies.Add(new MovieToGetDto
 			{
 				Id = new MovieId("1"),
+				TimestampOfAddingToGetList = new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)),
 				MovieInfo = new MovieInfo
 				{
 					Title = "Темный рыцарь",
@@ -43,6 +40,7 @@ namespace MovieLibrary.Logic.Internal
 			movies.Add(new MovieToGetDto
 			{
 				Id = new MovieId("2"),
+				TimestampOfAddingToGetList = new DateTimeOffset(2019, 11, 28, 19, 23, 12, TimeSpan.FromHours(3)),
 				MovieInfo = new MovieInfo
 				{
 					Title = "Гладиатор",
@@ -65,6 +63,7 @@ namespace MovieLibrary.Logic.Internal
 			movies.Add(new MovieToGetDto
 			{
 				Id = new MovieId("3"),
+				TimestampOfAddingToGetList = new DateTimeOffset(2020, 04, 03, 08, 12, 23, TimeSpan.FromHours(3)),
 				MovieInfo = new MovieInfo
 				{
 					Title = "Криминальное чтиво",
@@ -85,6 +84,7 @@ namespace MovieLibrary.Logic.Internal
 			movies.Add(new MovieToGetDto
 			{
 				Id = new MovieId("4"),
+				TimestampOfAddingToGetList = new DateTimeOffset(2020, 04, 26, 13, 06, 22, TimeSpan.FromHours(3)),
 				MovieInfo = new MovieInfo
 				{
 					Title = "Film with no data",
@@ -103,7 +103,7 @@ namespace MovieLibrary.Logic.Internal
 			return Task.CompletedTask;
 		}
 
-		public IAsyncEnumerable<MovieToGetDto> ReadMoviesToGet(CancellationToken cancellationToken)
+		public IAsyncEnumerable<MovieToGetDto> ReadAllMoviesToGet(CancellationToken cancellationToken)
 		{
 			List<MovieToGetDto> moviesToReturn;
 
@@ -115,28 +115,35 @@ namespace MovieLibrary.Logic.Internal
 			return moviesToReturn.ToAsyncEnumerable();
 		}
 
-		public async Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken)
+		public Task<MovieToGetDto> ReadMovieToGet(MovieId movieId, CancellationToken cancellationToken)
 		{
-			MovieToSeeDto movieToSeeDto;
-
 			lock (movies)
 			{
-				var movie = movies.FirstOrDefault(m => m.Id == movieId);
-				if (movie == null)
-				{
-					throw new NotFoundException($"The movie with id {movieId} was not found among movies to get");
-				}
+				var movie = FindMovie(movieId);
+				return Task.FromResult(movie);
+			}
+		}
 
-				movieToSeeDto = new MovieToSeeDto
-				{
-					Id = movieId,
-					MovieInfo = movie.MovieInfo,
-				};
-
+		public Task DeleteMovie(MovieId movieId, CancellationToken cancellationToken)
+		{
+			lock (movies)
+			{
+				var movie = FindMovie(movieId);
 				movies.Remove(movie);
 			}
 
-			await moviesToSeeRepository.CreateMovieToSee(movieToSeeDto, cancellationToken);
+			return Task.CompletedTask;
+		}
+
+		private MovieToGetDto FindMovie(MovieId movieId)
+		{
+			var movie = movies.FirstOrDefault(m => m.Id == movieId);
+			if (movie == null)
+			{
+				throw new NotFoundException($"The movie with id {movieId} was not found among movies to get");
+			}
+
+			return movie;
 		}
 	}
 }

@@ -7,11 +7,14 @@ namespace MovieLibrary.Logic.Models
 	{
 		public MovieId Id { get; }
 
+		public DateTimeOffset TimestampOfAddingToGetList { get; set; }
+
 		public MovieInfoModel MovieInfo { get; }
 
-		public MovieToGetModel(MovieId id, MovieInfo movieInfo)
+		public MovieToGetModel(MovieId id, DateTimeOffset timestampOfAdding, MovieInfo movieInfo)
 		{
 			Id = id ?? throw new ArgumentNullException(nameof(id));
+			TimestampOfAddingToGetList = timestampOfAdding;
 			MovieInfo = new MovieInfoModel(movieInfo);
 		}
 	}

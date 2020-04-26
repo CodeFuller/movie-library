@@ -20,7 +20,8 @@ namespace MovieLibrary.Logic.Services
 		{
 			return repository
 				.ReadMoviesToSee(cancellationToken)
-				.Select(m => new MovieToSeeModel(m.Id, m.MovieInfo));
+				.Select(m => new MovieToSeeModel(m.Id, m.TimestampOfAddingToSeeList, m.MovieInfo))
+				.OrderBy(m => m.TimestampOfAddingToSeeList);
 		}
 	}
 }

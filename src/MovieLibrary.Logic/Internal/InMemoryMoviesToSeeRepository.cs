@@ -19,6 +19,7 @@ namespace MovieLibrary.Logic.Internal
 			movies.Add(new MovieToSeeDto
 			{
 				Id = new MovieId("11"),
+				TimestampOfAddingToSeeList = new DateTimeOffset(2019, 10, 23, 06, 31, 28, TimeSpan.FromHours(3)),
 				MovieInfo = new MovieInfo
 				{
 					Title = "Большой куш",
@@ -39,6 +40,7 @@ namespace MovieLibrary.Logic.Internal
 			movies.Add(new MovieToSeeDto
 			{
 				Id = new MovieId("12"),
+				TimestampOfAddingToSeeList = new DateTimeOffset(2019, 04, 30, 12, 15, 47, TimeSpan.FromHours(3)),
 				MovieInfo = new MovieInfo
 				{
 					Title = "Марсианин",
