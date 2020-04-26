@@ -33,7 +33,7 @@ namespace MovieLibrary.Logic.Services
 			await repository.CreateMovieToGet(movieToGet, cancellationToken);
 		}
 
-		public IAsyncEnumerable<MovieToGetModel> GetMoviesToGet(CancellationToken cancellationToken)
+		public IAsyncEnumerable<MovieToGetModel> ReadMoviesToGet(CancellationToken cancellationToken)
 		{
 			return repository
 				.ReadMoviesToGet(cancellationToken)

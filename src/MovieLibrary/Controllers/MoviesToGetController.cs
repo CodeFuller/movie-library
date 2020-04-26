@@ -20,7 +20,7 @@ namespace MovieLibrary.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
-			var model = await GetMoviesToGet(cancellationToken);
+			var model = await ReadMoviesToGet(cancellationToken);
 
 			return View(model);
 		}
@@ -36,7 +36,7 @@ namespace MovieLibrary.Controllers
 				ModelState.Clear();
 			}
 
-			var outputModel = await GetMoviesToGet(cancellationToken);
+			var outputModel = await ReadMoviesToGet(cancellationToken);
 
 			return View(outputModel);
 		}
@@ -49,14 +49,14 @@ namespace MovieLibrary.Controllers
 
 			await service.MoveToMoviesToSee(movieId, cancellationToken);
 
-			var model = await GetMoviesToGet(cancellationToken);
+			var model = await ReadMoviesToGet(cancellationToken);
 
 			return View("Index", model);
 		}
 
-		private async Task<MoviesToGetModel> GetMoviesToGet(CancellationToken cancellationToken)
+		private async Task<MoviesToGetModel> ReadMoviesToGet(CancellationToken cancellationToken)
 		{
-			var moviesToGet = await service.GetMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
+			var moviesToGet = await service.ReadMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
 
 			return new MoviesToGetModel
 			{
