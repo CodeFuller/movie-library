@@ -11,8 +11,10 @@ namespace MovieLibrary.Logic.Extensions
 		public static IServiceCollection AddBusinessLogic(this IServiceCollection services)
 		{
 			services.AddSingleton<IMoviesToGetService, MoviesToGetService>();
+			services.AddSingleton<IMoviesToSeeService, MoviesToSeeService>();
 
 			services.AddSingleton<IMoviesToGetRepository, InMemoryMoviesToGetRepository>();
+			services.AddSingleton<IMoviesToSeeRepository, InMemoryMoviesToSeeRepository>();
 
 			services.AddKinopoiskMovieInfoProvider();
 

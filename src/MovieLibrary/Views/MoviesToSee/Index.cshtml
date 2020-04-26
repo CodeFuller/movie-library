@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Movies to see";
+}
+
+@using System.Text
+@model MovieLibrary.Logic.Models.MoviesToSeeModel
+
+@functions
+{
+    private static string GetSafePosterUri(Uri sourceUri)
+    {
+        return sourceUri?.OriginalString ?? "/img/no-poster.jpg";
+    }
+
+    private static string FormatCollection(IEnumerable<string> source)
+    {
+        var outputBuilder = new StringBuilder();
+
+        var list = source.ToList();
+        for (var i = 0; i < list.Count; ++i)
+        {
+            outputBuilder.Append($"<span>{list[i]}</span>");
+
+            if (i + 1 < list.Count)
+            {
+                outputBuilder.Append(", ");
+            }
+        }
+
+        return outputBuilder.ToString();
+    }
+}
+
+<h1>Movies to see</h1>
+
+<ul class="movies-list">
+    @foreach (var movie in Model.Movies)
+    {
+        var movieInfo = movie.MovieInfo;
+        <li class="movie-info">
+            <img class="movie-info-poster" src="@GetSafePosterUri(movieInfo.PosterUri)" alt="Poster for movie &quot;@movieInfo.Title&quot;" width="240" />
+            <div class="movie-info-details">
+                <a class="movie-info-title" href="@movieInfo.MovieUri">@movieInfo.Title</a>
+                <table class="movie-info-table">
+                    <tbody>
+                        <tr>
+                            <td class="movie-info-table-key">Year</td>
+                            <td>@movieInfo.Year</td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Genres</td>
+                            <td>@Html.Raw(FormatCollection(movieInfo.Genres))</td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Director</td>
+                            <td>@Html.Raw(FormatCollection(movieInfo.Directors))</td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Cast</td>
+                            <td>@Html.Raw(FormatCollection(movieInfo.Cast))</td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Rating</td>
+                            <td>@movieInfo.Rating</td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Duration</td>
+                            <td>@movieInfo.Duration</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="movie-info-summary">
+                    @movieInfo.Summary
+                </p>
+            </div>
+        </li>
+    }
+</ul>

@@ -10,7 +10,7 @@ using MovieLibrary.Logic.MoviesInfo;
 
 namespace MovieLibrary.Logic.Internal
 {
-	public class InMemoryMoviesToGetRepository : IMoviesToGetRepository
+	internal class InMemoryMoviesToGetRepository : IMoviesToGetRepository
 	{
 		private readonly List<MovieToGetDto> movies = new List<MovieToGetDto>();
 
