@@ -38,7 +38,7 @@
     {
         var movieInfo = movie.MovieInfo;
         <li class="movie-info">
-            <img class="movie-info-poster" src="@GetSafePosterUri(movieInfo.PosterUri)" alt="Poster for movie &quot;@movieInfo.Title&quot;" width="240" />
+            <img class="movie-info-poster" src="@GetSafePosterUri(movieInfo.PosterUri)" alt="Poster for movie &quot;@movieInfo.Title&quot;" />
             <div class="movie-info-details">
                 <a class="movie-info-title" href="@movieInfo.MovieUri">@movieInfo.Title</a>
                 <table class="movie-info-table">

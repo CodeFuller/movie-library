@@ -87,6 +87,9 @@ body {
   margin-right: 12px;
   flex: none;
   border-radius: 5px;
+
+  width: 240px;
+  height: 360px;
 }
 
 .movie-info-details {
