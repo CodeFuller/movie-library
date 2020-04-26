@@ -49,41 +49,45 @@
         <li class="movie-info">
             <img class="movie-info-poster" src="@GetSafePosterUri(movieInfo.PosterUri)" alt="Poster for movie &quot;@movieInfo.Title&quot;" width="240" />
             <div class="movie-info-details">
-                <a class="movie-info-title" href="@movieInfo.MovieUri">@movieInfo.Title</a>
-                <table class="movie-info-table">
-                    <tbody>
-                        <tr>
-                            <td class="movie-info-table-key">Year</td>
-                            <td>@movieInfo.Year</td>
-                        </tr>
-                        <tr>
-                            <td class="movie-info-table-key">Genres</td>
-                            <td>@Html.Raw(FormatCollection(movieInfo.Genres))</td>
-                        </tr>
-                        <tr>
-                            <td class="movie-info-table-key">Director</td>
-                            <td>@Html.Raw(FormatCollection(movieInfo.Directors))</td>
-                        </tr>
-                        <tr>
-                            <td class="movie-info-table-key">Cast</td>
-                            <td>@Html.Raw(FormatCollection(movieInfo.Cast))</td>
-                        </tr>
-                        <tr>
-                            <td class="movie-info-table-key">Rating</td>
-                            <td>@movieInfo.Rating</td>
-                        </tr>
-                        <tr>
-                            <td class="movie-info-table-key">Duration</td>
-                            <td>@movieInfo.Duration</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="movie-info-table-details-and-actions">
+                    <div class="movie-info-table-details">
+                        <a class="movie-info-title" href="@movieInfo.MovieUri">@movieInfo.Title</a>
+                        <table class="movie-info-table">
+                            <tbody>
+                                <tr>
+                                    <td class="movie-info-table-key">Year</td>
+                                    <td>@movieInfo.Year</td>
+                                </tr>
+                                <tr>
+                                    <td class="movie-info-table-key">Genres</td>
+                                    <td>@Html.Raw(FormatCollection(movieInfo.Genres))</td>
+                                </tr>
+                                <tr>
+                                    <td class="movie-info-table-key">Director</td>
+                                    <td>@Html.Raw(FormatCollection(movieInfo.Directors))</td>
+                                </tr>
+                                <tr>
+                                    <td class="movie-info-table-key">Cast</td>
+                                    <td>@Html.Raw(FormatCollection(movieInfo.Cast))</td>
+                                </tr>
+                                <tr>
+                                    <td class="movie-info-table-key">Rating</td>
+                                    <td>@movieInfo.Rating</td>
+                                </tr>
+                                <tr>
+                                    <td class="movie-info-table-key">Duration</td>
+                                    <td>@movieInfo.Duration</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="movie-info-actions">
+                        <a asp-controller="MoviesToGet" asp-action="MoveToMoviesToSee" asp-route-id="@movie.Id.Value">To See</a>
+                    </div>
+                </div>
                 <p class="movie-info-summary">
                     @movieInfo.Summary
                 </p>
-            </div>
-            <div class="movie-actions">
-                <a asp-controller="MoviesToGet" asp-action="MoveToMoviesToSee" asp-route-id="@movie.Id.Value">To See</a>
             </div>
         </li>
     }

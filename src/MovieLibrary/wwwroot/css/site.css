@@ -86,13 +86,26 @@ body {
 .movie-info-poster {
   margin-right: 12px;
   flex: none;
-
   border-radius: 5px;
 }
 
 .movie-info-details {
   display: flex;
   flex-direction: column;
+  /*
+    Occupy all width, even if movie details are narrow.
+    Without this, actions block will move left for movies with narrow details.
+  */
+  flex-grow: 1;
+}
+
+.movie-info-table-details-and-actions {
+  display: flex;
+  flex-direction: row;
+}
+
+.movie-info-table-details {
+  flex-grow: 1;
 }
 
 .movie-info-title {
