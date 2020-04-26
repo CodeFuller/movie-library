@@ -72,16 +72,16 @@ namespace MovieLibrary.Logic.Kinopoisk
 
 			var movieInfo = new MovieInfoModel
 			{
-				Title = title,
+				Title = SanitizeText(title),
 				Year = ParseInt(yearText, "year"),
 				MovieUri = ParseUri(movieUri),
 				PosterUri = ParseUri(posterUri),
-				Directors = directors,
-				Cast = cast,
+				Directors = SanitizeText(directors),
+				Cast = SanitizeText(cast),
 				Rating = ParseRating(ratingValue, ratingCount),
 				Duration = ParseDuration(duration),
-				Genres = genres,
-				Summary = SanitizeSummary(summary),
+				Genres = SanitizeText(genres),
+				Summary = SanitizeText(summary),
 			};
 
 			CheckMovieInfoForRequiredData(movieInfo, sourceUri);
@@ -176,7 +176,12 @@ namespace MovieLibrary.Logic.Kinopoisk
 			return duration != null ? TimeSpan.FromMinutes(duration.Value) : (TimeSpan?)null;
 		}
 
-		private static string SanitizeSummary(string summary)
+		private static IReadOnlyCollection<string> SanitizeText(IReadOnlyCollection<string> summary)
+		{
+			return summary?.Select(SanitizeText).ToList();
+		}
+
+		private static string SanitizeText(string summary)
 		{
 			if (String.IsNullOrWhiteSpace(summary))
 			{
