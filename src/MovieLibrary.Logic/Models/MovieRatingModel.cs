@@ -1,12 +1,12 @@
-﻿namespace MovieLibrary.Logic.MoviesInfo
+﻿namespace MovieLibrary.Logic.Models
 {
-	public class MovieRating
+	public class MovieRatingModel
 	{
 		public decimal Value { get; set; }
 
 		public int? VotesNumber { get; set; }
 
-		public MovieRating(decimal value, int? votesNumber)
+		public MovieRatingModel(decimal value, int? votesNumber)
 		{
 			Value = value;
 			VotesNumber = votesNumber;

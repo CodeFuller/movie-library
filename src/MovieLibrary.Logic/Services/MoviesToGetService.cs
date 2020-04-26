@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MovieLibrary.Logic.Dto;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
 
@@ -31,11 +30,7 @@ namespace MovieLibrary.Logic.Services
 		{
 			var movieInfo = await movieInfoProvider.GetMovieInfo(movieUri, cancellationToken);
 
-			var movieToGet = new MovieToGetDto
-			{
-				TimestampOfAddingToGetList = clock.Now,
-				MovieInfo = movieInfo,
-			};
+			var movieToGet = new MovieToGetModel(clock.Now, movieInfo);
 
 			await moviesToGetRepository.AddMovie(movieToGet, cancellationToken);
 		}
@@ -44,7 +39,6 @@ namespace MovieLibrary.Logic.Services
 		{
 			return moviesToGetRepository
 				.GetAllMovies(cancellationToken)
-				.Select(m => new MovieToGetModel(m.Id, m.TimestampOfAddingToGetList, m.MovieInfo))
 				.OrderBy(m => m.TimestampOfAddingToGetList);
 		}
 
@@ -52,12 +46,7 @@ namespace MovieLibrary.Logic.Services
 		{
 			var movieToGet = await moviesToGetRepository.GetMovie(movieId, cancellationToken);
 
-			var movieToSee = new MovieToSeeDto
-			{
-				Id = movieId,
-				TimestampOfAddingToSeeList = clock.Now,
-				MovieInfo = movieToGet.MovieInfo,
-			};
+			var movieToSee = new MovieToSeeModel(movieId, clock.Now, movieToGet.MovieInfo);
 
 			await moviesToSeeRepository.AddMovie(movieToSee, cancellationToken);
 

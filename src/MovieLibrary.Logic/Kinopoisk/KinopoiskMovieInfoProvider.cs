@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MovieLibrary.Logic.Interfaces;
-using MovieLibrary.Logic.MoviesInfo;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Logic.Kinopoisk
 {
@@ -18,7 +18,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 			this.movieInfoParser = movieInfoParser ?? throw new ArgumentNullException(nameof(movieInfoParser));
 		}
 
-		public async Task<MovieInfo> GetMovieInfo(Uri movieUri, CancellationToken cancellationToken)
+		public async Task<MovieInfoModel> GetMovieInfo(Uri movieUri, CancellationToken cancellationToken)
 		{
 			if (!String.Equals(movieUri.Host, "www.kinopoisk.ru", StringComparison.OrdinalIgnoreCase))
 			{

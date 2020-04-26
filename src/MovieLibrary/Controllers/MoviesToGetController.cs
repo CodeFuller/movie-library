@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
+using MovieLibrary.Models;
 
 namespace MovieLibrary.Controllers
 {
@@ -20,13 +21,13 @@ namespace MovieLibrary.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
-			var model = await ReadMoviesToGet(cancellationToken);
+			var viewModel = await ReadMoviesToGet(cancellationToken);
 
-			return View(model);
+			return View(viewModel);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Index(MoviesToGetModel model, CancellationToken cancellationToken)
+		public async Task<IActionResult> Index(MoviesToGetViewModel model, CancellationToken cancellationToken)
 		{
 			if (ModelState.IsValid)
 			{
@@ -36,9 +37,9 @@ namespace MovieLibrary.Controllers
 				ModelState.Clear();
 			}
 
-			var outputModel = await ReadMoviesToGet(cancellationToken);
+			var viewModel = await ReadMoviesToGet(cancellationToken);
 
-			return View(outputModel);
+			return View(viewModel);
 		}
 
 		[HttpGet]
@@ -49,19 +50,16 @@ namespace MovieLibrary.Controllers
 
 			await service.MoveToMoviesToSee(movieId, cancellationToken);
 
-			var model = await ReadMoviesToGet(cancellationToken);
+			var viewModel = await ReadMoviesToGet(cancellationToken);
 
-			return View("Index", model);
+			return View("Index", viewModel);
 		}
 
-		private async Task<MoviesToGetModel> ReadMoviesToGet(CancellationToken cancellationToken)
+		private async Task<MoviesToGetViewModel> ReadMoviesToGet(CancellationToken cancellationToken)
 		{
 			var moviesToGet = await service.ReadMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
 
-			return new MoviesToGetModel
-			{
-				Movies = moviesToGet,
-			};
+			return new MoviesToGetViewModel(moviesToGet);
 		}
 	}
 }

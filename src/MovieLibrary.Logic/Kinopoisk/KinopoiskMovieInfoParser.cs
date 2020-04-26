@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Logging;
-using MovieLibrary.Logic.MoviesInfo;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Logic.Kinopoisk
 {
@@ -30,7 +30,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public MovieInfo ParseMovieInfo(string content, Uri sourceUri)
+		public MovieInfoModel ParseMovieInfo(string content, Uri sourceUri)
 		{
 			string title = null;
 			string yearText = null;
@@ -70,7 +70,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 				posterUri = null;
 			}
 
-			var movieInfo = new MovieInfo
+			var movieInfo = new MovieInfoModel
 			{
 				Title = title,
 				Year = ParseInt(yearText, "year"),
@@ -89,7 +89,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 			return movieInfo;
 		}
 
-		private static void CheckMovieInfoForRequiredData(MovieInfo movieInfo, Uri movieUri)
+		private static void CheckMovieInfoForRequiredData(MovieInfoModel movieInfo, Uri movieUri)
 		{
 			if (String.IsNullOrWhiteSpace(movieInfo.Title))
 			{
@@ -156,7 +156,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 			return uriText != null ? new Uri(uriText, UriKind.Absolute) : null;
 		}
 
-		private MovieRating ParseRating(string ratingValueText, string ratingCountText)
+		private MovieRatingModel ParseRating(string ratingValueText, string ratingCountText)
 		{
 			var ratingValue = ParseDecimal(ratingValueText, "rating value");
 			var ratingCount = ParseInt(ratingCountText, "rating count");
@@ -166,7 +166,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 				return null;
 			}
 
-			return new MovieRating(ratingValue.Value, ratingCount);
+			return new MovieRatingModel(ratingValue.Value, ratingCount);
 		}
 
 		private TimeSpan? ParseDuration(string durationText)

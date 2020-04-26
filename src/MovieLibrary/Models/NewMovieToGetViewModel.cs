@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MovieLibrary.Logic.Models
+namespace MovieLibrary.Models
 {
-	public class NewMovieToGetModel
+	public class NewMovieToGetViewModel
 	{
 		[Required]
 		public Uri MovieUri { get; set; }

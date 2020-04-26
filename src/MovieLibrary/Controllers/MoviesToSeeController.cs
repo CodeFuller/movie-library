@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Logic.Interfaces;
-using MovieLibrary.Logic.Models;
+using MovieLibrary.Models;
 
 namespace MovieLibrary.Controllers
 {
@@ -20,12 +20,9 @@ namespace MovieLibrary.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
-			var moviesToSee = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
+			var movies = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
 
-			var model = new MoviesToSeeModel
-			{
-				Movies = moviesToSee,
-			};
+			var model = new MoviesToSeeViewModel(movies);
 
 			return View(model);
 		}

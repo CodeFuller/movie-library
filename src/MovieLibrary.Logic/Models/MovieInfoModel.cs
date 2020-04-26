@@ -1,62 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using MovieLibrary.Logic.MoviesInfo;
-using static System.FormattableString;
 
 namespace MovieLibrary.Logic.Models
 {
 	public class MovieInfoModel
 	{
-		private const string MissingValue = "N/A";
+		public string Title { get; set; }
 
-		private const int MaxCollectionLength = 3;
+		public int? Year { get; set; }
 
-		private readonly MovieInfo movieInfo;
+		public Uri MovieUri { get; set; }
 
-		public string Title => movieInfo.Title;
+		public Uri PosterUri { get; set; }
 
-		public string Year => movieInfo.Year != null ? movieInfo.Year.Value.ToString(CultureInfo.InvariantCulture) : MissingValue;
+		public IReadOnlyCollection<string> Directors { get; set; }
 
-		public Uri MovieUri => movieInfo.MovieUri;
+		public IReadOnlyCollection<string> Cast { get; set; }
 
-		public Uri PosterUri => movieInfo.PosterUri;
+		public MovieRatingModel Rating { get; set; }
 
-		public IReadOnlyCollection<string> Directors => GetSafeCollection(movieInfo.Directors);
+		public TimeSpan? Duration { get; set; }
 
-		public IReadOnlyCollection<string> Cast => GetSafeCollection(movieInfo.Cast);
+		public IReadOnlyCollection<string> Genres { get; set; }
 
-		public string Rating
-		{
-			get
-			{
-				var rating = movieInfo.Rating;
-
-				if (rating == null)
-				{
-					return MissingValue;
-				}
-
-				var votesNumberPart = rating.VotesNumber == null ? String.Empty : Invariant($" ({rating.VotesNumber:N0})");
-				return Invariant($"{rating.Value:N1}{votesNumberPart}");
-			}
-		}
-
-		public string Duration => movieInfo.Duration == null ? MissingValue : Invariant($"{movieInfo.Duration.Value.ToString("hh\\:mm", CultureInfo.InvariantCulture)}");
-
-		public IReadOnlyCollection<string> Genres => GetSafeCollection(movieInfo.Genres);
-
-		public string Summary => movieInfo.Summary ?? String.Empty;
-
-		public MovieInfoModel(MovieInfo movieInfo)
-		{
-			this.movieInfo = movieInfo ?? throw new ArgumentNullException(nameof(movieInfo));
-		}
-
-		private static IReadOnlyCollection<string> GetSafeCollection(IReadOnlyCollection<string> source)
-		{
-			return source?.Take(MaxCollectionLength).ToArray() ?? new[] { MissingValue };
-		}
+		public string Summary { get; set; }
 	}
 }

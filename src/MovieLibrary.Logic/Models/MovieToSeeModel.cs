@@ -1,5 +1,4 @@
 ﻿using System;
-using MovieLibrary.Logic.MoviesInfo;
 
 namespace MovieLibrary.Logic.Models
 {
@@ -7,15 +6,15 @@ namespace MovieLibrary.Logic.Models
 	{
 		public MovieId Id { get; }
 
-		public DateTimeOffset TimestampOfAddingToSeeList { get; set; }
+		public DateTimeOffset TimestampOfAddingToSeeList { get; }
 
 		public MovieInfoModel MovieInfo { get; }
 
-		public MovieToSeeModel(MovieId id, DateTimeOffset timestampOfAdding, MovieInfo movieInfo)
+		public MovieToSeeModel(MovieId id, DateTimeOffset timestampOfAdding, MovieInfoModel movieInfo)
 		{
 			Id = id ?? throw new ArgumentNullException(nameof(id));
 			TimestampOfAddingToSeeList = timestampOfAdding;
-			MovieInfo = new MovieInfoModel(movieInfo);
+			MovieInfo = movieInfo ?? throw new ArgumentNullException(nameof(movieInfo));
 		}
 	}
 }

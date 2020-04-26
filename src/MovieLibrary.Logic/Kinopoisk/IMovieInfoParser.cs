@@ -1,10 +1,10 @@
 ﻿using System;
-using MovieLibrary.Logic.MoviesInfo;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Logic.Kinopoisk
 {
 	internal interface IMovieInfoParser
 	{
-		MovieInfo ParseMovieInfo(string content, Uri sourceUri);
+		MovieInfoModel ParseMovieInfo(string content, Uri sourceUri);
 	}
 }
