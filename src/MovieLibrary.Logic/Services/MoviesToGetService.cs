@@ -37,20 +37,20 @@ namespace MovieLibrary.Logic.Services
 				MovieInfo = movieInfo,
 			};
 
-			await moviesToGetRepository.CreateMovieToGet(movieToGet, cancellationToken);
+			await moviesToGetRepository.AddMovie(movieToGet, cancellationToken);
 		}
 
 		public IAsyncEnumerable<MovieToGetModel> ReadMoviesToGet(CancellationToken cancellationToken)
 		{
 			return moviesToGetRepository
-				.ReadAllMoviesToGet(cancellationToken)
+				.GetAllMovies(cancellationToken)
 				.Select(m => new MovieToGetModel(m.Id, m.TimestampOfAddingToGetList, m.MovieInfo))
 				.OrderBy(m => m.TimestampOfAddingToGetList);
 		}
 
 		public async Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken)
 		{
-			var movieToGet = await moviesToGetRepository.ReadMovieToGet(movieId, cancellationToken);
+			var movieToGet = await moviesToGetRepository.GetMovie(movieId, cancellationToken);
 
 			var movieToSee = new MovieToSeeDto
 			{
@@ -59,7 +59,7 @@ namespace MovieLibrary.Logic.Services
 				MovieInfo = movieToGet.MovieInfo,
 			};
 
-			await moviesToSeeRepository.CreateMovieToSee(movieToSee, cancellationToken);
+			await moviesToSeeRepository.AddMovie(movieToSee, cancellationToken);
 
 			await moviesToGetRepository.DeleteMovie(movieId, cancellationToken);
 		}

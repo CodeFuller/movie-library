@@ -7,8 +7,8 @@ namespace MovieLibrary.Logic.Interfaces
 {
 	public interface IMoviesToSeeRepository
 	{
-		Task CreateMovieToSee(MovieToSeeDto movieToSee, CancellationToken cancellationToken);
+		Task AddMovie(MovieToSeeDto movie, CancellationToken cancellationToken);
 
-		IAsyncEnumerable<MovieToSeeDto> ReadMoviesToSee(CancellationToken cancellationToken);
+		IAsyncEnumerable<MovieToSeeDto> GetAllMovies(CancellationToken cancellationToken);
 	}
 }

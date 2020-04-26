@@ -20,7 +20,7 @@ namespace MovieLibrary.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
-			var moviesToSee = await service.GetMoviesToSee(cancellationToken).ToListAsync(cancellationToken);
+			var moviesToSee = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
 
 			var model = new MoviesToSeeModel
 			{

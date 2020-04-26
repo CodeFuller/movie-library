@@ -16,10 +16,10 @@ namespace MovieLibrary.Logic.Services
 			this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
 		}
 
-		public IAsyncEnumerable<MovieToSeeModel> GetMoviesToSee(CancellationToken cancellationToken)
+		public IAsyncEnumerable<MovieToSeeModel> GetAllMovies(CancellationToken cancellationToken)
 		{
 			return repository
-				.ReadMoviesToSee(cancellationToken)
+				.GetAllMovies(cancellationToken)
 				.Select(m => new MovieToSeeModel(m.Id, m.TimestampOfAddingToSeeList, m.MovieInfo))
 				.OrderBy(m => m.TimestampOfAddingToSeeList);
 		}

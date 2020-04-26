@@ -6,6 +6,6 @@ namespace MovieLibrary.Logic.Interfaces
 {
 	public interface IMoviesToSeeService
 	{
-		IAsyncEnumerable<MovieToSeeModel> GetMoviesToSee(CancellationToken cancellationToken);
+		IAsyncEnumerable<MovieToSeeModel> GetAllMovies(CancellationToken cancellationToken);
 	}
 }

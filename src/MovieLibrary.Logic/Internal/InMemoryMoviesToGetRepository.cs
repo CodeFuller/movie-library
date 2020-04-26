@@ -93,17 +93,17 @@ namespace MovieLibrary.Logic.Internal
 			});
 		}
 
-		public Task CreateMovieToGet(MovieToGetDto movieToGet, CancellationToken cancellationToken)
+		public Task AddMovie(MovieToGetDto movie, CancellationToken cancellationToken)
 		{
 			lock (movies)
 			{
-				movies.Add(movieToGet);
+				movies.Add(movie);
 			}
 
 			return Task.CompletedTask;
 		}
 
-		public IAsyncEnumerable<MovieToGetDto> ReadAllMoviesToGet(CancellationToken cancellationToken)
+		public IAsyncEnumerable<MovieToGetDto> GetAllMovies(CancellationToken cancellationToken)
 		{
 			List<MovieToGetDto> moviesToReturn;
 
@@ -115,7 +115,7 @@ namespace MovieLibrary.Logic.Internal
 			return moviesToReturn.ToAsyncEnumerable();
 		}
 
-		public Task<MovieToGetDto> ReadMovieToGet(MovieId movieId, CancellationToken cancellationToken)
+		public Task<MovieToGetDto> GetMovie(MovieId movieId, CancellationToken cancellationToken)
 		{
 			lock (movies)
 			{

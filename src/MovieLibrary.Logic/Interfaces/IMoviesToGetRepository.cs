@@ -8,11 +8,11 @@ namespace MovieLibrary.Logic.Interfaces
 {
 	public interface IMoviesToGetRepository
 	{
-		Task CreateMovieToGet(MovieToGetDto movieToGet, CancellationToken cancellationToken);
+		Task AddMovie(MovieToGetDto movie, CancellationToken cancellationToken);
 
-		IAsyncEnumerable<MovieToGetDto> ReadAllMoviesToGet(CancellationToken cancellationToken);
+		IAsyncEnumerable<MovieToGetDto> GetAllMovies(CancellationToken cancellationToken);
 
-		Task<MovieToGetDto> ReadMovieToGet(MovieId movieId, CancellationToken cancellationToken);
+		Task<MovieToGetDto> GetMovie(MovieId movieId, CancellationToken cancellationToken);
 
 		Task DeleteMovie(MovieId movieId, CancellationToken cancellationToken);
 	}

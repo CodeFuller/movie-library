@@ -59,17 +59,17 @@ namespace MovieLibrary.Logic.Internal
 			});
 		}
 
-		public Task CreateMovieToSee(MovieToSeeDto movieToSee, CancellationToken cancellationToken)
+		public Task AddMovie(MovieToSeeDto movie, CancellationToken cancellationToken)
 		{
 			lock (movies)
 			{
-				movies.Add(movieToSee);
+				movies.Add(movie);
 			}
 
 			return Task.CompletedTask;
 		}
 
-		public IAsyncEnumerable<MovieToSeeDto> ReadMoviesToSee(CancellationToken cancellationToken)
+		public IAsyncEnumerable<MovieToSeeDto> GetAllMovies(CancellationToken cancellationToken)
 		{
 			List<MovieToSeeDto> moviesToReturn;
 
