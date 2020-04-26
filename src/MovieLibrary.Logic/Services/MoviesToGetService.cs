@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MovieLibrary.Logic.Dto;
 using MovieLibrary.Logic.Interfaces;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Logic.Services
 {
@@ -31,9 +33,11 @@ namespace MovieLibrary.Logic.Services
 			await repository.CreateMovieToGet(movieToGet, cancellationToken);
 		}
 
-		public IAsyncEnumerable<MovieToGetDto> GetMoviesToGet(CancellationToken cancellationToken)
+		public IAsyncEnumerable<MovieToGetModel> GetMoviesToGet(CancellationToken cancellationToken)
 		{
-			return repository.ReadMoviesToGet(cancellationToken);
+			return repository
+				.ReadMoviesToGet(cancellationToken)
+				.Select(m => new MovieToGetModel(m.Id, m.MovieInfo));
 		}
 	}
 }

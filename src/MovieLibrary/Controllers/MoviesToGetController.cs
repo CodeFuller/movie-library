@@ -20,12 +20,7 @@ namespace MovieLibrary.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
-			var moviesToGet = await service.GetMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
-
-			var model = new MoviesToGetModel
-			{
-				Movies = moviesToGet.Select(m => new MovieToGetModel(m.Id, m.MovieInfo)).ToList(),
-			};
+			var model = await GetMoviesToGet(cancellationToken);
 
 			return View(model);
 		}
@@ -41,14 +36,19 @@ namespace MovieLibrary.Controllers
 				ModelState.Clear();
 			}
 
-			var moviesToGet = await service.GetMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
-
-			var outputModel = new MoviesToGetModel
-			{
-				Movies = moviesToGet.Select(m => new MovieToGetModel(m.Id, m.MovieInfo)).ToList(),
-			};
+			var outputModel = await GetMoviesToGet(cancellationToken);
 
 			return View(outputModel);
+		}
+
+		private async Task<MoviesToGetModel> GetMoviesToGet(CancellationToken cancellationToken)
+		{
+			var moviesToGet = await service.GetMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
+
+			return new MoviesToGetModel
+			{
+				Movies = moviesToGet,
+			};
 		}
 	}
 }

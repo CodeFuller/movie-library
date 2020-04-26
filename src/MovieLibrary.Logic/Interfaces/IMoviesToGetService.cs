@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MovieLibrary.Logic.Dto;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Logic.Interfaces
 {
@@ -10,6 +10,6 @@ namespace MovieLibrary.Logic.Interfaces
 	{
 		Task AddMovieToGetByUrl(Uri movieUri, CancellationToken cancellationToken);
 
-		IAsyncEnumerable<MovieToGetDto> GetMoviesToGet(CancellationToken cancellationToken);
+		IAsyncEnumerable<MovieToGetModel> GetMoviesToGet(CancellationToken cancellationToken);
 	}
 }
