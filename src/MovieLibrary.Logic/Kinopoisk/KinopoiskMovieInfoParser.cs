@@ -186,7 +186,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 			var htmlDoc = new HtmlDocument();
 			htmlDoc.LoadHtml(summary);
 
-			foreach (var node in htmlDoc.DocumentNode.SelectNodes("//br"))
+			foreach (var node in htmlDoc.DocumentNode.SelectNodes("//br") ?? Enumerable.Empty<HtmlNode>())
 			{
 				node.ParentNode.ReplaceChild(htmlDoc.CreateTextNode("\n"), node);
 			}
