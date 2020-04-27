@@ -13,9 +13,6 @@ namespace MovieLibrary.Logic.Extensions
 			services.AddSingleton<IMoviesToGetService, MoviesToGetService>();
 			services.AddSingleton<IMoviesToSeeService, MoviesToSeeService>();
 
-			services.AddSingleton<IMoviesToGetRepository, InMemoryMoviesToGetRepository>();
-			services.AddSingleton<IMoviesToSeeRepository, InMemoryMoviesToSeeRepository>();
-
 			services.AddKinopoiskMovieInfoProvider();
 
 			services.AddSingleton<IClock, Clock>();

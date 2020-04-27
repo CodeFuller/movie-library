@@ -10,11 +10,16 @@ namespace MovieLibrary.Logic.Models
 
 		public MovieInfoModel MovieInfo { get; }
 
-		public MovieToSeeModel(MovieId id, DateTimeOffset timestampOfAdding, MovieInfoModel movieInfo)
+		public MovieToSeeModel(DateTimeOffset timestampOfAdding, MovieInfoModel movieInfo)
 		{
-			Id = id ?? throw new ArgumentNullException(nameof(id));
 			TimestampOfAddingToSeeList = timestampOfAdding;
 			MovieInfo = movieInfo ?? throw new ArgumentNullException(nameof(movieInfo));
+		}
+
+		public MovieToSeeModel(MovieId id, DateTimeOffset timestampOfAdding, MovieInfoModel movieInfo)
+			: this(timestampOfAdding, movieInfo)
+		{
+			Id = id ?? throw new ArgumentNullException(nameof(id));
 		}
 	}
 }

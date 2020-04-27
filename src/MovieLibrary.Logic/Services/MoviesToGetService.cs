@@ -26,7 +26,7 @@ namespace MovieLibrary.Logic.Services
 			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 		}
 
-		public async Task AddMovieToGetByUrl(Uri movieUri, CancellationToken cancellationToken)
+		public async Task AddMovieByUrl(Uri movieUri, CancellationToken cancellationToken)
 		{
 			var movieInfo = await movieInfoProvider.GetMovieInfo(movieUri, cancellationToken);
 
@@ -35,7 +35,7 @@ namespace MovieLibrary.Logic.Services
 			await moviesToGetRepository.AddMovie(movieToGet, cancellationToken);
 		}
 
-		public IAsyncEnumerable<MovieToGetModel> ReadMoviesToGet(CancellationToken cancellationToken)
+		public IAsyncEnumerable<MovieToGetModel> GetAllMovies(CancellationToken cancellationToken)
 		{
 			return moviesToGetRepository
 				.GetAllMovies(cancellationToken)
@@ -46,7 +46,7 @@ namespace MovieLibrary.Logic.Services
 		{
 			var movieToGet = await moviesToGetRepository.GetMovie(movieId, cancellationToken);
 
-			var movieToSee = new MovieToSeeModel(movieId, clock.Now, movieToGet.MovieInfo);
+			var movieToSee = new MovieToSeeModel(clock.Now, movieToGet.MovieInfo);
 
 			await moviesToSeeRepository.AddMovie(movieToSee, cancellationToken);
 

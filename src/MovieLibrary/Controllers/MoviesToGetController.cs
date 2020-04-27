@@ -32,7 +32,7 @@ namespace MovieLibrary.Controllers
 			if (ModelState.IsValid)
 			{
 				var newMovieToGet = model.NewMovieToGet;
-				await service.AddMovieToGetByUrl(newMovieToGet.MovieUri, cancellationToken);
+				await service.AddMovieByUrl(newMovieToGet.MovieUri, cancellationToken);
 
 				ModelState.Clear();
 			}
@@ -57,7 +57,7 @@ namespace MovieLibrary.Controllers
 
 		private async Task<MoviesToGetViewModel> ReadMoviesToGet(CancellationToken cancellationToken)
 		{
-			var moviesToGet = await service.ReadMoviesToGet(cancellationToken).ToListAsync(cancellationToken);
+			var moviesToGet = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
 
 			return new MoviesToGetViewModel(moviesToGet);
 		}
