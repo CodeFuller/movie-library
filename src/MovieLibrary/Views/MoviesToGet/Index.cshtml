@@ -85,9 +85,15 @@
                         <a asp-controller="MoviesToGet" asp-action="MoveToMoviesToSee" asp-route-id="@movie.Id.Value">To See</a>
                     </div>
                 </div>
-                <p class="movie-info-summary">
-                    @movieInfo.Summary
-                </p>
+                @if (!String.IsNullOrEmpty(movieInfo.Summary))
+                {
+                    <div class="movie-info-summary">
+                        <a data-toggle="collapse" href="#collapseSummary-@movie.Id.Value">Click for Summary</a>
+                        <div id="collapseSummary-@movie.Id.Value" class="collapse">
+                            @movieInfo.Summary
+                        </div>
+                    </div>
+                }
             </div>
         </li>
     }
