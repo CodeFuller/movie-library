@@ -82,7 +82,10 @@
                         </table>
                     </div>
                     <div class="movie-info-actions">
-                        <a asp-controller="MoviesToGet" asp-action="MoveToMoviesToSee" asp-route-id="@movie.Id.Value">To See</a>
+                        @if (User.IsInRole("MoviesToSeeAdder"))
+                        {
+                            <a asp-controller="MoviesToGet" asp-action="MoveToMoviesToSee" asp-route-id="@movie.Id.Value">To See</a>
+                        }
                     </div>
                 </div>
                 @if (!String.IsNullOrEmpty(movieInfo.Summary))
