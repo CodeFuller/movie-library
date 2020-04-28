@@ -7,9 +7,9 @@
 
 @functions
 {
-    private static string GetSafePosterUri(Uri sourceUri)
+    private string GetSafePosterUri(Uri sourceUri)
     {
-        return sourceUri?.OriginalString ?? "/img/no-poster.jpg";
+        return sourceUri?.OriginalString ?? Url.Content("~/img/no-poster.jpg");
     }
 
     private static string FormatCollection(IEnumerable<string> source)
