@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using AspNetCore.Identity.Mongo;
 using AspNetCore.Identity.Mongo.Model;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MovieLibrary.Dal.MongoDB;
+using MovieLibrary.Internal;
 using MovieLibrary.Logic.Extensions;
 
 namespace MovieLibrary
@@ -49,10 +51,14 @@ namespace MovieLibrary
 
 			services.AddIdentityMongoDbProvider<MongoUser>(mongoIdentityOptions => mongoIdentityOptions.ConnectionString = connectionString)
 				.AddDefaultUI();
+
+			services.AddSingleton<IApplicationInitializer, RolesInitializer>();
 		}
 
-		public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApplicationInitializer appInitializer)
 		{
+			appInitializer.Initialize(CancellationToken.None).Wait();
+
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
