@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Models;
@@ -18,6 +19,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
+		[Authorize(Roles = "MoviesToSeeReader")]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
 			var movies = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);

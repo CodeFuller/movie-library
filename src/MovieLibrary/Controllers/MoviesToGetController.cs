@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
@@ -19,6 +20,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
+		[Authorize(Roles = "MoviesToGetAdder, MoviesToGetReader")]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
 			var viewModel = await ReadMoviesToGet(cancellationToken);
@@ -27,6 +29,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Roles = "MoviesToGetAdder")]
 		public async Task<IActionResult> Index(MoviesToGetViewModel model, CancellationToken cancellationToken)
 		{
 			if (ModelState.IsValid)
@@ -43,6 +46,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
+		[Authorize(Roles = "MoviesToSeeAdder")]
 		public async Task<IActionResult> MoveToMoviesToSee(string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
