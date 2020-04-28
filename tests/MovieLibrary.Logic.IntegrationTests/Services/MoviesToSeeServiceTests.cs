@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MovieLibrary.Logic.Exceptions;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
 using static MovieLibrary.Logic.IntegrationTests.TestsBootstrapper;
@@ -49,6 +50,55 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 			// Assert
 
 			CollectionAssert.AreEqual(Array.Empty<MovieToSeeModel>(), movies);
+		}
+
+		[TestMethod]
+		public async Task MarkMovieAsSeen_MovieExists_DeletesMovie()
+		{
+			// Arrange
+
+			var serviceProvider = await BootstrapTests(seedData: true);
+			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();
+
+			var movieId = await GetMovieId(serviceProvider, DataForSeeding.MovieToSee1);
+
+			// Act
+
+			await target.MarkMovieAsSeen(movieId, CancellationToken.None);
+
+			// Assert
+
+			var movies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+
+			Assert.AreEqual(1, movies.Count);
+			MovieAssert.AreEqual(DataForSeeding.MovieToSee2, movies[0]);
+		}
+
+		[TestMethod]
+		public async Task MarkMovieAsSeen_MovieDoesNotExist_ThrowsNotFoundException()
+		{
+			// Arrange
+
+			var serviceProvider = await BootstrapTests(seedData: true);
+			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();
+
+			var movieId = new MovieId("5ea68c4477f3ed42b8a798da");
+
+			// Act
+
+			Task Call() => target.MarkMovieAsSeen(movieId, CancellationToken.None);
+
+			// Assert
+
+			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
+		}
+
+		private static async Task<MovieId> GetMovieId(IServiceProvider serviceProvider, MovieToSeeModel movie)
+		{
+			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();
+
+			var allMovies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+			return allMovies.Single(m => m.MovieInfo.MovieUri == movie.MovieInfo.MovieUri).Id;
 		}
 	}
 }

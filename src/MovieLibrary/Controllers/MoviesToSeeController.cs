@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Logic.Interfaces;
+using MovieLibrary.Logic.Models;
 using MovieLibrary.Models;
 
 namespace MovieLibrary.Controllers
@@ -22,11 +23,30 @@ namespace MovieLibrary.Controllers
 		[Authorize(Roles = "MoviesToSeeReader")]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
+			var viewModel = await ReadMoviesToSee(cancellationToken);
+
+			return View(viewModel);
+		}
+
+		[HttpGet]
+		[Authorize(Roles = "CanMarkMoviesAsSeen")]
+		public async Task<IActionResult> MarkMovieAsSeen(string id, CancellationToken cancellationToken)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+			var movieId = new MovieId(id);
+
+			await service.MarkMovieAsSeen(movieId, cancellationToken);
+
+			var viewModel = await ReadMoviesToSee(cancellationToken);
+
+			return View("Index", viewModel);
+		}
+
+		private async Task<MoviesToSeeViewModel> ReadMoviesToSee(CancellationToken cancellationToken)
+		{
 			var movies = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
 
-			var model = new MoviesToSeeViewModel(movies);
-
-			return View(model);
+			return new MoviesToSeeViewModel(movies);
 		}
 	}
 }

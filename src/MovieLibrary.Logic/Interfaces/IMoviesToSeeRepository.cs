@@ -10,5 +10,7 @@ namespace MovieLibrary.Logic.Interfaces
 		Task AddMovie(MovieToSeeModel movie, CancellationToken cancellationToken);
 
 		IAsyncEnumerable<MovieToSeeModel> GetAllMovies(CancellationToken cancellationToken);
+
+		Task DeleteMovie(MovieId movieId, CancellationToken cancellationToken);
 	}
 }

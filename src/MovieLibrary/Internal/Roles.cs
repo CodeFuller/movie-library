@@ -12,6 +12,8 @@ namespace MovieLibrary.Internal
 
 		public static string MoviesToSeeReaderRole => "MoviesToSeeReader";
 
+		public static string CanMarkMoviesAsSeenRole => "CanMarkMoviesAsSeen";
+
 		public static IEnumerable<string> All
 		{
 			get
@@ -20,6 +22,7 @@ namespace MovieLibrary.Internal
 				yield return MoviesToGetReaderRole;
 				yield return MoviesToSeeAdderRole;
 				yield return MoviesToSeeReaderRole;
+				yield return CanMarkMoviesAsSeenRole;
 			}
 		}
 	}
