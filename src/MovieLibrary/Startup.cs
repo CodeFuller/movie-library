@@ -1,6 +1,11 @@
 using System;
+using AspNetCore.Identity.Mongo;
+using AspNetCore.Identity.Mongo.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +25,17 @@ namespace MovieLibrary
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllersWithViews();
+			services.AddControllersWithViews(config =>
+			{
+				var policy = new AuthorizationPolicyBuilder()
+					.RequireAuthenticatedUser()
+					.Build();
+
+				config.Filters.Add(new AuthorizeFilter(policy));
+			});
+
+			// Razor pages are required for Microsoft.AspNetCore.Identity.UI
+			services.AddRazorPages();
 
 			services.AddBusinessLogic();
 
@@ -31,6 +46,9 @@ namespace MovieLibrary
 			}
 
 			services.AddMongoDbDal(connectionString);
+
+			services.AddIdentityMongoDbProvider<MongoUser>(mongoIdentityOptions => mongoIdentityOptions.ConnectionString = connectionString)
+				.AddDefaultUI();
 		}
 
 		public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -48,6 +66,7 @@ namespace MovieLibrary
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
@@ -55,6 +74,9 @@ namespace MovieLibrary
 				endpoints.MapControllerRoute(
 					name: "default",
 					pattern: "{controller=Home}/{action=Index}/{id?}");
+
+				// Razor pages are required for Microsoft.AspNetCore.Identity.UI
+				endpoints.MapRazorPages();
 			});
 		}
 	}
