@@ -95,7 +95,10 @@
                 @if (!String.IsNullOrEmpty(movieInfo.Summary))
                 {
                     <div class="movie-info-summary">
-                        <a data-toggle="collapse" href="#collapseSummary-@movie.Id.Value">Click for Summary</a>
+                        <a class="collapsed" data-toggle="collapse" href="#collapseSummary-@movie.Id.Value">
+                            <span class="if-collapsed">Show summary</span>
+                            <span class="if-not-collapsed">Hide summary</span>
+                        </a>
                         <div id="collapseSummary-@movie.Id.Value" class="collapse">
                             @movieInfo.Summary
                         </div>
