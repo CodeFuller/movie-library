@@ -51,5 +51,12 @@ namespace MovieLibrary.Logic.Services
 
 			await repository.DeleteMovie(movieId, cancellationToken);
 		}
+
+		public async Task DeleteMovie(MovieId movieId, CancellationToken cancellationToken)
+		{
+			logger.LogInformation("Deleting movie to see {MovieId} ...", movieId);
+
+			await repository.DeleteMovie(movieId, cancellationToken);
+		}
 	}
 }

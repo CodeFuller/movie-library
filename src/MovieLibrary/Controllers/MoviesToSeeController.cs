@@ -23,9 +23,7 @@ namespace MovieLibrary.Controllers
 		[Authorize(Roles = "MoviesToSeeReader")]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
-			var viewModel = await ReadMoviesToSee(cancellationToken);
-
-			return View(viewModel);
+			return await MoviesView(cancellationToken);
 		}
 
 		[HttpPost]
@@ -40,9 +38,7 @@ namespace MovieLibrary.Controllers
 				ModelState.Clear();
 			}
 
-			var viewModel = await ReadMoviesToSee(cancellationToken);
-
-			return View("Index", viewModel);
+			return await MoviesView(cancellationToken);
 		}
 
 		[HttpGet]
@@ -54,6 +50,23 @@ namespace MovieLibrary.Controllers
 
 			await service.MarkMovieAsSeen(movieId, cancellationToken);
 
+			return await MoviesView(cancellationToken);
+		}
+
+		[HttpGet]
+		[Authorize(Roles = "CanDeleteMoviesToSee")]
+		public async Task<IActionResult> DeleteMovie(string id, CancellationToken cancellationToken)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+			var movieId = new MovieId(id);
+
+			await service.DeleteMovie(movieId, cancellationToken);
+
+			return await MoviesView(cancellationToken);
+		}
+
+		private async Task<IActionResult> MoviesView(CancellationToken cancellationToken)
+		{
 			var viewModel = await ReadMoviesToSee(cancellationToken);
 
 			return View("Index", viewModel);

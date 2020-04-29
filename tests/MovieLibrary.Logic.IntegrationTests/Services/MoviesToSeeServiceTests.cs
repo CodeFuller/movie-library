@@ -168,6 +168,47 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
 		}
 
+		[TestMethod]
+		public async Task DeleteMovie_MovieExists_DeletesMovie()
+		{
+			// Arrange
+
+			var serviceProvider = await BootstrapTests(seedData: true);
+			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();
+
+			var movieId = await GetMovieId(serviceProvider, DataForSeeding.MovieToSee1);
+
+			// Act
+
+			await target.DeleteMovie(movieId, CancellationToken.None);
+
+			// Assert
+
+			var movies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+
+			Assert.AreEqual(1, movies.Count);
+			MovieAssert.AreEqual(DataForSeeding.MovieToSee2, movies[0]);
+		}
+
+		[TestMethod]
+		public async Task DeleteMovie_MovieDoesNotExist_ThrowsNotFoundException()
+		{
+			// Arrange
+
+			var serviceProvider = await BootstrapTests(seedData: true);
+			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();
+
+			var movieId = new MovieId("5ea68c4477f3ed42b8a798da");
+
+			// Act
+
+			Task Call() => target.DeleteMovie(movieId, CancellationToken.None);
+
+			// Assert
+
+			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
+		}
+
 		private static async Task<MovieId> GetMovieId(IServiceProvider serviceProvider, MovieToSeeModel movie)
 		{
 			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();

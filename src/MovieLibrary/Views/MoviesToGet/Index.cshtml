@@ -88,7 +88,15 @@
                     <div class="movie-info-actions">
                         @if (User.IsInRole("MoviesToSeeAdder"))
                         {
-                            <a asp-controller="MoviesToGet" asp-action="MoveToMoviesToSee" asp-route-id="@movie.Id.Value">To see</a>
+                            <div>
+                                <a asp-action="MoveToMoviesToSee" asp-route-id="@movie.Id.Value">To see</a>
+                            </div>
+                        }
+                        @if (User.IsInRole("CanDeleteMoviesToGet"))
+                        {
+                            <div>
+                                <a asp-action="DeleteMovie" asp-route-id="@movie.Id.Value">Delete</a>
+                            </div>
                         }
                     </div>
                 </div>
