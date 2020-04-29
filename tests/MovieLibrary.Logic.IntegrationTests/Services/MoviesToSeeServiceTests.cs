@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.Logic.Exceptions;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
+using static MovieLibrary.Logic.IntegrationTests.MockHelpers;
 using static MovieLibrary.Logic.IntegrationTests.TestsBootstrapper;
 
 namespace MovieLibrary.Logic.IntegrationTests.Services
@@ -14,6 +15,80 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 	[TestClass]
 	public class MoviesToSeeServiceTests
 	{
+		[TestMethod]
+		public async Task AddMovieByUrl_AllPropertiesAreFilled_SavesDataCorrectly()
+		{
+			// Arrange
+
+			// Using fake URL to prevent requests to Kinopoisk if stub is misconfigured.
+			var movieUri = new Uri("https://www.kinopoisk-test.ru/film/111543/");
+
+			var movieInfo = new MovieInfoModel
+			{
+				Title = "Темный рыцарь",
+				Year = 2008,
+				MovieUri = movieUri,
+				PosterUri = new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_111543.jpg"),
+				Directors = new[] { "Кристофер Нолан" },
+				Cast = new[] { "Кристиан Бэйл", "Хит Леджер", "Аарон Экхарт", "Мэгги Джилленхол", "Гари Олдман", },
+				Rating = new MovieRatingModel(8.499M, 463508),
+				Duration = TimeSpan.FromMinutes(152),
+				Genres = new[] { "фантастика", "боевик", "триллер", "криминал", "драма", },
+				Summary = "Бэтмен поднимает ставки в войне с криминалом...",
+			};
+
+			var serviceProvider = await BootstrapTests(seedData: true, StubMovieInfoProviderAndClock(movieUri, movieInfo, new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3))));
+			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();
+
+			// Act
+
+			await target.AddMovieByUrl(movieUri, CancellationToken.None);
+
+			// Assert
+
+			var allMovies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+
+			var storedMovie = allMovies.SingleOrDefault(m => m?.MovieInfo.MovieUri == movieUri);
+			Assert.IsNotNull(storedMovie);
+
+			Assert.IsNotNull(storedMovie.Id);
+			Assert.AreEqual(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)), storedMovie.TimestampOfAddingToSeeList);
+			MovieAssert.AreEqual(movieInfo, storedMovie.MovieInfo);
+		}
+
+		[TestMethod]
+		public async Task AddMovieByUrl_AllPropertiesAreMissing_SavesDataCorrectly()
+		{
+			// Arrange
+
+			// Using fake URL to prevent requests to Kinopoisk if stub is misconfigured.
+			var movieUri = new Uri("https://www.kinopoisk-test.ru/film/111543/");
+
+			var movieInfo = new MovieInfoModel
+			{
+				Title = "Темный рыцарь",
+				MovieUri = movieUri,
+			};
+
+			var serviceProvider = await BootstrapTests(seedData: true, StubMovieInfoProviderAndClock(movieUri, movieInfo, new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3))));
+			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();
+
+			// Act
+
+			await target.AddMovieByUrl(movieUri, CancellationToken.None);
+
+			// Assert
+
+			var allMovies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+
+			var storedMovie = allMovies.SingleOrDefault(m => m?.MovieInfo.MovieUri == movieUri);
+			Assert.IsNotNull(storedMovie);
+
+			Assert.IsNotNull(storedMovie.Id);
+			Assert.AreEqual(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)), storedMovie.TimestampOfAddingToSeeList);
+			MovieAssert.AreEqual(movieInfo, storedMovie.MovieInfo);
+		}
+
 		[TestMethod]
 		public async Task GetAllMovies_SomeMoviesExist_ReturnsCorrectData()
 		{

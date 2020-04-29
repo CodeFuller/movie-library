@@ -7,7 +7,7 @@ namespace MovieLibrary.Models
 {
 	public class MoviesToGetViewModel
 	{
-		public NewMovieToGetViewModel NewMovieToGet { get; set; }
+		public NewMovieViewModel NewMovieToGet { get; set; }
 
 		public IReadOnlyCollection<MovieToGetViewModel> Movies { get; }
 

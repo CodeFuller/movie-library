@@ -20,7 +20,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "MoviesToGetAdder, MoviesToGetReader")]
+		[Authorize(Roles = "MoviesToGetReader")]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
 			var viewModel = await ReadMoviesToGet(cancellationToken);

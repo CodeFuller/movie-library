@@ -4,10 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using MovieLibrary.Logic.Exceptions;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
+using static MovieLibrary.Logic.IntegrationTests.MockHelpers;
 using static MovieLibrary.Logic.IntegrationTests.TestsBootstrapper;
 
 namespace MovieLibrary.Logic.IntegrationTests.Services
@@ -177,39 +177,6 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 			// Assert
 
 			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
-		}
-
-		private static Action<IServiceCollection> StubMovieInfoProviderAndClock(Uri movieUri, MovieInfoModel movieInfo, DateTimeOffset currentTime)
-		{
-			var servicesSetups = new[]
-			{
-				StubMovieInfoProvider(movieUri, movieInfo),
-				StubClock(currentTime),
-			};
-
-			return services =>
-			{
-				foreach (var serviceSetup in servicesSetups)
-				{
-					serviceSetup(services);
-				}
-			};
-		}
-
-		private static Action<IServiceCollection> StubMovieInfoProvider(Uri movieUri, MovieInfoModel movieInfo)
-		{
-			var movieInfoProviderStub = new Mock<IMovieInfoProvider>();
-			movieInfoProviderStub.Setup(x => x.GetMovieInfo(movieUri, It.IsAny<CancellationToken>())).ReturnsAsync(movieInfo);
-
-			return services => services.AddSingleton<IMovieInfoProvider>(movieInfoProviderStub.Object);
-		}
-
-		private static Action<IServiceCollection> StubClock(DateTimeOffset currentTime)
-		{
-			var clockStub = new Mock<IClock>();
-			clockStub.Setup(x => x.Now).Returns(currentTime);
-
-			return services => services.AddSingleton<IClock>(clockStub.Object);
 		}
 
 		private static async Task<MovieId> GetMovieId(IServiceProvider serviceProvider, MovieToGetModel movie)

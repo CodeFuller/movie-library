@@ -28,6 +28,23 @@ namespace MovieLibrary.Controllers
 			return View(viewModel);
 		}
 
+		[HttpPost]
+		[Authorize(Roles = "MoviesToSeeAdder")]
+		public async Task<IActionResult> Index(MoviesToSeeViewModel model, CancellationToken cancellationToken)
+		{
+			if (ModelState.IsValid)
+			{
+				var newMovieToSee = model.NewMovieToSee;
+				await service.AddMovieByUrl(newMovieToSee.MovieUri, cancellationToken);
+
+				ModelState.Clear();
+			}
+
+			var viewModel = await ReadMoviesToSee(cancellationToken);
+
+			return View("Index", viewModel);
+		}
+
 		[HttpGet]
 		[Authorize(Roles = "CanMarkMoviesAsSeen")]
 		public async Task<IActionResult> MarkMovieAsSeen(string id, CancellationToken cancellationToken)
