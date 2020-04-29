@@ -35,11 +35,12 @@
 
 <form method="post">
     <div asp-validation-summary="All"></div>
-    <p>
-        <label asp-for="NewMovieToGet.MovieUri">Movie URL:</label>
-        <input asp-for="NewMovieToGet.MovieUri" size="40" />
-        <button type="submit">Add</button>
-    </p>
+    <div class="input-group">
+        <div class="input-group-append">
+            <input class="form-control" asp-for="NewMovieToGet.MovieUri" placeholder="Movie URL" aria-label="Movie URL" size="40" />
+            <button class="btn btn-primary" type="submit">Add</button>
+        </div>
+    </div>
 </form>
 
 <ul class="movies-list">
