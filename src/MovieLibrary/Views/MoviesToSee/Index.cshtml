@@ -100,7 +100,7 @@
                             <span class="if-not-collapsed">Hide summary</span>
                         </a>
                         <div id="collapseSummary-@movie.Id.Value" class="collapse">
-                            @movieInfo.Summary
+                            @Html.Raw(Html.Encode(movieInfo.Summary).Replace("\n", "<br />").Replace("&#xA;", "<br />"))
                         </div>
                     </div>
                 }
