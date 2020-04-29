@@ -12,14 +12,14 @@
         return sourceUri?.OriginalString ?? Url.Content("~/img/no-poster.jpg");
     }
 
-    private static string FormatCollection(IEnumerable<string> source)
+    private string FormatCollection(IEnumerable<string> source)
     {
         var outputBuilder = new StringBuilder();
 
         var list = source.ToList();
         for (var i = 0; i < list.Count; ++i)
         {
-            outputBuilder.Append($"<span>{list[i]}</span>");
+            outputBuilder.Append($"<span>{Html.Encode(list[i])}</span>");
 
             if (i + 1 < list.Count)
             {
