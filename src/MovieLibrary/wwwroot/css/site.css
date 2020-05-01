@@ -141,3 +141,17 @@ body {
   background-color: #c8c8c8;
   border-radius: .25rem;
 }
+
+.movie-info:target {
+  animation: new-movie-fade-in 3s linear;
+}
+
+@keyframes new-movie-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
