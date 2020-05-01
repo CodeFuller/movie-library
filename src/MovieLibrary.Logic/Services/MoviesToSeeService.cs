@@ -27,14 +27,14 @@ namespace MovieLibrary.Logic.Services
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task AddMovieByUrl(Uri movieUri, CancellationToken cancellationToken)
+		public async Task<MovieId> AddMovieByUrl(Uri movieUri, CancellationToken cancellationToken)
 		{
 			logger.LogInformation("Adding movie to see '{SourceMovieUri}' ...", movieUri);
 
 			var movieInfo = await movieInfoProvider.GetMovieInfo(movieUri, cancellationToken);
 			var movieToSee = new MovieToSeeModel(clock.Now, movieInfo);
 
-			await repository.AddMovie(movieToSee, cancellationToken);
+			return await repository.AddMovie(movieToSee, cancellationToken);
 		}
 
 		public IAsyncEnumerable<MovieToSeeModel> GetAllMovies(CancellationToken cancellationToken)

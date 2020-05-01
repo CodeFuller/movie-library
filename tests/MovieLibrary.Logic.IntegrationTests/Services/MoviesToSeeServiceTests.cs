@@ -42,7 +42,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			await target.AddMovieByUrl(movieUri, CancellationToken.None);
+			var newMovieId = await target.AddMovieByUrl(movieUri, CancellationToken.None);
 
 			// Assert
 
@@ -51,7 +51,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 			var storedMovie = allMovies.SingleOrDefault(m => m?.MovieInfo.MovieUri == movieUri);
 			Assert.IsNotNull(storedMovie);
 
-			Assert.IsNotNull(storedMovie.Id);
+			Assert.AreEqual(storedMovie.Id, newMovieId);
 			Assert.AreEqual(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)), storedMovie.TimestampOfAddingToSeeList);
 			MovieAssert.AreEqual(movieInfo, storedMovie.MovieInfo);
 		}
@@ -75,7 +75,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			await target.AddMovieByUrl(movieUri, CancellationToken.None);
+			var newMovieId = await target.AddMovieByUrl(movieUri, CancellationToken.None);
 
 			// Assert
 
@@ -84,7 +84,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 			var storedMovie = allMovies.SingleOrDefault(m => m?.MovieInfo.MovieUri == movieUri);
 			Assert.IsNotNull(storedMovie);
 
-			Assert.IsNotNull(storedMovie.Id);
+			Assert.AreEqual(storedMovie.Id, newMovieId);
 			Assert.AreEqual(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)), storedMovie.TimestampOfAddingToSeeList);
 			MovieAssert.AreEqual(movieInfo, storedMovie.MovieInfo);
 		}

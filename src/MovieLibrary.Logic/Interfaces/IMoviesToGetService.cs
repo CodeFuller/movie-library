@@ -8,7 +8,7 @@ namespace MovieLibrary.Logic.Interfaces
 {
 	public interface IMoviesToGetService
 	{
-		Task AddMovieByUrl(Uri movieUri, CancellationToken cancellationToken);
+		Task<MovieId> AddMovieByUrl(Uri movieUri, CancellationToken cancellationToken);
 
 		IAsyncEnumerable<MovieToGetModel> GetAllMovies(CancellationToken cancellationToken);
 

@@ -36,9 +36,9 @@ namespace MovieLibrary.Controllers
 			}
 
 			var newMovieToSee = model.NewMovieToSee;
-			await service.AddMovieByUrl(newMovieToSee.MovieUri, cancellationToken);
+			var newMovieId = await service.AddMovieByUrl(newMovieToSee.MovieUri, cancellationToken);
 
-			return RedirectToAction("Index");
+			return RedirectToAction("Index", "MoviesToSee", $"movie-{newMovieId.Value}");
 		}
 
 		[HttpGet]

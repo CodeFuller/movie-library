@@ -22,7 +22,7 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 			this.collection = collection ?? throw new ArgumentNullException(nameof(collection));
 		}
 
-		public async Task AddMovie(MovieToGetModel movie, CancellationToken cancellationToken)
+		public async Task<MovieId> AddMovie(MovieToGetModel movie, CancellationToken cancellationToken)
 		{
 			var document = movie.ToDocument();
 
@@ -32,6 +32,8 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 			};
 
 			await collection.InsertOneAsync(document, insertOptions, cancellationToken);
+
+			return document.Id.ToMovieId();
 		}
 
 		public async IAsyncEnumerable<MovieToGetModel> GetAllMovies([EnumeratorCancellation] CancellationToken cancellationToken)

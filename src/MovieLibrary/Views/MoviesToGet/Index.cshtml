@@ -48,7 +48,7 @@
     @foreach (var movie in Model.Movies)
     {
         var movieInfo = movie.MovieInfo;
-        <li class="movie-info">
+        <li id="movie-@movie.Id.Value" class="movie-info">
             <img class="movie-info-poster" src="@GetSafePosterUri(movieInfo.PosterUri)" alt="Poster for movie &quot;@movieInfo.Title&quot;" />
             <div class="movie-info-details">
                 <div class="movie-info-table-details-and-actions">

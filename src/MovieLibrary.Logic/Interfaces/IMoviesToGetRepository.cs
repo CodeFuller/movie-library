@@ -7,7 +7,7 @@ namespace MovieLibrary.Logic.Interfaces
 {
 	public interface IMoviesToGetRepository
 	{
-		Task AddMovie(MovieToGetModel movie, CancellationToken cancellationToken);
+		Task<MovieId> AddMovie(MovieToGetModel movie, CancellationToken cancellationToken);
 
 		IAsyncEnumerable<MovieToGetModel> GetAllMovies(CancellationToken cancellationToken);
 

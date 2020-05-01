@@ -18,7 +18,7 @@ namespace MovieLibrary.Dal.MongoDB.Extensions
 
 		public static MovieToGetModel ToModel(this MovieToGetDocument document)
 		{
-			var id = new MovieId(document.Id.ToString());
+			var id = document.Id.ToMovieId();
 			var movieInfo = document.MovieInfo.ToModel();
 
 			return new MovieToGetModel(id, document.TimestampOfAddingToGetList, movieInfo);
