@@ -30,15 +30,15 @@ namespace MovieLibrary.Controllers
 		[Authorize(Roles = "MoviesToGetAdder")]
 		public async Task<IActionResult> Index(MoviesToGetViewModel model, CancellationToken cancellationToken)
 		{
-			if (ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
-				var newMovieToGet = model.NewMovieToGet;
-				await service.AddMovieByUrl(newMovieToGet.MovieUri, cancellationToken);
-
-				ModelState.Clear();
+				return await MoviesView(cancellationToken);
 			}
 
-			return await MoviesView(cancellationToken);
+			var newMovieToGet = model.NewMovieToGet;
+			await service.AddMovieByUrl(newMovieToGet.MovieUri, cancellationToken);
+
+			return RedirectToAction("Index");
 		}
 
 		[HttpGet]
@@ -50,7 +50,7 @@ namespace MovieLibrary.Controllers
 
 			await service.MoveToMoviesToSee(movieId, cancellationToken);
 
-			return await MoviesView(cancellationToken);
+			return RedirectToAction("Index");
 		}
 
 		[HttpGet]
@@ -62,7 +62,7 @@ namespace MovieLibrary.Controllers
 
 			await service.DeleteMovie(movieId, cancellationToken);
 
-			return await MoviesView(cancellationToken);
+			return RedirectToAction("Index");
 		}
 
 		private async Task<IActionResult> MoviesView(CancellationToken cancellationToken)
