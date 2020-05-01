@@ -19,7 +19,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 		private static readonly Regex CastRegex = new Regex(@"<li itemprop=""actors""><a href=""/name/\d+/"">(.+?)</a></li>", RegexOptions.Compiled);
 		private static readonly Regex RatingValueRegex = new Regex(@"<span class=""rating_ball"">(\d+\.\d+)</span>", RegexOptions.Compiled);
 		private static readonly Regex RatingCountRegex = new Regex(@"<meta itemprop=""ratingCount"" content=""(\d+)"" />", RegexOptions.Compiled);
-		private static readonly Regex DurationRegex = new Regex(@"<td class=""time"" id=""runtime"">(\d+) мин\. ", RegexOptions.Compiled);
+		private static readonly Regex DurationRegex = new Regex(@"<td class=""time"" id=""runtime"">(\d+) мин\.", RegexOptions.Compiled);
 		private static readonly Regex GenresRegex = new Regex(@"<span itemprop=""genre"">\s*(?:<a href=""/lists/navigator/.+?/\?quick_filters=films"">(.+?)</a>(?:,\s*)?)+</span>", RegexOptions.Compiled);
 		private static readonly Regex SummaryRegex = new Regex(@"<span class=""_reachbanner_""><div class=""brand_words film-synopsys"" itemprop=""description"">(.+?)</div></span>", RegexOptions.Compiled);
 
