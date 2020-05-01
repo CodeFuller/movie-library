@@ -1,8 +1,5 @@
 echo off
 
-echo [93mMoving "MovieLibrary.zip" from FTP directory to temporary location ...[0m
-move /Y "C:\inetpub\ftproot\MovieLibrary.zip" "C:\inetpub\temp\deploy" || goto :error
-
 echo [93mRestarting IIS ...[0m
 iisreset || goto :error
 
@@ -29,8 +26,7 @@ del "C:\inetpub\temp\deploy\MovieLibrary.zip"
 echo [93mRestarting IIS ...[0m
 iisreset || goto :error
 
-echo [92mDeployed successfully![0m
-pause
+echo [92mLocal deployment completed successfully![0m
 goto :EOF
 
 :error
@@ -40,6 +36,5 @@ if "%exit_code%"=="0" (
     set exit_code=1
 )
 
-echo [91mDeployment FAILED with the error #%exit_code%[0m
-pause
+echo [91mLocal deployment has FAILED with the error #%exit_code%[0m
 exit /b %exit_code%
