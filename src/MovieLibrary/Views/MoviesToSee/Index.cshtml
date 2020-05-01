@@ -5,33 +5,31 @@
 @using System.Text
 @model MoviesToSeeViewModel
 
-@functions
-{
-    private string GetSafePosterUri(Uri sourceUri)
-    {
-        return sourceUri?.OriginalString ?? Url.Content("~/img/no-poster.jpg");
-    }
-
-    private string FormatCollection(IEnumerable<string> source)
+@{
+    void ProduceCollection(IEnumerable<string> source)
     {
         var outputBuilder = new StringBuilder();
 
         var list = source.ToList();
         for (var i = 0; i < list.Count; ++i)
         {
-            outputBuilder.Append($"<span>{Html.Encode(list[i])}</span>");
+            <span>@list[i]</span>
 
             if (i + 1 < list.Count)
             {
-                outputBuilder.Append(", ");
+                @:,
             }
         }
-
-        return outputBuilder.ToString();
     }
 }
 
-<h3 class="text-center">@ViewData["Title"]</h3>
+@functions
+{
+    private string GetSafePosterUri(Uri sourceUri)
+    {
+        return sourceUri?.OriginalString ?? Url.Content("~/img/no-poster.jpg");
+    }
+}
 
 @if (User.IsInRole("MoviesToSeeAdder"))
 {
@@ -64,15 +62,27 @@
                                 </tr>
                                 <tr>
                                     <td class="movie-info-table-key">Genres</td>
-                                    <td>@Html.Raw(FormatCollection(movieInfo.Genres))</td>
+                                    <td>
+                                        @{
+                                            ProduceCollection(movieInfo.Genres);
+                                        }
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="movie-info-table-key">Director</td>
-                                    <td>@Html.Raw(FormatCollection(movieInfo.Directors))</td>
+                                    <td>
+                                        @{
+                                            ProduceCollection(movieInfo.Directors);
+                                        }
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="movie-info-table-key">Cast</td>
-                                    <td>@Html.Raw(FormatCollection(movieInfo.Cast))</td>
+                                    <td>
+                                        @{
+                                            ProduceCollection(movieInfo.Cast);
+                                        }
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="movie-info-table-key">Rating</td>

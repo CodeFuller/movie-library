@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="shortcut icon" href="~/favicon.ico">
 </head>
+
+@{
+    async Task ProduceNavItem(string controllerName, string actionName, string title)
+    {
+        var currentController = Html.ViewContext.RouteData.Values["controller"] as string;
+        var currentAction = Html.ViewContext.RouteData.Values["action"] as string;
+
+        var isActive = currentController == controllerName && currentAction == actionName;
+
+        var classes = "nav-link text-dark";
+        if (isActive)
+        {
+            classes += " active";
+        }
+
+        <li class="nav-item">
+            <a class="@classes" asp-area="" asp-controller="@controllerName" asp-action="@actionName">@title</a>
+        </li>
+    }
+}
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -19,12 +40,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="MoviesToGet" asp-action="Index">Movies to Get</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="MoviesToSee" asp-action="Index">Movies to See</a>
-                        </li>
+                        @{
+                            await ProduceNavItem("MoviesToGet", "Index", "Movies to Get");
+                            await ProduceNavItem("MoviesToSee", "Index", "Movies to See");
+                        }
                     </ul>
                 </div>
             </div>

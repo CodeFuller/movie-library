@@ -136,3 +136,8 @@ body {
 [data-toggle="collapse"]:not(.collapsed) .if-collapsed {
   display: none;
 }
+
+.nav-link.active {
+  background-color: #c8c8c8;
+  border-radius: .25rem;
+}
