@@ -33,7 +33,7 @@
 
 @if (User.IsInRole("MoviesToSeeAdder"))
 {
-    <form method="post">
+    <form method="post" asp-action="AddMovie">
         <div asp-validation-summary="All"></div>
         <div class="input-group">
             <div class="input-group-append">

@@ -28,7 +28,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(Roles = "MoviesToGetAdder")]
-		public async Task<IActionResult> Index(MoviesToGetViewModel model, CancellationToken cancellationToken)
+		public async Task<IActionResult> AddMovie(MoviesToGetViewModel model, CancellationToken cancellationToken)
 		{
 			if (!ModelState.IsValid)
 			{
