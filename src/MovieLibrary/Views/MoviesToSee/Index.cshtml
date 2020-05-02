@@ -112,22 +112,22 @@
                         </div>
                     </div>
                     @if (!String.IsNullOrEmpty(movieInfo.Summary))
-                {
-                    <div class="movie-info-summary">
-                        <a class="collapsed" data-toggle="collapse" href="#collapseSummary-@movie.Id.Value">
-                            <span class="if-collapsed">Show summary</span>
-                            <span class="if-not-collapsed">Hide summary</span>
-                        </a>
-                        <div id="collapseSummary-@movie.Id.Value" class="collapse">
-                            @foreach (var paragraph in movieInfo.Summary.Split("\n\n"))
-                            {
-                            <p>
-                                @paragraph
-                            </p>
-                            }
+                    {
+                        <div class="movie-info-summary">
+                            <a class="collapsed" data-toggle="collapse" href="#collapseSummary-@movie.Id.Value">
+                                <span class="if-collapsed">Show summary</span>
+                                <span class="if-not-collapsed">Hide summary</span>
+                            </a>
+                            <div id="collapseSummary-@movie.Id.Value" class="collapse">
+                                @foreach (var paragraph in movieInfo.Summary.Split("\n\n"))
+                                {
+                                    <p>
+                                        @paragraph
+                                    </p>
+                                }
+                            </div>
                         </div>
-                    </div>
-                }
+                    }
                 </div>
             </div>
         </li>

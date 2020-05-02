@@ -43,6 +43,19 @@ namespace MovieLibrary.Controllers
 
 		[HttpGet]
 		[Authorize(Roles = "MoviesToSeeAdder")]
+		public async Task<IActionResult> ConfirmMovingToSee(string id, CancellationToken cancellationToken)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+			var movieId = new MovieId(id);
+
+			var movie = await service.GetMovie(movieId, cancellationToken);
+			var viewModel = new MovieToGetViewModel(movie);
+
+			return View(viewModel);
+		}
+
+		[HttpPost]
+		[Authorize(Roles = "MoviesToSeeAdder")]
 		public async Task<IActionResult> MoveToMoviesToSee(string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
@@ -50,6 +63,13 @@ namespace MovieLibrary.Controllers
 
 			await service.MoveToMoviesToSee(movieId, cancellationToken);
 
+			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		[Authorize(Roles = "MoviesToSeeAdder")]
+		public IActionResult CancelMovingToSee()
+		{
 			return RedirectToAction("Index");
 		}
 
