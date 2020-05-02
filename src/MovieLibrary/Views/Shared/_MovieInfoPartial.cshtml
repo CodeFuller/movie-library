@@ -8,11 +8,11 @@
             <tbody>
                 <tr>
                     <td class="movie-info-table-key">Year</td>
-                    <td>@Model.Year</td>
+                    <td class="movie-info-table-value">@Model.Year</td>
                 </tr>
                 <tr>
                     <td class="movie-info-table-key">Genres</td>
-                    <td>
+                    <td class="movie-info-table-value">
                         @{
                             ProduceCollection(Model.Genres);
                         }
@@ -20,7 +20,7 @@
                 </tr>
                 <tr>
                     <td class="movie-info-table-key">Director</td>
-                    <td>
+                    <td class="movie-info-table-value">
                         @{
                             ProduceCollection(Model.Directors);
                         }
@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <td class="movie-info-table-key">Cast</td>
-                    <td>
+                    <td class="movie-info-table-value">
                         @{
                             ProduceCollection(Model.Cast);
                         }
@@ -36,11 +36,11 @@
                 </tr>
                 <tr>
                     <td class="movie-info-table-key">Rating</td>
-                    <td>@Model.Rating</td>
+                    <td class="movie-info-table-value">@Model.Rating</td>
                 </tr>
                 <tr>
                     <td class="movie-info-table-key">Duration</td>
-                    <td>@Model.Duration</td>
+                    <td class="movie-info-table-value">@Model.Duration</td>
                 </tr>
             </tbody>
         </table>

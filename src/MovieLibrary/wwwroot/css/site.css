@@ -114,6 +114,7 @@ body {
 
 .movie-info-details {
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
 }
 
@@ -129,6 +130,14 @@ body {
 .movie-info-table-key {
   font-weight: 600;
   padding-right: 60px;
+
+  /* Making the key column as small as possible */
+  width: 1px;
+  white-space: nowrap;
+}
+
+.movie-info-table-value {
+  width: auto;
 }
 
 .movie-info-summary {
