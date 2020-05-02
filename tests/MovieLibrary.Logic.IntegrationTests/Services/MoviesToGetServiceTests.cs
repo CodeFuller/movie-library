@@ -128,6 +128,44 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 		}
 
 		[TestMethod]
+		public async Task GetMovie_MovieExists_ReturnsMovieData()
+		{
+			// Arrange
+
+			var serviceProvider = await BootstrapTests(seedData: true);
+			var target = serviceProvider.GetRequiredService<IMoviesToGetService>();
+
+			var movieId = await GetMovieId(serviceProvider, DataForSeeding.MovieToGet1);
+
+			// Act
+
+			var movie = await target.GetMovie(movieId, CancellationToken.None);
+
+			// Assert
+
+			MovieAssert.AreEqual(DataForSeeding.MovieToGet1, movie);
+		}
+
+		[TestMethod]
+		public async Task GetMovie_MovieDoesNotExist_ThrowsNotFoundException()
+		{
+			// Arrange
+
+			var serviceProvider = await BootstrapTests(seedData: true);
+			var target = serviceProvider.GetRequiredService<IMoviesToGetService>();
+
+			var movieId = new MovieId("5ea68c4477f3ed42b8a798da");
+
+			// Act
+
+			Task Call() => target.GetMovie(movieId, CancellationToken.None);
+
+			// Assert
+
+			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
+		}
+
+		[TestMethod]
 		public async Task MoveToMoviesToSee_MovieExists_MovesMovie()
 		{
 			// Arrange

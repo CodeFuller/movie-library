@@ -55,13 +55,33 @@ namespace MovieLibrary.Controllers
 
 		[HttpGet]
 		[Authorize(Roles = "CanDeleteMoviesToGet")]
-		public async Task<IActionResult> DeleteMovie(string id, CancellationToken cancellationToken)
+		public async Task<IActionResult> ConfirmMovieDeletion(string id, CancellationToken cancellationToken)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+			var movieId = new MovieId(id);
+
+			var movie = await service.GetMovie(movieId, cancellationToken);
+			var viewModel = new MovieToGetViewModel(movie);
+
+			return View(viewModel);
+		}
+
+		[HttpPost]
+		[Authorize(Roles = "CanDeleteMoviesToGet")]
+		public async Task<IActionResult> DeleteMovie([FromForm] string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 			var movieId = new MovieId(id);
 
 			await service.DeleteMovie(movieId, cancellationToken);
 
+			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		[Authorize(Roles = "CanDeleteMoviesToGet")]
+		public IActionResult CancelMovieDeletion()
+		{
 			return RedirectToAction("Index");
 		}
 

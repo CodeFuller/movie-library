@@ -12,6 +12,8 @@ namespace MovieLibrary.Logic.Interfaces
 
 		IAsyncEnumerable<MovieToSeeModel> GetAllMovies(CancellationToken cancellationToken);
 
+		Task<MovieToSeeModel> GetMovie(MovieId movieId, CancellationToken cancellationToken);
+
 		Task MarkMovieAsSeen(MovieId movieId, CancellationToken cancellationToken);
 
 		Task DeleteMovie(MovieId movieId, CancellationToken cancellationToken);

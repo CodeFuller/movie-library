@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Confirm Movie Deletion";
+}
+
+@using System.Text
+@model MovieToSeeViewModel
+
+<div class="alert alert-warning" role="alert">
+    Are you sure you want to delete the following movie?
+</div>
+
+@{
+    var movieId = Model.Id;
+    var movieInfo = Model.MovieInfo;
+}
+
+<div class="movie-info">
+    <img class="movie-info-poster" src="@GetSafePosterUri(movieInfo.PosterUri)" alt="Poster for movie &quot;@movieInfo.Title&quot;" />
+    <div class="movie-info-details">
+        <div class="movie-info-table-details-and-actions">
+            <div class="movie-info-table-details">
+                <a class="movie-info-title" href="@movieInfo.MovieUri">@movieInfo.Title</a>
+                <table class="movie-info-table">
+                    <tbody>
+                        <tr>
+                            <td class="movie-info-table-key">Year</td>
+                            <td>@movieInfo.Year</td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Genres</td>
+                            <td>
+                                @{
+                                    ProduceCollection(movieInfo.Genres);
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Director</td>
+                            <td>
+                                @{
+                                    ProduceCollection(movieInfo.Directors);
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Cast</td>
+                            <td>
+                                @{
+                                    ProduceCollection(movieInfo.Cast);
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Rating</td>
+                            <td>@movieInfo.Rating</td>
+                        </tr>
+                        <tr>
+                            <td class="movie-info-table-key">Duration</td>
+                            <td>@movieInfo.Duration</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @if (!String.IsNullOrEmpty(movieInfo.Summary))
+        {
+            <div class="movie-info-summary">
+                <a class="collapsed" data-toggle="collapse" href="#collapseSummary-@movieId.Value">
+                    <span class="if-collapsed">Show summary</span>
+                    <span class="if-not-collapsed">Hide summary</span>
+                </a>
+                <div id="collapseSummary-@movieId.Value" class="collapse">
+                    @foreach (var paragraph in movieInfo.Summary.Split("\n\n"))
+                    {
+                        <p>
+                            @paragraph
+                        </p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<form method="post" asp-action="DeleteMovie">
+    <input type="hidden" id="id" name="id" value="@movieId.Value" />
+    <button class="btn btn-primary" type="submit">Delete</button>
+    <button class="btn btn-primary" type="submit" asp-action="CancelMovieDeletion">Cancel</button>
+</form>
+
+@{
+    void ProduceCollection(IEnumerable<string> source)
+    {
+        var outputBuilder = new StringBuilder();
+
+        var list = source.ToList();
+        for (var i = 0; i < list.Count; ++i)
+        {
+            <span>@list[i]</span>
+
+            if (i + 1 < list.Count)
+            {
+                @:,
+            }
+        }
+    }
+}
+
+@functions
+{
+    private string GetSafePosterUri(Uri sourceUri)
+    {
+        return sourceUri?.OriginalString ?? Url.Content("~/img/no-poster.jpg");
+    }
+}

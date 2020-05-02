@@ -48,6 +48,11 @@ namespace MovieLibrary.Logic.Services
 				.OrderBy(m => m.TimestampOfAddingToGetList);
 		}
 
+		public Task<MovieToGetModel> GetMovie(MovieId movieId, CancellationToken cancellationToken)
+		{
+			return moviesToGetRepository.GetMovie(movieId, cancellationToken);
+		}
+
 		public async Task MoveToMoviesToSee(MovieId movieId, CancellationToken cancellationToken)
 		{
 			logger.LogInformation("Moving movie {MovieId} to movies to see ...", movieId);

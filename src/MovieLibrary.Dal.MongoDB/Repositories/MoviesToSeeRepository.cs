@@ -46,6 +46,26 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 			}
 		}
 
+		public async Task<MovieToSeeModel> GetMovie(MovieId movieId, CancellationToken cancellationToken)
+		{
+			var filter = BuildMovieFilter(movieId);
+
+			var options = new FindOptions<MovieToSeeDocument>
+			{
+				Limit = 1,
+			};
+
+			var cursor = await collection.FindAsync(filter, options, cancellationToken);
+			var document = await cursor.FirstOrDefaultAsync(cancellationToken);
+
+			if (document == null)
+			{
+				throw new NotFoundException($"The movie with id {movieId} was not found among movies to see");
+			}
+
+			return document.ToModel();
+		}
+
 		public async Task DeleteMovie(MovieId movieId, CancellationToken cancellationToken)
 		{
 			var filter = BuildMovieFilter(movieId);

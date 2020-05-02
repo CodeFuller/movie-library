@@ -75,13 +75,14 @@ body {
   list-style-type: none;
 }
 
+.movies-list-item {
+  border-bottom: 1px solid gray;
+}
+
 .movie-info {
   display: flex;
   flex-direction: row;
-
   padding: 20px 0 20px 0;
-
-  border-bottom: 1px solid gray;
 }
 
 .movie-info-poster {

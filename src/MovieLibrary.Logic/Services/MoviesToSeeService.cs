@@ -45,6 +45,11 @@ namespace MovieLibrary.Logic.Services
 				.OrderBy(m => m.TimestampOfAddingToSeeList);
 		}
 
+		public Task<MovieToSeeModel> GetMovie(MovieId movieId, CancellationToken cancellationToken)
+		{
+			return repository.GetMovie(movieId, cancellationToken);
+		}
+
 		public async Task MarkMovieAsSeen(MovieId movieId, CancellationToken cancellationToken)
 		{
 			logger.LogInformation("Marking movie {MovieId} as seen ...", movieId);
