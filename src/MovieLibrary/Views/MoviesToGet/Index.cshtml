@@ -118,7 +118,12 @@
                             <span class="if-not-collapsed">Hide summary</span>
                         </a>
                         <div id="collapseSummary-@movie.Id.Value" class="collapse">
-                            @Html.Raw(Html.Encode(movieInfo.Summary).Replace("\n", "<br />").Replace("&#xA;", "<br />"))
+                            @foreach (var paragraph in movieInfo.Summary.Split("\n\n"))
+                            {
+                            <p>
+                                @paragraph
+                            </p>
+                            }
                         </div>
                     </div>
                 }
