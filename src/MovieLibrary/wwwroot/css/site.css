@@ -70,6 +70,11 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
+.nav-link.active {
+  background-color: #c8c8c8;
+  border-radius: .25rem;
+}
+
 .movies-list {
   padding-left: 0;
   list-style-type: none;
@@ -79,10 +84,23 @@ body {
   border-bottom: 1px solid gray;
 }
 
+.movie-info-and-actions {
+  display: flex;
+  flex-direction: row;
+}
+
+.movie-info-and-actions, .single-movie-item {
+  padding: 20px 0 20px 0;
+}
+
 .movie-info {
   display: flex;
   flex-direction: row;
-  padding: 20px 0 20px 0;
+  /*
+    Occupy all width, even if movie details are narrow.
+    Without this, actions block will move left for movies with narrow details.
+  */
+  flex-grow: 1;
 }
 
 .movie-info-poster {
@@ -97,20 +115,6 @@ body {
 .movie-info-details {
   display: flex;
   flex-direction: column;
-  /*
-    Occupy all width, even if movie details are narrow.
-    Without this, actions block will move left for movies with narrow details.
-  */
-  flex-grow: 1;
-}
-
-.movie-info-table-details-and-actions {
-  display: flex;
-  flex-direction: row;
-}
-
-.movie-info-table-details {
-  flex-grow: 1;
 }
 
 .movie-info-title {
@@ -118,6 +122,7 @@ body {
 }
 
 .movie-info-table {
+  flex-grow: 1;
   margin-bottom: 1em;
 }
 
@@ -130,17 +135,19 @@ body {
   text-align: justify;
 }
 
+.movie-actions {
+  /* Preventing action links from breaking into severla lines when summary is expanded
+    (movie-info strives to occupy widest space).
+  */
+  white-space: nowrap;
+}
+
 [data-toggle="collapse"].collapsed .if-not-collapsed {
   display: none;
 }
 
 [data-toggle="collapse"]:not(.collapsed) .if-collapsed {
   display: none;
-}
-
-.nav-link.active {
-  background-color: #c8c8c8;
-  border-radius: .25rem;
 }
 
 .movie-info:target {

@@ -1,0 +1,90 @@
+﻿@model MovieInfoViewModel
+
+<div class="movie-info">
+    <img class="movie-info-poster" src="@GetSafePosterUri(Model.PosterUri)" alt="Poster for movie &quot;Model.Title&quot;" />
+    <div class="movie-info-details">
+        <a class="movie-info-title" href="@Model.MovieUri">@Model.Title</a>
+        <table class="movie-info-table">
+            <tbody>
+                <tr>
+                    <td class="movie-info-table-key">Year</td>
+                    <td>@Model.Year</td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Genres</td>
+                    <td>
+                        @{
+                            ProduceCollection(Model.Genres);
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Director</td>
+                    <td>
+                        @{
+                            ProduceCollection(Model.Directors);
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Cast</td>
+                    <td>
+                        @{
+                            ProduceCollection(Model.Cast);
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Rating</td>
+                    <td>@Model.Rating</td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Duration</td>
+                    <td>@Model.Duration</td>
+                </tr>
+            </tbody>
+        </table>
+        @if (!String.IsNullOrEmpty(Model.Summary))
+        {
+            var collapseId = $"collapseSummary-{Guid.NewGuid():N}";
+            <div class="movie-info-summary">
+                <a class="collapsed" data-toggle="collapse" href="#@collapseId">
+                    <span class="if-collapsed">Show summary</span>
+                    <span class="if-not-collapsed">Hide summary</span>
+                </a>
+                <div id="@collapseId" class="collapse">
+                    @foreach (var paragraph in Model.Summary.Split("\n\n"))
+                    {
+                        <p>
+                            @paragraph
+                        </p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@{
+    void ProduceCollection(IEnumerable<string> source)
+    {
+        var list = source.ToList();
+        for (var i = 0; i < list.Count; ++i)
+        {
+            <span>@list[i]</span>
+
+            if (i + 1 < list.Count)
+            {
+                @:,
+            }
+        }
+    }
+}
+
+@functions
+{
+    private string GetSafePosterUri(Uri sourceUri)
+    {
+        return sourceUri?.OriginalString ?? Url.Content("~/img/no-poster.jpg");
+    }
+}
