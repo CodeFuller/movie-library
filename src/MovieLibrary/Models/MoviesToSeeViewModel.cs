@@ -11,6 +11,12 @@ namespace MovieLibrary.Models
 
 		public IReadOnlyCollection<MovieToSeeViewModel> Movies { get; }
 
+		public bool AddedMovie { get; set; }
+
+		public bool MarkedMovieAsSeen { get; set; }
+
+		public bool DeletedMovie { get; set; }
+
 		public MoviesToSeeViewModel()
 		{
 		}

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
 using MovieLibrary.Models;
@@ -12,6 +13,10 @@ namespace MovieLibrary.Controllers
 {
 	public class MoviesToGetController : Controller
 	{
+		private const string TempDataAddedMovie = "AddedMovie";
+		private const string TempDataMovedMovie = "MovedMovie";
+		private const string TempDataDeletedMovie = "DeletedMovie";
+
 		private readonly IMoviesToGetService service;
 
 		public MoviesToGetController(IMoviesToGetService service)
@@ -38,6 +43,8 @@ namespace MovieLibrary.Controllers
 			var newMovieToGet = model.NewMovieToGet;
 			var newMovieId = await service.AddMovieByUrl(newMovieToGet.MovieUri, cancellationToken);
 
+			TempData[TempDataAddedMovie] = true;
+
 			return RedirectToAction("Index", "MoviesToGet", $"movie-{newMovieId.Value}");
 		}
 
@@ -62,6 +69,8 @@ namespace MovieLibrary.Controllers
 			var movieId = new MovieId(id);
 
 			await service.MoveToMoviesToSee(movieId, cancellationToken);
+
+			TempData[TempDataMovedMovie] = true;
 
 			return RedirectToAction("Index");
 		}
@@ -95,6 +104,8 @@ namespace MovieLibrary.Controllers
 
 			await service.DeleteMovie(movieId, cancellationToken);
 
+			TempData[TempDataDeletedMovie] = true;
+
 			return RedirectToAction("Index");
 		}
 
@@ -108,6 +119,9 @@ namespace MovieLibrary.Controllers
 		private async Task<IActionResult> MoviesView(CancellationToken cancellationToken)
 		{
 			var viewModel = await ReadMoviesToGet(cancellationToken);
+			viewModel.AddedMovie = TempData.GetBooleanValue(TempDataAddedMovie);
+			viewModel.MovedMovie = TempData.GetBooleanValue(TempDataMovedMovie);
+			viewModel.DeletedMovie = TempData.GetBooleanValue(TempDataDeletedMovie);
 
 			return View("Index", viewModel);
 		}

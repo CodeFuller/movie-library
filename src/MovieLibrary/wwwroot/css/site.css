@@ -150,7 +150,7 @@ body {
   display: none;
 }
 
-.movie-info:target {
+.movies-list-item:target {
   animation: new-movie-fade-in 3s linear;
 }
 

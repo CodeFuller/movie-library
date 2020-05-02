@@ -4,6 +4,27 @@
 
 @model MoviesToGetViewModel
 
+@if (Model.AddedMovie)
+{
+    <div class="alert alert-success" role="alert">
+        The movie was added successfully.
+    </div>
+}
+
+@if (Model.MovedMovie)
+{
+    <div class="alert alert-success" role="alert">
+        The movie was moved successfully.
+    </div>
+}
+
+@if (Model.DeletedMovie)
+{
+    <div class="alert alert-success" role="alert">
+        The movie was deleted successfully.
+    </div>
+}
+
 @if (User.IsInRole("MoviesToGetAdder"))
 {
     <form method="post" asp-action="AddMovie">
