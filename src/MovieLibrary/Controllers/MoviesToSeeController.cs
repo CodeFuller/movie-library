@@ -43,6 +43,19 @@ namespace MovieLibrary.Controllers
 
 		[HttpGet]
 		[Authorize(Roles = "CanMarkMoviesAsSeen")]
+		public async Task<IActionResult> ConfirmMarkingAsSeen(string id, CancellationToken cancellationToken)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+			var movieId = new MovieId(id);
+
+			var movie = await service.GetMovie(movieId, cancellationToken);
+			var viewModel = new MovieToSeeViewModel(movie);
+
+			return View(viewModel);
+		}
+
+		[HttpPost]
+		[Authorize(Roles = "CanMarkMoviesAsSeen")]
 		public async Task<IActionResult> MarkMovieAsSeen(string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
@@ -50,6 +63,13 @@ namespace MovieLibrary.Controllers
 
 			await service.MarkMovieAsSeen(movieId, cancellationToken);
 
+			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		[Authorize(Roles = "CanMarkMoviesAsSeen")]
+		public IActionResult CancelMarkingAsSeen()
+		{
 			return RedirectToAction("Index");
 		}
 

@@ -100,7 +100,7 @@
                             @if (User.IsInRole("CanMarkMoviesAsSeen"))
                             {
                                 <div>
-                                    <a asp-action="MarkMovieAsSeen" asp-route-id="@movie.Id.Value">Mark as seen</a>
+                                    <a asp-action="ConfirmMarkingAsSeen" asp-route-id="@movie.Id.Value">Mark as seen</a>
                                 </div>
                             }
                             @if (User.IsInRole("CanDeleteMoviesToSee"))
