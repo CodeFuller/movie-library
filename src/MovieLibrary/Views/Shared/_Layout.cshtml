@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using MovieLibrary.Internal
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -43,7 +44,7 @@
                         @{
                             await ProduceNavItem("MoviesToGet", "Index", "Movies to Get");
                             await ProduceNavItem("MoviesToSee", "Index", "Movies to See");
-                            if (User.IsInRole("Administrator"))
+                            if (User.IsInRole(Roles.Administrator))
                             {
                                 await ProduceNavItem("Users", "Index", "Manager Users");
                             }

@@ -11,7 +11,7 @@ using MovieLibrary.UserManagement.ViewModels;
 
 namespace MovieLibrary.Controllers
 {
-	[Authorize(Roles = Roles.AdministratorRole)]
+	[Authorize(Roles = Roles.Administrator)]
 	public class UsersController : Controller
 	{
 		private const string TempDataAddedUser = "AddedUser";

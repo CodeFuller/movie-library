@@ -2,6 +2,7 @@
     ViewData["Title"] = "Movies to Get";
 }
 
+@using MovieLibrary.Internal
 @model MoviesToGetViewModel
 
 @if (Model.AddedMovie)
@@ -25,7 +26,7 @@
     </div>
 }
 
-@if (User.IsInRole("MoviesToGetAdder"))
+@if (User.IsInRole(Roles.CanAddMoviesToGet))
 {
     <form method="post" asp-action="AddMovie">
         <div asp-validation-summary="All"></div>
@@ -38,27 +39,30 @@
     </form>
 }
 
-<ul class="movies-list">
-    @foreach (var movie in Model.Movies)
-    {
-        <li id="movie-@movie.Id.Value" class="movies-list-item">
-            <div class="movie-info-and-actions">
-                @await Html.PartialAsync("_MovieInfoPartial", movie.MovieInfo)
-                <div class="movie-actions">
-                    @if (User.IsInRole("MoviesToSeeAdder"))
-                    {
-                        <div>
-                            <a asp-action="ConfirmMovingToSee" asp-route-id="@movie.Id.Value">To see</a>
-                        </div>
-                    }
-                    @if (User.IsInRole("CanDeleteMoviesToGet"))
-                    {
-                        <div>
-                            <a asp-action="ConfirmMovieDeletion" asp-route-id="@movie.Id.Value">Delete</a>
-                        </div>
-                    }
+@if (User.IsInRole(Roles.CanReadMoviesToGet))
+{
+    <ul class="movies-list">
+        @foreach (var movie in Model.Movies)
+        {
+            <li id="movie-@movie.Id.Value" class="movies-list-item">
+                <div class="movie-info-and-actions">
+                    @await Html.PartialAsync("_MovieInfoPartial", movie.MovieInfo)
+                    <div class="movie-actions">
+                        @if (User.IsInRole(Roles.CanAddMoviesToSee))
+                        {
+                            <div>
+                                <a asp-action="ConfirmMovingToSee" asp-route-id="@movie.Id.Value">To see</a>
+                            </div>
+                        }
+                        @if (User.IsInRole(Roles.CanDeleteMoviesToGet))
+                        {
+                            <div>
+                                <a asp-action="ConfirmMovieDeletion" asp-route-id="@movie.Id.Value">Delete</a>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
-        </li>
-    }
-</ul>
+            </li>
+        }
+    </ul>
+}

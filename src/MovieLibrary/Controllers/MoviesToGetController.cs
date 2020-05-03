@@ -25,14 +25,14 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "MoviesToGetReader")]
+		[Authorize(Roles = Roles.CanAddOrReadMoviesToGet)]
 		public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
 			return await MoviesView(cancellationToken);
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "MoviesToGetAdder")]
+		[Authorize(Roles = Roles.CanAddMoviesToGet)]
 		public async Task<IActionResult> AddMovie(MoviesToGetViewModel model, CancellationToken cancellationToken)
 		{
 			if (!ModelState.IsValid)
@@ -49,7 +49,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "MoviesToSeeAdder")]
+		[Authorize(Roles = Roles.CanAddMoviesToSee)]
 		public async Task<IActionResult> ConfirmMovingToSee(string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
@@ -62,7 +62,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "MoviesToSeeAdder")]
+		[Authorize(Roles = Roles.CanAddMoviesToSee)]
 		public async Task<IActionResult> MoveToMoviesToSee(string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
@@ -76,7 +76,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "CanDeleteMoviesToGet")]
+		[Authorize(Roles = Roles.CanDeleteMoviesToGet)]
 		public async Task<IActionResult> ConfirmMovieDeletion(string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
@@ -89,7 +89,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "CanDeleteMoviesToGet")]
+		[Authorize(Roles = Roles.CanDeleteMoviesToGet)]
 		public async Task<IActionResult> DeleteMovie([FromForm] string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));

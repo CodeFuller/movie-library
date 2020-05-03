@@ -2,36 +2,40 @@
 
 namespace MovieLibrary.Internal
 {
-	internal static class Roles
+	public static class Roles
 	{
-		public static string MoviesToGetAdderRole => "MoviesToGetAdder";
+		public const string Administrator = "Administrator";
 
-		public static string MoviesToGetReaderRole => "MoviesToGetReader";
+		public const string CanAddMoviesToGet = "CanAddMoviesToGet";
 
-		public static string MoviesToSeeAdderRole => "MoviesToSeeAdder";
+		public const string CanReadMoviesToGet = "CanReadMoviesToGet";
 
-		public static string MoviesToSeeReaderRole => "MoviesToSeeReader";
+		public const string CanDeleteMoviesToGet = "CanDeleteMoviesToGet";
 
-		public static string CanMarkMoviesAsSeenRole => "CanMarkMoviesAsSeen";
+		public const string CanAddMoviesToSee = "CanAddMoviesToSee";
 
-		public static string CanDeleteMoviesToGetRole => "CanDeleteMoviesToGet";
+		public const string CanReadMoviesToSee = "CanReadMoviesToSee";
 
-		public static string CanDeleteMoviesToSeeRole => "CanDeleteMoviesToSee";
+		public const string CanMarkMoviesAsSeen = "CanMarkMoviesAsSeen";
 
-		public const string AdministratorRole = "Administrator";
+		public const string CanDeleteMoviesToSee = "CanDeleteMoviesToSee";
+
+		// Combined roles
+		public const string CanAddOrReadMoviesToGet = "CanAddMoviesToGet, CanReadMoviesToGet";
+		public const string CanAddOrReadMoviesToSee = "CanAddMoviesToSee, CanReadMoviesToSee";
 
 		public static IEnumerable<string> All
 		{
 			get
 			{
-				yield return MoviesToGetAdderRole;
-				yield return MoviesToGetReaderRole;
-				yield return MoviesToSeeAdderRole;
-				yield return MoviesToSeeReaderRole;
-				yield return CanMarkMoviesAsSeenRole;
-				yield return CanDeleteMoviesToGetRole;
-				yield return CanDeleteMoviesToSeeRole;
-				yield return AdministratorRole;
+				yield return Administrator;
+				yield return CanAddMoviesToGet;
+				yield return CanReadMoviesToGet;
+				yield return CanDeleteMoviesToGet;
+				yield return CanAddMoviesToSee;
+				yield return CanReadMoviesToSee;
+				yield return CanMarkMoviesAsSeen;
+				yield return CanDeleteMoviesToSee;
 			}
 		}
 	}
