@@ -13,6 +13,9 @@ namespace MovieLibrary.Controllers
 	[Authorize(Roles = Roles.AdministratorRole)]
 	public class UsersController : Controller
 	{
+		private const string TempDataUpdatedUser = "UpdatedUser";
+		private const string TempDataDeletedUser = "DeletedUser";
+
 		private readonly IUserService userService;
 
 		public UsersController(IUserService userService)
@@ -26,6 +29,9 @@ namespace MovieLibrary.Controllers
 			var users = await userService.GetAllUsers(cancellationToken).ToListAsync(cancellationToken);
 
 			var viewModel = new UserListViewModel(users);
+
+			viewModel.UpdatedUser = TempData.GetBooleanValue(TempDataUpdatedUser);
+			viewModel.DeletedUser = TempData.GetBooleanValue(TempDataDeletedUser);
 
 			return View(viewModel);
 		}
@@ -50,6 +56,8 @@ namespace MovieLibrary.Controllers
 
 			await userService.AssignUserPermissions(model.UserId, assignedPermissions, cancellationToken);
 
+			TempData[TempDataUpdatedUser] = true;
+
 			return RedirectToAction("Index");
 		}
 
@@ -70,6 +78,8 @@ namespace MovieLibrary.Controllers
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 
 			await userService.DeleteUser(id, cancellationToken);
+
+			TempData[TempDataDeletedUser] = true;
 
 			return RedirectToAction("Index");
 		}
