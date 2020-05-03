@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MovieLibrary.Logic.Interfaces;
-using MovieLibrary.Logic.Kinopoisk;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MovieLibrary.Logic.Interfaces;
+using MovieLibrary.Logic.Kinopoisk;
 
 namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 {
