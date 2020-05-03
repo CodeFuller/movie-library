@@ -75,13 +75,6 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
-		[HttpPost]
-		[Authorize(Roles = "CanMarkMoviesAsSeen")]
-		public IActionResult CancelMarkingAsSeen()
-		{
-			return RedirectToAction("Index");
-		}
-
 		[HttpGet]
 		[Authorize(Roles = "CanDeleteMoviesToSee")]
 		public async Task<IActionResult> ConfirmMovieDeletion(string id, CancellationToken cancellationToken)
@@ -106,13 +99,6 @@ namespace MovieLibrary.Controllers
 
 			TempData[TempDataDeletedMovie] = true;
 
-			return RedirectToAction("Index");
-		}
-
-		[HttpPost]
-		[Authorize(Roles = "CanDeleteMoviesToSee")]
-		public IActionResult CancelMovieDeletion()
-		{
 			return RedirectToAction("Index");
 		}
 

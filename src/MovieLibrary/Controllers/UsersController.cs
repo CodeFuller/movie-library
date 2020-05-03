@@ -53,12 +53,6 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
-		[HttpPost]
-		public IActionResult CancelUserUpdate()
-		{
-			return RedirectToAction("Index");
-		}
-
 		[HttpGet]
 		public async Task<IActionResult> ConfirmUserDeletion(string id, CancellationToken cancellationToken)
 		{
@@ -77,12 +71,6 @@ namespace MovieLibrary.Controllers
 
 			await userService.DeleteUser(id, cancellationToken);
 
-			return RedirectToAction("Index");
-		}
-
-		[HttpPost]
-		public IActionResult CancelUserDeletion()
-		{
 			return RedirectToAction("Index");
 		}
 

@@ -15,5 +15,5 @@
 <form method="post" asp-action="MoveToMoviesToSee">
     <input type="hidden" id="id" name="id" value="@Model.Id.Value" />
     <button class="btn btn-primary" type="submit">Move</button>
-    <button class="btn btn-primary" type="submit" asp-action="CancelMovingToSee">Cancel</button>
+    <a class="btn btn-primary" asp-action="Index">Cancel</a>
 </form>

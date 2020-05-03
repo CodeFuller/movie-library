@@ -11,5 +11,5 @@
 <form method="post" asp-action="DeleteUser">
     <input type="hidden" id="id" name="id" value="@Model.UserId" />
     <button class="btn btn-primary" type="submit">Delete</button>
-    <button class="btn btn-primary" type="submit" asp-action="CancelUserDeletion">Cancel</button>
+    <a class="btn btn-primary" asp-action="Index">Cancel</a>
 </form>
