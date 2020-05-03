@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using MovieLibrary.Extensions;
+using MovieLibrary.Internal;
 using MovieLibrary.Models;
 
 namespace MovieLibrary.Controllers
@@ -8,7 +10,22 @@ namespace MovieLibrary.Controllers
 	{
 		public IActionResult Index()
 		{
-			return RedirectToAction("Index", "MoviesToSee");
+			if (User.CanAccessMoviesToSee())
+			{
+				return RedirectToAction("Index", "MoviesToSee");
+			}
+
+			if (User.CanAccessMoviesToGet())
+			{
+				return RedirectToAction("Index", "MoviesToGet");
+			}
+
+			if (User.IsInRole(Roles.Administrator))
+			{
+				return RedirectToAction("Index", "Users");
+			}
+
+			return Forbid();
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

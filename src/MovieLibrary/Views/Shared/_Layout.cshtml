@@ -1,4 +1,5 @@
-﻿@using MovieLibrary.Internal
+﻿@using MovieLibrary.Extensions
+@using MovieLibrary.Internal
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,8 +43,16 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         @{
-                            await ProduceNavItem("MoviesToGet", "Index", "Movies to Get");
-                            await ProduceNavItem("MoviesToSee", "Index", "Movies to See");
+                            if (User.CanAccessMoviesToGet())
+                            {
+                                await ProduceNavItem("MoviesToGet", "Index", "Movies to Get");
+                            }
+
+                            if (User.CanAccessMoviesToSee())
+                            {
+                                await ProduceNavItem("MoviesToSee", "Index", "Movies to See");
+                            }
+
                             if (User.IsInRole(Roles.Administrator))
                             {
                                 await ProduceNavItem("Users", "Index", "Manager Users");
