@@ -1,10 +1,12 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using AspNetCore.Identity.Mongo;
 using AspNetCore.Identity.Mongo.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
@@ -86,7 +88,17 @@ namespace MovieLibrary
 
 				// Razor pages are required for Microsoft.AspNetCore.Identity.UI
 				endpoints.MapRazorPages();
+
+				// Disabling users registration built into Identity package.
+				endpoints.MapGet("/Identity/Account/Register", RedirectToLoginPage);
+				endpoints.MapPost("/Identity/Account/Register", RedirectToLoginPage);
 			});
+		}
+
+		private static Task RedirectToLoginPage(HttpContext context)
+		{
+			context.Response.Redirect("/Identity/Account/Login", true);
+			return Task.CompletedTask;
 		}
 	}
 }
