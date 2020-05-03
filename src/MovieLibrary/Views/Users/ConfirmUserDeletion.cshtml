@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Confirm User Deletion";
+}
+
+@model MovieLibrary.UserManagement.ViewModels.UserDetailsViewModel;
+
+<div class="alert alert-warning" role="alert">
+    Are you sure you want to delete the user '@Model.UserName'?
+</div>
+
+<form method="post" asp-action="DeleteUser">
+    <input type="hidden" id="id" name="id" value="@Model.UserId" />
+    <button class="btn btn-primary" type="submit">Delete</button>
+    <button class="btn btn-primary" type="submit" asp-action="CancelUserDeletion">Cancel</button>
+</form>

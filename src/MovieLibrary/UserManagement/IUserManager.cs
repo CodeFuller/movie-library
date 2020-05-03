@@ -19,5 +19,7 @@ namespace MovieLibrary.UserManagement
 		Task<IdentityResult> AddToRolesAsync(TUser user, IEnumerable<string> roles);
 
 		Task<IdentityResult> RemoveFromRolesAsync(TUser user, IEnumerable<string> roles);
+
+		Task<IdentityResult> DeleteAsync(TUser user);
 	}
 }

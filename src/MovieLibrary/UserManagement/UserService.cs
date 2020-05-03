@@ -67,6 +67,17 @@ namespace MovieLibrary.UserManagement
 			await RemoveUserRoles(user, rolesToRemove);
 		}
 
+		public async Task DeleteUser(string userId, CancellationToken cancellationToken)
+		{
+			var user = await FindUser(userId);
+
+			var result = await userManager.DeleteAsync(user);
+			if (!result.Succeeded)
+			{
+				throw new UserUpdateFailedException($"Failed to delete the user: {result}");
+			}
+		}
+
 		private async Task<TUser> FindUser(string userId)
 		{
 			var user = await userManager.FindByIdAsync(userId);

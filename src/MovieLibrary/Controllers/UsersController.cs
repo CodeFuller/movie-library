@@ -59,24 +59,39 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> ConfirmUserDeletion(string id, CancellationToken cancellationToken)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+
+			var user = await userService.GetUser(id, cancellationToken);
+			var viewModel = new UserDetailsViewModel(user);
+
+			return View(viewModel);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> DeleteUser(string id, CancellationToken cancellationToken)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+
+			await userService.DeleteUser(id, cancellationToken);
+
+			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		public IActionResult CancelUserDeletion()
+		{
+			return RedirectToAction("Index");
+		}
+
 		private async Task<IActionResult> UserDetailsView(string userId, CancellationToken cancellationToken)
 		{
 			_ = userId ?? throw new ArgumentNullException(nameof(userId));
 
 			var userDetails = await userService.GetUser(userId, cancellationToken);
-
-			var viewModel = new UserDetailsViewModel
-			{
-				UserId = userId,
-				UserName = userDetails.UserName,
-				Permissions = userDetails.AllPermissions
-					.Select(p => new UserPermissionViewModel
-					{
-						PermissionName = p,
-						Assigned = userDetails.UserPermissions.Contains(p),
-					})
-					.ToList(),
-			};
+			var viewModel = new UserDetailsViewModel(userDetails);
 
 			return View("Edit", viewModel);
 		}

@@ -12,5 +12,7 @@ namespace MovieLibrary.UserManagement
 		Task<UserDetailsModel> GetUser(string userId, CancellationToken cancellationToken);
 
 		Task AssignUserPermissions(string userId, IEnumerable<string> roles, CancellationToken cancellationToken);
+
+		Task DeleteUser(string userId, CancellationToken cancellationToken);
 	}
 }
