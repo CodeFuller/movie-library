@@ -12,17 +12,38 @@ using MovieLibrary.UserManagement.Models;
 namespace MovieLibrary.UserManagement
 {
 	internal class UserService<TUser, TRole, TKey> : IUserService
-		where TUser : IdentityUser<TKey>
+		where TUser : IdentityUser<TKey>, new()
 		where TRole : IdentityRole<TKey>
 		where TKey : IEquatable<TKey>
 	{
 		private readonly IUserManager<TUser, TKey> userManager;
 		private readonly IRoleManager<TRole, TKey> roleManager;
 
-		public UserService(IUserManager<TUser, TKey> userManager, IRoleManager<TRole, TKey> roleManager)
+		private readonly IUserStore<TUser> userStore;
+
+		public UserService(IUserManager<TUser, TKey> userManager, IRoleManager<TRole, TKey> roleManager, IUserStore<TUser> userStore)
 		{
 			this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
+			this.userStore = userStore ?? throw new ArgumentNullException(nameof(userStore));
+		}
+
+		public async Task CreateUser(NewUserModel user, CancellationToken cancellationToken)
+		{
+			var userEmail = user.Email;
+
+			var newUser = new TUser
+			{
+				Email = userEmail,
+			};
+
+			await userStore.SetUserNameAsync(newUser, userEmail, cancellationToken);
+
+			var result = await userManager.CreateAsync(newUser, user.Password);
+			if (!result.Succeeded)
+			{
+				throw new UserUpdateFailedException($"Failed to create the user. {result}");
+			}
 		}
 
 		public async IAsyncEnumerable<UserModel> GetAllUsers([EnumeratorCancellation] CancellationToken cancellationToken)
@@ -74,7 +95,7 @@ namespace MovieLibrary.UserManagement
 			var result = await userManager.DeleteAsync(user);
 			if (!result.Succeeded)
 			{
-				throw new UserUpdateFailedException($"Failed to delete the user: {result}");
+				throw new UserUpdateFailedException($"Failed to delete the user. {result}");
 			}
 		}
 
@@ -99,7 +120,7 @@ namespace MovieLibrary.UserManagement
 			var result = await userManager.AddToRolesAsync(user, rolesToAdd);
 			if (!result.Succeeded)
 			{
-				throw new UserUpdateFailedException($"Failed to add roles for the user: {result}");
+				throw new UserUpdateFailedException($"Failed to add roles for the user. {result}");
 			}
 		}
 
@@ -113,7 +134,7 @@ namespace MovieLibrary.UserManagement
 			var result = await userManager.RemoveFromRolesAsync(user, rolesToRemove);
 			if (!result.Succeeded)
 			{
-				throw new UserUpdateFailedException($"Failed to remove roles for the user: {result}");
+				throw new UserUpdateFailedException($"Failed to remove roles for the user. {result}");
 			}
 		}
 	}

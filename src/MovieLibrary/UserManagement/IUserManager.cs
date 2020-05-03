@@ -12,6 +12,8 @@ namespace MovieLibrary.UserManagement
 	{
 		IQueryable<TUser> Users { get; }
 
+		Task<IdentityResult> CreateAsync(TUser user, string password);
+
 		Task<TUser> FindByIdAsync(string userId);
 
 		Task<IList<string>> GetRolesAsync(TUser user);

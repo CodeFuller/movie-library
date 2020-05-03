@@ -4,6 +4,13 @@
 
 @model MovieLibrary.UserManagement.ViewModels.UserListViewModel;
 
+@if (Model.AddedUser)
+{
+    <div class="alert alert-success" role="alert">
+        The user was added successfully.
+    </div>
+}
+
 @if (Model.UpdatedUser)
 {
     <div class="alert alert-success" role="alert">
@@ -42,3 +49,5 @@
         </li>
     }
 </ul>
+
+<a class="btn btn-primary mt-3" asp-action="RegisterUser">Add User</a>

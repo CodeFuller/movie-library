@@ -9,6 +9,8 @@ namespace MovieLibrary.UserManagement.ViewModels
 	{
 		public IReadOnlyCollection<UserViewModel> Users { get; }
 
+		public bool AddedUser { get; set; }
+
 		public bool UpdatedUser { get; set; }
 
 		public bool DeletedUser { get; set; }

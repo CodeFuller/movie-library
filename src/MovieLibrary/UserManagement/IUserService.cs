@@ -7,6 +7,8 @@ namespace MovieLibrary.UserManagement
 {
 	public interface IUserService
 	{
+		Task CreateUser(NewUserModel user, CancellationToken cancellationToken);
+
 		IAsyncEnumerable<UserModel> GetAllUsers(CancellationToken cancellationToken);
 
 		Task<UserDetailsModel> GetUser(string userId, CancellationToken cancellationToken);

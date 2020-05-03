@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Internal;
 using MovieLibrary.UserManagement;
+using MovieLibrary.UserManagement.Models;
 using MovieLibrary.UserManagement.ViewModels;
 
 namespace MovieLibrary.Controllers
@@ -13,6 +14,7 @@ namespace MovieLibrary.Controllers
 	[Authorize(Roles = Roles.AdministratorRole)]
 	public class UsersController : Controller
 	{
+		private const string TempDataAddedUser = "AddedUser";
 		private const string TempDataUpdatedUser = "UpdatedUser";
 		private const string TempDataDeletedUser = "DeletedUser";
 
@@ -28,12 +30,41 @@ namespace MovieLibrary.Controllers
 		{
 			var users = await userService.GetAllUsers(cancellationToken).ToListAsync(cancellationToken);
 
-			var viewModel = new UserListViewModel(users);
-
-			viewModel.UpdatedUser = TempData.GetBooleanValue(TempDataUpdatedUser);
-			viewModel.DeletedUser = TempData.GetBooleanValue(TempDataDeletedUser);
+			var viewModel = new UserListViewModel(users)
+			{
+				AddedUser = TempData.GetBooleanValue(TempDataAddedUser),
+				UpdatedUser = TempData.GetBooleanValue(TempDataUpdatedUser),
+				DeletedUser = TempData.GetBooleanValue(TempDataDeletedUser),
+			};
 
 			return View(viewModel);
+		}
+
+		[HttpGet]
+		public IActionResult RegisterUser()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> RegisterUser(NewUserViewModel model, CancellationToken cancellationToken)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View("RegisterUser");
+			}
+
+			var newUser = new NewUserModel
+			{
+				Email = model.Email,
+				Password = model.Password,
+			};
+
+			await userService.CreateUser(newUser, cancellationToken);
+
+			TempData[TempDataAddedUser] = true;
+
+			return RedirectToAction("Index");
 		}
 
 		[HttpGet]
