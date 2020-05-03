@@ -18,6 +18,8 @@ namespace MovieLibrary.Internal
 
 		public static string CanDeleteMoviesToSeeRole => "CanDeleteMoviesToSee";
 
+		public const string AdministratorRole = "Administrator";
+
 		public static IEnumerable<string> All
 		{
 			get
@@ -29,6 +31,7 @@ namespace MovieLibrary.Internal
 				yield return CanMarkMoviesAsSeenRole;
 				yield return CanDeleteMoviesToGetRole;
 				yield return CanDeleteMoviesToSeeRole;
+				yield return AdministratorRole;
 			}
 		}
 	}

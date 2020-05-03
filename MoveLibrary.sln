@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{543ECA5C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieLibrary.Logic.IntegrationTests", "tests\MovieLibrary.Logic.IntegrationTests\MovieLibrary.Logic.IntegrationTests.csproj", "{6A4D79DC-4C4E-403E-B66F-5DF233292B9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieLibrary.Dal.MongoDB", "src\MovieLibrary.Dal.MongoDB\MovieLibrary.Dal.MongoDB.csproj", "{8C58D720-25B8-4365-9389-5BE70A9B3696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieLibrary.Dal.MongoDB", "src\MovieLibrary.Dal.MongoDB\MovieLibrary.Dal.MongoDB.csproj", "{8C58D720-25B8-4365-9389-5BE70A9B3696}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieLibrary.Tests", "tests\MovieLibrary.Tests\MovieLibrary.Tests.csproj", "{B5C75CBA-F10D-4F26-93B8-2E4360F00803}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{8C58D720-25B8-4365-9389-5BE70A9B3696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C58D720-25B8-4365-9389-5BE70A9B3696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C58D720-25B8-4365-9389-5BE70A9B3696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5C75CBA-F10D-4F26-93B8-2E4360F00803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5C75CBA-F10D-4F26-93B8-2E4360F00803}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5C75CBA-F10D-4F26-93B8-2E4360F00803}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5C75CBA-F10D-4F26-93B8-2E4360F00803}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{1C0E953A-3D46-4BF7-9288-3F57DA2AF8A9} = {C636E0B7-DB65-49B1-9A7E-05FE547DDD95}
 		{6A4D79DC-4C4E-403E-B66F-5DF233292B9E} = {543ECA5C-BE2B-4777-81F3-B1377F044234}
 		{8C58D720-25B8-4365-9389-5BE70A9B3696} = {C636E0B7-DB65-49B1-9A7E-05FE547DDD95}
+		{B5C75CBA-F10D-4F26-93B8-2E4360F00803} = {543ECA5C-BE2B-4777-81F3-B1377F044234}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B570E18-B58F-4031-81EA-D24A3B9ACC63}

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using MovieLibrary.Dal.MongoDB;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Extensions;
+using MovieLibrary.UserManagement;
 
 namespace MovieLibrary
 {
@@ -53,6 +54,8 @@ namespace MovieLibrary
 				.AddDefaultUI();
 
 			services.AddSingleton<IApplicationInitializer, RolesInitializer>();
+
+			services.AddUserManagement();
 		}
 
 		public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApplicationInitializer appInitializer)

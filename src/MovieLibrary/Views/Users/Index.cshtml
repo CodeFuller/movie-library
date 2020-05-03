@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Manage Users";
+}
+
+@model MovieLibrary.UserManagement.ViewModels.UserListViewModel;
+
+<ul class="list-group">
+    @foreach (var user in Model.Users)
+    {
+        <li class="list-group-item">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        @user.UserName
+                    </div>
+                    <div class="col-auto container">
+                        <div class="row">
+                            <div class="col">
+                                <a asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    }
+</ul>

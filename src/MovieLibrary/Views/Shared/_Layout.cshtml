@@ -43,6 +43,10 @@
                         @{
                             await ProduceNavItem("MoviesToGet", "Index", "Movies to Get");
                             await ProduceNavItem("MoviesToSee", "Index", "Movies to See");
+                            if (User.IsInRole("Administrator"))
+                            {
+                                await ProduceNavItem("Users", "Index", "Manager Users");
+                            }
                         }
                     </ul>
                 </div>
