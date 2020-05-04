@@ -14,6 +14,6 @@
 
 <form method="post" asp-action="DeleteMovie">
     <input type="hidden" id="id" name="id" value="@Model.Id.Value" />
-    <button class="btn btn-primary" type="submit">Delete</button>
-    <a class="btn btn-primary" asp-action="Index">Cancel</a>
+    <button class="btn btn-danger" type="submit">Delete</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>
