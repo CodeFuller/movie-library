@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MovieLibrary.IntegrationTests
@@ -16,11 +15,11 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateClient();
+			using var client = CustomWebApplicationFactory.CreateHttpClient();
 
 			// Act
 
-			using var response = await client.GetAsync(new Uri("/Identity/Account/Register", UriKind.Relative), CancellationToken.None);
+			using var response = await client.GetAsync(new Uri("https://localhost:5001/Identity/Account/Register"), CancellationToken.None);
 
 			// Assert
 
@@ -33,30 +32,18 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateClient();
+			using var client = CustomWebApplicationFactory.CreateHttpClient();
 
 			using var content = new StringContent(String.Empty);
 
 			// Act
 
-			using var response = await client.PostAsync(new Uri("/Identity/Account/Register", UriKind.Relative), content, CancellationToken.None);
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/Identity/Account/Register"), content, CancellationToken.None);
 
 			// Assert
 
 			Assert.AreEqual(HttpStatusCode.MovedPermanently, response.StatusCode);
 			Assert.AreEqual(new Uri("/Identity/Account/Login", UriKind.Relative), response.Headers.Location);
-		}
-
-		private static HttpClient CreateClient()
-		{
-			var factory = new CustomWebApplicationFactory();
-
-			var options = new WebApplicationFactoryClientOptions
-			{
-				AllowAutoRedirect = false,
-			};
-
-			return factory.CreateClient(options);
 		}
 	}
 }

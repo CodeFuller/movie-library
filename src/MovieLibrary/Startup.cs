@@ -73,6 +73,8 @@ namespace MovieLibrary
 				app.UseExceptionHandler("/Home/Error");
 			}
 
+			app.UseHttpsRedirection();
+
 			app.UseStatusCodePages();
 
 			app.UseStaticFiles();
