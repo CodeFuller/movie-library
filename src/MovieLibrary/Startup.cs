@@ -58,6 +58,11 @@ namespace MovieLibrary
 			services.AddSingleton<IApplicationInitializer, RolesInitializer>();
 
 			services.AddUserManagement();
+
+			services.AddHsts(options =>
+			{
+				options.MaxAge = TimeSpan.FromDays(365);
+			});
 		}
 
 		public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApplicationInitializer appInitializer)
@@ -71,6 +76,8 @@ namespace MovieLibrary
 			else
 			{
 				app.UseExceptionHandler("/Home/Error");
+
+				app.UseHsts();
 			}
 
 			app.UseHttpsRedirection();
