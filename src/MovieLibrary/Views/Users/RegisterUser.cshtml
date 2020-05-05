@@ -6,21 +6,20 @@
 
 <div class="col-md-4">
     <form method="post" asp-action="RegisterUser">
-        <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Email"></label>
+            <div><span asp-validation-for="Email" class="text-danger"></span></div>
             <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Password"></label>
+            <div><span asp-validation-for="Password" class="text-danger"></span></div>
             <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="ConfirmPassword"></label>
+            <div><span asp-validation-for="ConfirmPassword" class="text-danger"></span></div>
             <input asp-for="ConfirmPassword" class="form-control" />
-            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
         <button class="btn btn-primary" type="submit">Register</button>
         <a class="btn btn-secondary" asp-action="Index">Cancel</a>
