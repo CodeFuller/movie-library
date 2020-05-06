@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
@@ -19,16 +20,19 @@ namespace MovieLibrary.Controllers
 
 		private readonly IMoviesToGetService service;
 
-		public MoviesToGetController(IMoviesToGetService service)
+		private readonly AppSettings settings;
+
+		public MoviesToGetController(IMoviesToGetService service, IOptions<AppSettings> options)
 		{
 			this.service = service ?? throw new ArgumentNullException(nameof(service));
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		[HttpGet]
 		[Authorize(Roles = Roles.CanAddOrReadMoviesToGet)]
-		public async Task<IActionResult> Index(CancellationToken cancellationToken)
+		public async Task<IActionResult> Index([FromRoute] int pageNumber, CancellationToken cancellationToken)
 		{
-			return await MoviesView(cancellationToken);
+			return await MoviesView(pageNumber, cancellationToken);
 		}
 
 		[HttpPost]
@@ -37,7 +41,7 @@ namespace MovieLibrary.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return await MoviesView(cancellationToken);
+				return await MoviesView(model?.Paging?.CurrentPageNumber ?? 1, cancellationToken);
 			}
 
 			var newMovieToGet = model.NewMovieToGet;
@@ -102,9 +106,9 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
-		private async Task<IActionResult> MoviesView(CancellationToken cancellationToken)
+		private async Task<IActionResult> MoviesView(int pageNumber, CancellationToken cancellationToken)
 		{
-			var viewModel = await ReadMoviesToGet(cancellationToken);
+			var viewModel = await ReadMoviesToGet(pageNumber, cancellationToken);
 			viewModel.AddedMovie = TempData.GetBooleanValue(TempDataAddedMovie);
 			viewModel.MovedMovie = TempData.GetBooleanValue(TempDataMovedMovie);
 			viewModel.DeletedMovie = TempData.GetBooleanValue(TempDataDeletedMovie);
@@ -112,11 +116,19 @@ namespace MovieLibrary.Controllers
 			return View("Index", viewModel);
 		}
 
-		private async Task<MoviesToGetViewModel> ReadMoviesToGet(CancellationToken cancellationToken)
+		private async Task<MoviesToGetViewModel> ReadMoviesToGet(int pageNumber, CancellationToken cancellationToken)
 		{
 			var moviesToGet = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
 
-			return new MoviesToGetViewModel(moviesToGet);
+			var moviesCount = moviesToGet.Count;
+
+			var moviesToShow = moviesToGet
+				.Skip((pageNumber - 1) * settings.MoviesPageSize)
+				.Take(settings.MoviesPageSize);
+
+			var totalPagesNumber = (int)Math.Ceiling(moviesCount / (double)settings.MoviesPageSize);
+
+			return new MoviesToGetViewModel(moviesToShow, pageNumber, totalPagesNumber);
 		}
 	}
 }

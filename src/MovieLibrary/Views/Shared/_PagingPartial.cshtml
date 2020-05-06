@@ -1,0 +1,65 @@
+﻿@using System.Globalization
+@using MovieLibrary.Internal
+@model PagingViewModel
+
+<nav aria-label="Movies pages">
+    <ul class="pagination justify-content-center">
+        @* Prev page *@
+        @if (Model.CurrentPageNumber > 1)
+        {
+            await ProducePageButtonWithCaption(Model.CurrentPageNumber - 1, "Prev");
+        }
+        else
+        {
+            await ProduceDisabledPageButton("Prev");
+        }
+
+        @foreach (var buttonPageNumber in PagingButtonsSelector.SelectButtonsPages(Model.CurrentPageNumber, Model.TotalPagesNumber))
+        {
+            if (buttonPageNumber == 0)
+            {
+                await ProduceDisabledPageButton("...");
+            }
+            else
+            {
+                await ProducePageButton(buttonPageNumber, Model.CurrentPageNumber);
+            }
+        }
+
+        @* Next page *@
+        @if (Model.CurrentPageNumber < Model.TotalPagesNumber)
+        {
+            await ProducePageButtonWithCaption(Model.CurrentPageNumber + 1, "Next");
+        }
+        else
+        {
+            await ProduceDisabledPageButton("Next");
+        }
+    </ul>
+</nav>
+
+@{
+    async Task ProduceDisabledPageButton(string caption)
+    {
+        <li class="page-item disabled"><span class="page-link">@caption</span></li>
+    }
+
+    async Task ProducePageButton(int pageNumber, int currentPageNumber)
+    {
+        var activeClass = pageNumber == currentPageNumber ? "active" : String.Empty;
+        await ProducePageButtonWithCaption(pageNumber, pageNumber.ToString(CultureInfo.InvariantCulture), activeClass);
+    }
+
+    async Task ProducePageButtonWithCaption(int pageNumber, string caption, string styleClasses = "")
+    {
+        // We want to display the link to first page as just /Movies, not as /Movies/page-1
+        if (pageNumber == 1)
+        {
+            <li class="page-item @styleClasses"><a class="page-link" asp-action="Index">@caption</a></li>
+        }
+        else
+        {
+            <li class="page-item @styleClasses"><a class="page-link" asp-action="Index" asp-route-pageNumber="@pageNumber">@caption</a></li>
+        }
+    }
+}

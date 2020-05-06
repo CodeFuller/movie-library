@@ -17,13 +17,16 @@ namespace MovieLibrary.Models
 
 		public bool DeletedMovie { get; set; }
 
+		public PagingViewModel Paging { get; set; }
+
 		public MoviesToGetViewModel()
 		{
 		}
 
-		public MoviesToGetViewModel(IEnumerable<MovieToGetModel> movies)
+		public MoviesToGetViewModel(IEnumerable<MovieToGetModel> movies, int currentPageNumber, int totalPagesNumber)
 		{
 			Movies = movies?.Select(m => new MovieToGetViewModel(m)).ToList() ?? throw new ArgumentNullException(nameof(movies));
+			Paging = new PagingViewModel(currentPageNumber, totalPagesNumber);
 		}
 	}
 }

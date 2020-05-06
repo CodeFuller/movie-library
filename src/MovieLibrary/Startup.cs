@@ -30,6 +30,8 @@ namespace MovieLibrary
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.Configure<AppSettings>(settings => Configuration.Bind(settings));
+
 			services.AddControllersWithViews(config =>
 			{
 				var policy = new AuthorizationPolicyBuilder()
@@ -93,6 +95,16 @@ namespace MovieLibrary
 
 			app.UseEndpoints(endpoints =>
 			{
+				endpoints.MapControllerRoute(
+					name: "MoviesToGet",
+					pattern: "MoviesToGet",
+					defaults: new { controller = "MoviesToGet", action = "Index", pageNumber = 1, });
+
+				endpoints.MapControllerRoute(
+					name: "MoviesToGetWithPage",
+					pattern: "MoviesToGet/page-{pageNumber:int:min(1)}",
+					defaults: new { controller = "MoviesToGet", action = "Index", });
+
 				endpoints.MapControllerRoute(
 					name: "default",
 					pattern: "{controller=Home}/{action=Index}/{id?}");
