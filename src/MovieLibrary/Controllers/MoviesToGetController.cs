@@ -118,17 +118,17 @@ namespace MovieLibrary.Controllers
 
 		private async Task<MoviesToGetViewModel> ReadMoviesToGet(int pageNumber, CancellationToken cancellationToken)
 		{
-			var moviesToGet = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
+			var movies = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
 
-			var moviesCount = moviesToGet.Count;
+			var moviesCount = movies.Count;
 
-			var moviesToShow = moviesToGet
+			var pageMovies = movies
 				.Skip((pageNumber - 1) * settings.MoviesPageSize)
 				.Take(settings.MoviesPageSize);
 
 			var totalPagesNumber = (int)Math.Ceiling(moviesCount / (double)settings.MoviesPageSize);
 
-			return new MoviesToGetViewModel(moviesToShow, pageNumber, totalPagesNumber);
+			return new MoviesToGetViewModel(pageMovies, pageNumber, totalPagesNumber);
 		}
 	}
 }

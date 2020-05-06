@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -93,29 +94,41 @@ namespace MovieLibrary
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "MoviesToGet",
-					pattern: "MoviesToGet",
-					defaults: new { controller = "MoviesToGet", action = "Index", pageNumber = 1, });
+			app.UseEndpoints(ConfigureRoutes);
+		}
 
-				endpoints.MapControllerRoute(
-					name: "MoviesToGetWithPage",
-					pattern: "MoviesToGet/page-{pageNumber:int:min(1)}",
-					defaults: new { controller = "MoviesToGet", action = "Index", });
+		private static void ConfigureRoutes(IEndpointRouteBuilder endpoints)
+		{
+			endpoints.MapControllerRoute(
+				name: "MoviesToGet",
+				pattern: "MoviesToGet",
+				defaults: new { controller = "MoviesToGet", action = "Index", pageNumber = 1, });
 
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
+			endpoints.MapControllerRoute(
+				name: "MoviesToGetWithPage",
+				pattern: "MoviesToGet/page-{pageNumber:int:min(1)}",
+				defaults: new { controller = "MoviesToGet", action = "Index", });
 
-				// Razor pages are required for Microsoft.AspNetCore.Identity.UI
-				endpoints.MapRazorPages();
+			endpoints.MapControllerRoute(
+				name: "MoviesToSee",
+				pattern: "MoviesToSee",
+				defaults: new { controller = "MoviesToSee", action = "Index", pageNumber = 1, });
 
-				// Disabling users registration built into Identity package.
-				endpoints.MapGet("/Identity/Account/Register", RedirectToLoginPage);
-				endpoints.MapPost("/Identity/Account/Register", RedirectToLoginPage);
-			});
+			endpoints.MapControllerRoute(
+				name: "MoviesToSeeWithPage",
+				pattern: "MoviesToSee/page-{pageNumber:int:min(1)}",
+				defaults: new { controller = "MoviesToSee", action = "Index", });
+
+			endpoints.MapControllerRoute(
+				name: "default",
+				pattern: "{controller=Home}/{action=Index}/{id?}");
+
+			// Razor pages are required for Microsoft.AspNetCore.Identity.UI
+			endpoints.MapRazorPages();
+
+			// Disabling users registration built into Identity package.
+			endpoints.MapGet("/Identity/Account/Register", RedirectToLoginPage);
+			endpoints.MapPost("/Identity/Account/Register", RedirectToLoginPage);
 		}
 
 		private static Task RedirectToLoginPage(HttpContext context)
