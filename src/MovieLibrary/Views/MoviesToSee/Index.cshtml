@@ -28,7 +28,7 @@
 
 @if (User.IsInRole(Roles.CanAddMoviesToSee))
 {
-    <form class="mb-3" method="post" asp-action="AddMovie">
+    <form method="post" asp-action="AddMovie">
         <div asp-validation-summary="All"></div>
         <div class="input-group">
             <div class="input-group-append">
@@ -42,8 +42,6 @@
 
 @if (User.IsInRole(Roles.CanReadMoviesToSee))
 {
-    @await Html.PartialAsync("_PagingPartial", Model.Paging)
-
     <ul class="movies-list">
         @foreach (var movie in Model.Movies)
         {
