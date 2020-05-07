@@ -16,7 +16,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 	public class MoviesToSeeServiceTests
 	{
 		[TestMethod]
-		public async Task AddMovieByUrl_AllPropertiesAreFilled_SavesDataCorrectly()
+		public async Task AddMovie_AllPropertiesAreFilled_SavesDataCorrectly()
 		{
 			// Arrange
 
@@ -37,12 +37,12 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 				Summary = "Бэтмен поднимает ставки в войне с криминалом...",
 			};
 
-			var serviceProvider = await BootstrapTests(seedData: true, StubMovieInfoProviderAndClock(movieUri, movieInfo, new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3))));
+			var serviceProvider = await BootstrapTests(seedData: true, StubClock(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3))));
 			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();
 
 			// Act
 
-			var newMovieId = await target.AddMovieByUrl(movieUri, CancellationToken.None);
+			var newMovieId = await target.AddMovie(movieInfo, CancellationToken.None);
 
 			// Assert
 
@@ -57,7 +57,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 		}
 
 		[TestMethod]
-		public async Task AddMovieByUrl_AllPropertiesAreMissing_SavesDataCorrectly()
+		public async Task AddMovie_AllPropertiesAreMissing_SavesDataCorrectly()
 		{
 			// Arrange
 
@@ -70,12 +70,12 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 				MovieUri = movieUri,
 			};
 
-			var serviceProvider = await BootstrapTests(seedData: true, StubMovieInfoProviderAndClock(movieUri, movieInfo, new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3))));
+			var serviceProvider = await BootstrapTests(seedData: true, StubClock(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3))));
 			var target = serviceProvider.GetRequiredService<IMoviesToSeeService>();
 
 			// Act
 
-			var newMovieId = await target.AddMovieByUrl(movieUri, CancellationToken.None);
+			var newMovieId = await target.AddMovie(movieInfo, CancellationToken.None);
 
 			// Assert
 

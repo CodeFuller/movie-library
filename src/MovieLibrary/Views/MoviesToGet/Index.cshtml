@@ -28,7 +28,7 @@
 
 @if (User.IsInRole(Roles.CanAddMoviesToGet))
 {
-    <form method="post" asp-action="AddMovie">
+    <form method="post" asp-action="ConfirmMovieAdding">
         <div asp-validation-summary="All"></div>
         <div class="input-group">
             <div class="input-group-append">

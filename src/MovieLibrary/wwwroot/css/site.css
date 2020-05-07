@@ -163,17 +163,3 @@ body {
 [data-toggle="collapse"]:not(.collapsed) .if-collapsed {
   display: none;
 }
-
-.movies-list-item:target {
-  animation: new-movie-fade-in 3s linear;
-}
-
-@keyframes new-movie-fade-in {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}

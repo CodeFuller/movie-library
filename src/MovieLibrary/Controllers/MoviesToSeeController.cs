@@ -19,13 +19,16 @@ namespace MovieLibrary.Controllers
 		private const string TempDataMarkedMovieAsSeen = "MarkedMovieAsSeen";
 		private const string TempDataDeletedMovie = "DeletedMovie";
 
-		private readonly IMoviesToSeeService service;
+		private readonly IMoviesToSeeService moviesToSeeService;
+
+		private readonly IMovieInfoService movieInfoService;
 
 		private readonly AppSettings settings;
 
-		public MoviesToSeeController(IMoviesToSeeService service, IOptions<AppSettings> options)
+		public MoviesToSeeController(IMoviesToSeeService moviesToSeeService, IMovieInfoService movieInfoService, IOptions<AppSettings> options)
 		{
-			this.service = service ?? throw new ArgumentNullException(nameof(service));
+			this.moviesToSeeService = moviesToSeeService ?? throw new ArgumentNullException(nameof(moviesToSeeService));
+			this.movieInfoService = movieInfoService ?? throw new ArgumentNullException(nameof(movieInfoService));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
@@ -38,7 +41,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(Roles = Roles.CanAddMoviesToSee)]
-		public async Task<IActionResult> AddMovie(MoviesToSeeViewModel model, CancellationToken cancellationToken)
+		public async Task<IActionResult> ConfirmMovieAdding(MoviesToSeeViewModel model, CancellationToken cancellationToken)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -46,11 +49,21 @@ namespace MovieLibrary.Controllers
 			}
 
 			var newMovieToSee = model.NewMovieToSee;
-			var newMovieId = await service.AddMovieByUrl(newMovieToSee.MovieUri, cancellationToken);
+			var movieInfo = await movieInfoService.LoadMovieInfoByUrl(newMovieToSee.MovieUri, cancellationToken);
+
+			return View("ConfirmMovieAdding", new InputMovieInfoViewModel(movieInfo));
+		}
+
+		[HttpPost]
+		[Authorize(Roles = Roles.CanAddMoviesToSee)]
+		public async Task<IActionResult> AddMovie(InputMovieInfoViewModel model, CancellationToken cancellationToken)
+		{
+			var movieInfo = model.ToMovieInfo();
+			await moviesToSeeService.AddMovie(movieInfo, cancellationToken);
 
 			TempData[TempDataAddedMovie] = true;
 
-			return RedirectToAction("Index", "MoviesToSee", $"movie-{newMovieId.Value}");
+			return RedirectToAction("Index");
 		}
 
 		[HttpGet]
@@ -60,7 +73,7 @@ namespace MovieLibrary.Controllers
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 			var movieId = new MovieId(id);
 
-			var movie = await service.GetMovie(movieId, cancellationToken);
+			var movie = await moviesToSeeService.GetMovie(movieId, cancellationToken);
 			var viewModel = new MovieToSeeViewModel(movie);
 
 			return View(viewModel);
@@ -73,7 +86,7 @@ namespace MovieLibrary.Controllers
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 			var movieId = new MovieId(id);
 
-			await service.MarkMovieAsSeen(movieId, cancellationToken);
+			await moviesToSeeService.MarkMovieAsSeen(movieId, cancellationToken);
 
 			TempData[TempDataMarkedMovieAsSeen] = true;
 
@@ -87,7 +100,7 @@ namespace MovieLibrary.Controllers
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 			var movieId = new MovieId(id);
 
-			var movie = await service.GetMovie(movieId, cancellationToken);
+			var movie = await moviesToSeeService.GetMovie(movieId, cancellationToken);
 			var viewModel = new MovieToSeeViewModel(movie);
 
 			return View(viewModel);
@@ -100,7 +113,7 @@ namespace MovieLibrary.Controllers
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 			var movieId = new MovieId(id);
 
-			await service.DeleteMovie(movieId, cancellationToken);
+			await moviesToSeeService.DeleteMovie(movieId, cancellationToken);
 
 			TempData[TempDataDeletedMovie] = true;
 
@@ -109,7 +122,7 @@ namespace MovieLibrary.Controllers
 
 		private async Task<IActionResult> MoviesPageView(int pageNumber, CancellationToken cancellationToken)
 		{
-			var movies = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
+			var movies = await moviesToSeeService.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
 
 			var moviesCount = movies.Count;
 			var totalPagesNumber = (int)Math.Ceiling(moviesCount / (double)settings.MoviesPageSize);

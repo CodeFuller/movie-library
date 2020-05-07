@@ -11,8 +11,6 @@ namespace MovieLibrary.Logic.Services
 {
 	internal class MoviesToGetService : IMoviesToGetService
 	{
-		private readonly IMovieInfoProvider movieInfoProvider;
-
 		private readonly IMoviesToGetRepository moviesToGetRepository;
 
 		private readonly IMoviesToSeeRepository moviesToSeeRepository;
@@ -21,21 +19,18 @@ namespace MovieLibrary.Logic.Services
 
 		private readonly ILogger<MoviesToGetService> logger;
 
-		public MoviesToGetService(IMovieInfoProvider movieInfoProvider, IMoviesToGetRepository moviesToGetRepository,
-			IMoviesToSeeRepository moviesToSeeRepository, IClock clock, ILogger<MoviesToGetService> logger)
+		public MoviesToGetService(IMoviesToGetRepository moviesToGetRepository, IMoviesToSeeRepository moviesToSeeRepository, IClock clock, ILogger<MoviesToGetService> logger)
 		{
-			this.movieInfoProvider = movieInfoProvider ?? throw new ArgumentNullException(nameof(movieInfoProvider));
 			this.moviesToGetRepository = moviesToGetRepository ?? throw new ArgumentNullException(nameof(moviesToGetRepository));
 			this.moviesToSeeRepository = moviesToSeeRepository ?? throw new ArgumentNullException(nameof(moviesToSeeRepository));
 			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task<MovieId> AddMovieByUrl(Uri movieUri, CancellationToken cancellationToken)
+		public async Task<MovieId> AddMovie(MovieInfoModel movieInfo, CancellationToken cancellationToken)
 		{
-			logger.LogInformation("Adding movie to get '{SourceMovieUri}' ...", movieUri);
+			logger.LogInformation("Adding movie to get '{SourceMovieUri}' ...", movieInfo.MovieUri);
 
-			var movieInfo = await movieInfoProvider.GetMovieInfo(movieUri, cancellationToken);
 			var movieToGet = new MovieToGetModel(clock.Now, movieInfo);
 
 			return await moviesToGetRepository.AddMovie(movieToGet, cancellationToken);

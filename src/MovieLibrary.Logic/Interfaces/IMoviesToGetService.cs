@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MovieLibrary.Logic.Models;
@@ -8,7 +7,7 @@ namespace MovieLibrary.Logic.Interfaces
 {
 	public interface IMoviesToGetService
 	{
-		Task<MovieId> AddMovieByUrl(Uri movieUri, CancellationToken cancellationToken);
+		Task<MovieId> AddMovie(MovieInfoModel movieInfo, CancellationToken cancellationToken);
 
 		IAsyncEnumerable<MovieToGetModel> GetAllMovies(CancellationToken cancellationToken);
 

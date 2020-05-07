@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Confirm Movie Adding";
+}
+
+@model InputMovieInfoViewModel;
+
+<div class="alert alert-warning" role="alert">
+    Are you sure you want to add the following movie?
+</div>
+
+<div class="single-movie-item">
+    @await Html.PartialAsync("_MovieInfoPartial", Model.SourceMovieInfo)
+</div>
+
+<form method="post" asp-action="AddMovie">
+    <input type="hidden" asp-for="Title" />
+    <input type="hidden" asp-for="Year" />
+    <input type="hidden" asp-for="MovieUri" />
+    <input type="hidden" asp-for="PosterUri" />
+    @for (var i = 0; i < Model.Directors.Count; ++i)
+    {
+        <input type="hidden" asp-for="Directors[i]" />
+    }
+    @for (var i = 0; i < Model.Cast.Count; ++i)
+    {
+        <input type="hidden" asp-for="Cast[i]" />
+    }
+    <input type="hidden" asp-for="RatingValue" />
+    <input type="hidden" asp-for="RatingVotesNumber" />
+    <input type="hidden" asp-for="Duration" />
+    @for (var i = 0; i < Model.Genres.Count; ++i)
+    {
+        <input type="hidden" asp-for="Genres[i]" />
+    }
+    <input type="hidden" asp-for="Summary" />
+    <button class="btn btn-primary" type="submit">Add</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>

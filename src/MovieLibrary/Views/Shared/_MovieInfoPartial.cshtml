@@ -44,7 +44,7 @@
                 </tr>
             </tbody>
         </table>
-        @if (!String.IsNullOrEmpty(Model.Summary))
+        @if (Model.Summary.Any())
         {
             var collapseId = $"collapseSummary-{Guid.NewGuid():N}";
             <div class="movie-info-summary">
@@ -53,7 +53,7 @@
                     <span class="if-not-collapsed">Hide summary</span>
                 </a>
                 <div id="@collapseId" class="collapse">
-                    @foreach (var paragraph in Model.Summary.Split("\n\n"))
+                    @foreach (var paragraph in Model.Summary)
                     {
                         <p>
                             @paragraph
