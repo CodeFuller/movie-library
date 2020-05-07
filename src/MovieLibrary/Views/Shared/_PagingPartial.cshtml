@@ -2,41 +2,44 @@
 @using MovieLibrary.Internal
 @model PagingViewModel
 
-<nav aria-label="Movies pages">
-    <ul class="pagination justify-content-center">
-        @* Prev page *@
-        @if (Model.CurrentPageNumber > 1)
-        {
-            await ProducePageButtonWithCaption(Model.CurrentPageNumber - 1, "Prev");
-        }
-        else
-        {
-            await ProduceDisabledPageButton("Prev");
-        }
-
-        @foreach (var buttonPageNumber in PagingButtonsSelector.SelectButtonsPages(Model.CurrentPageNumber, Model.TotalPagesNumber))
-        {
-            if (buttonPageNumber == 0)
+@if (Model.TotalPagesNumber > 1)
+{
+    <nav aria-label="Movies pages">
+        <ul class="pagination justify-content-center">
+            @* Prev page *@
+            @if (Model.CurrentPageNumber > 1)
             {
-                await ProduceDisabledPageButton("...");
+                await ProducePageButtonWithCaption(Model.CurrentPageNumber - 1, "Prev");
             }
             else
             {
-                await ProducePageButton(buttonPageNumber, Model.CurrentPageNumber);
+                await ProduceDisabledPageButton("Prev");
             }
-        }
 
-        @* Next page *@
-        @if (Model.CurrentPageNumber < Model.TotalPagesNumber)
-        {
-            await ProducePageButtonWithCaption(Model.CurrentPageNumber + 1, "Next");
-        }
-        else
-        {
-            await ProduceDisabledPageButton("Next");
-        }
-    </ul>
-</nav>
+            @foreach (var buttonPageNumber in PagingButtonsSelector.SelectButtonsPages(Model.CurrentPageNumber, Model.TotalPagesNumber))
+            {
+                if (buttonPageNumber == 0)
+                {
+                    await ProduceDisabledPageButton("...");
+                }
+                else
+                {
+                    await ProducePageButton(buttonPageNumber, Model.CurrentPageNumber);
+                }
+            }
+
+            @* Next page *@
+            @if (Model.CurrentPageNumber < Model.TotalPagesNumber)
+            {
+                await ProducePageButtonWithCaption(Model.CurrentPageNumber + 1, "Next");
+            }
+            else
+            {
+                await ProduceDisabledPageButton("Next");
+            }
+        </ul>
+    </nav>
+}
 
 @{
     async Task ProduceDisabledPageButton(string caption)
