@@ -106,7 +106,7 @@ namespace MovieLibrary
 
 			endpoints.MapControllerRoute(
 				name: "MoviesToGetWithPage",
-				pattern: "MoviesToGet/page-{pageNumber:int:min(1)}",
+				pattern: "MoviesToGet/page-{pageNumber:int}",
 				defaults: new { controller = "MoviesToGet", action = "Index", });
 
 			endpoints.MapControllerRoute(
@@ -116,7 +116,7 @@ namespace MovieLibrary
 
 			endpoints.MapControllerRoute(
 				name: "MoviesToSeeWithPage",
-				pattern: "MoviesToSee/page-{pageNumber:int:min(1)}",
+				pattern: "MoviesToSee/page-{pageNumber:int}",
 				defaults: new { controller = "MoviesToSee", action = "Index", });
 
 			endpoints.MapControllerRoute(

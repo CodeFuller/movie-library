@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace MovieLibrary.Controllers
 		[Authorize(Roles = Roles.CanAddOrReadMoviesToSee)]
 		public async Task<IActionResult> Index([FromRoute] int pageNumber, CancellationToken cancellationToken)
 		{
-			return await MoviesView(pageNumber, cancellationToken);
+			return await MoviesPageView(pageNumber, cancellationToken);
 		}
 
 		[HttpPost]
@@ -41,7 +42,7 @@ namespace MovieLibrary.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return await MoviesView(model?.Paging?.CurrentPageNumber ?? 1, cancellationToken);
+				return await MoviesPageView(model?.Paging?.CurrentPageNumber ?? 1, cancellationToken);
 			}
 
 			var newMovieToSee = model.NewMovieToSee;
@@ -106,30 +107,40 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
-		private async Task<IActionResult> MoviesView(int pageNumber, CancellationToken cancellationToken)
-		{
-			var viewModel = await ReadMoviesToSee(pageNumber, cancellationToken);
-
-			viewModel.AddedMovie = TempData.GetBooleanValue(TempDataAddedMovie);
-			viewModel.MarkedMovieAsSeen = TempData.GetBooleanValue(TempDataMarkedMovieAsSeen);
-			viewModel.DeletedMovie = TempData.GetBooleanValue(TempDataDeletedMovie);
-
-			return View("Index", viewModel);
-		}
-
-		private async Task<MoviesToSeeViewModel> ReadMoviesToSee(int pageNumber, CancellationToken cancellationToken)
+		private async Task<IActionResult> MoviesPageView(int pageNumber, CancellationToken cancellationToken)
 		{
 			var movies = await service.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
 
 			var moviesCount = movies.Count;
+			var totalPagesNumber = (int)Math.Ceiling(moviesCount / (double)settings.MoviesPageSize);
 
+			if (pageNumber < 1)
+			{
+				return RedirectToAction("Index", new { pageNumber = 1 });
+			}
+
+			if (pageNumber > totalPagesNumber)
+			{
+				return RedirectToAction("Index", new { pageNumber = totalPagesNumber });
+			}
+
+			return CreateMoviesPageView(movies, pageNumber, totalPagesNumber);
+		}
+
+		private ViewResult CreateMoviesPageView(IEnumerable<MovieToSeeModel> movies, int pageNumber, int totalPagesNumber)
+		{
 			var pageMovies = movies
 				.Skip((pageNumber - 1) * settings.MoviesPageSize)
 				.Take(settings.MoviesPageSize);
 
-			var totalPagesNumber = (int)Math.Ceiling(moviesCount / (double)settings.MoviesPageSize);
+			var viewModel = new MoviesToSeeViewModel(pageMovies, pageNumber, totalPagesNumber)
+			{
+				AddedMovie = TempData.GetBooleanValue(TempDataAddedMovie),
+				MarkedMovieAsSeen = TempData.GetBooleanValue(TempDataMarkedMovieAsSeen),
+				DeletedMovie = TempData.GetBooleanValue(TempDataDeletedMovie),
+			};
 
-			return new MoviesToSeeViewModel(pageMovies, pageNumber, totalPagesNumber);
+			return View("Index", viewModel);
 		}
 	}
 }
