@@ -41,7 +41,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(Roles = Roles.CanAddMoviesToSee)]
-		public async Task<IActionResult> ConfirmMovieAdding(MoviesToSeeViewModel model, CancellationToken cancellationToken)
+		public async Task<IActionResult> ConfirmMovieAdding([FromForm] MoviesToSeeViewModel model, CancellationToken cancellationToken)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -56,7 +56,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(Roles = Roles.CanAddMoviesToSee)]
-		public async Task<IActionResult> AddMovie(InputMovieInfoViewModel model, CancellationToken cancellationToken)
+		public async Task<IActionResult> AddMovie([FromForm] InputMovieInfoViewModel model, CancellationToken cancellationToken)
 		{
 			var movieInfo = model.ToMovieInfo();
 			await moviesToSeeService.AddMovie(movieInfo, cancellationToken);
@@ -68,7 +68,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpGet]
 		[Authorize(Roles = Roles.CanMarkMoviesAsSeen)]
-		public async Task<IActionResult> ConfirmMarkingAsSeen(string id, CancellationToken cancellationToken)
+		public async Task<IActionResult> ConfirmMarkingAsSeen([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			var viewModel = await CreateMovieViewModel(id, cancellationToken);
 			return View(viewModel);
@@ -76,7 +76,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(Roles = Roles.CanMarkMoviesAsSeen)]
-		public async Task<IActionResult> MarkMovieAsSeen(string id, CancellationToken cancellationToken)
+		public async Task<IActionResult> MarkMovieAsSeen([FromForm] string id, CancellationToken cancellationToken)
 		{
 			var movieId = CreateMovieId(id);
 			await moviesToSeeService.MarkMovieAsSeen(movieId, cancellationToken);
@@ -88,7 +88,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpGet]
 		[Authorize(Roles = Roles.CanDeleteMoviesToSee)]
-		public async Task<IActionResult> ConfirmMovieDeletion(string id, CancellationToken cancellationToken)
+		public async Task<IActionResult> ConfirmMovieDeletion([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			var viewModel = await CreateMovieViewModel(id, cancellationToken);
 			return View(viewModel);
