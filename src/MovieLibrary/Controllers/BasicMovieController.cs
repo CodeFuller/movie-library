@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Controllers
 {
@@ -50,6 +51,12 @@ namespace MovieLibrary.Controllers
 			var viewModel = CreateMoviesPageViewModel(pageMovies, pageNumber, totalPagesNumber);
 
 			return View("Index", viewModel);
+		}
+
+		protected static MovieId CreateMovieId(string id)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+			return new MovieId(id);
 		}
 	}
 }

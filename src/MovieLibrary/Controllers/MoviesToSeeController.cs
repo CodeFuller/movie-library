@@ -78,9 +78,7 @@ namespace MovieLibrary.Controllers
 		[Authorize(Roles = Roles.CanMarkMoviesAsSeen)]
 		public async Task<IActionResult> MarkMovieAsSeen(string id, CancellationToken cancellationToken)
 		{
-			_ = id ?? throw new ArgumentNullException(nameof(id));
-			var movieId = new MovieId(id);
-
+			var movieId = CreateMovieId(id);
 			await moviesToSeeService.MarkMovieAsSeen(movieId, cancellationToken);
 
 			TempData[TempDataMarkedMovieAsSeen] = true;
@@ -100,9 +98,7 @@ namespace MovieLibrary.Controllers
 		[Authorize(Roles = Roles.CanDeleteMoviesToSee)]
 		public async Task<IActionResult> DeleteMovie([FromForm] string id, CancellationToken cancellationToken)
 		{
-			_ = id ?? throw new ArgumentNullException(nameof(id));
-			var movieId = new MovieId(id);
-
+			var movieId = CreateMovieId(id);
 			await moviesToSeeService.DeleteMovie(movieId, cancellationToken);
 
 			TempData[TempDataDeletedMovie] = true;
@@ -127,9 +123,7 @@ namespace MovieLibrary.Controllers
 
 		private async Task<MovieToSeeViewModel> CreateMovieViewModel(string id, CancellationToken cancellationToken)
 		{
-			_ = id ?? throw new ArgumentNullException(nameof(id));
-			var movieId = new MovieId(id);
-
+			var movieId = CreateMovieId(id);
 			var movie = await moviesToSeeService.GetMovie(movieId, cancellationToken);
 			return new MovieToSeeViewModel(movie);
 		}
