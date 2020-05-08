@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MovieLibrary.Logic.Models;
@@ -9,7 +9,7 @@ namespace MovieLibrary.Logic.Interfaces
 	{
 		Task<MovieId> AddMovie(MovieInfoModel movieInfo, CancellationToken cancellationToken);
 
-		IAsyncEnumerable<MovieToGetModel> GetAllMovies(CancellationToken cancellationToken);
+		IQueryable<MovieToGetModel> GetAllMovies();
 
 		Task<MovieToGetModel> GetMovie(MovieId movieId, CancellationToken cancellationToken);
 

@@ -21,7 +21,12 @@ namespace MovieLibrary.Dal.MongoDB.Extensions
 			var id = document.Id.ToMovieId();
 			var movieInfo = document.MovieInfo.ToModel();
 
-			return new MovieToSeeModel(id, document.TimestampOfAddingToSeeList, movieInfo);
+			return new MovieToSeeModel
+			{
+				Id = id,
+				TimestampOfAddingToSeeList = document.TimestampOfAddingToSeeList,
+				MovieInfo = movieInfo,
+			};
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,9 +33,9 @@ namespace MovieLibrary.Controllers
 
 		[HttpGet]
 		[Authorize(Roles = Roles.CanAddOrReadMoviesToGet)]
-		public async Task<IActionResult> Index([FromRoute] int pageNumber, CancellationToken cancellationToken)
+		public IActionResult Index([FromRoute] int pageNumber)
 		{
-			return await MoviesPageView(pageNumber, cancellationToken);
+			return MoviesPageView(pageNumber);
 		}
 
 		[HttpPost]
@@ -45,7 +44,7 @@ namespace MovieLibrary.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return await MoviesPageView(model?.Paging?.CurrentPageNumber ?? 1, cancellationToken);
+				return MoviesPageView(model?.Paging?.CurrentPageNumber ?? 1);
 			}
 
 			var newMovieToGet = model.NewMovieToGet;
@@ -120,11 +119,11 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
-		private async Task<IActionResult> MoviesPageView(int pageNumber, CancellationToken cancellationToken)
+		private IActionResult MoviesPageView(int pageNumber)
 		{
-			var movies = await moviesToGetService.GetAllMovies(cancellationToken).ToListAsync(cancellationToken);
+			var moviesQueryable = moviesToGetService.GetAllMovies();
 
-			var moviesCount = movies.Count;
+			var moviesCount = moviesQueryable.Count();
 			var totalPagesNumber = (int)Math.Ceiling(moviesCount / (double)settings.MoviesPageSize);
 
 			if (pageNumber < 1)
@@ -137,10 +136,10 @@ namespace MovieLibrary.Controllers
 				return RedirectToAction("Index", new { pageNumber = totalPagesNumber });
 			}
 
-			return CreateMoviesPageView(movies, pageNumber, totalPagesNumber);
+			return CreateMoviesPageView(moviesQueryable, pageNumber, totalPagesNumber);
 		}
 
-		private ViewResult CreateMoviesPageView(IEnumerable<MovieToGetModel> movies, int pageNumber, int totalPagesNumber)
+		private ViewResult CreateMoviesPageView(IQueryable<MovieToGetModel> movies, int pageNumber, int totalPagesNumber)
 		{
 			var pageMovies = movies
 				.Skip((pageNumber - 1) * settings.MoviesPageSize)

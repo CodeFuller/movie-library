@@ -46,7 +46,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var allMovies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+			var allMovies = target.GetAllMovies().ToList();
 
 			var storedMovie = allMovies.SingleOrDefault(m => m?.MovieInfo.MovieUri == movieUri);
 			Assert.IsNotNull(storedMovie);
@@ -79,7 +79,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var allMovies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+			var allMovies = target.GetAllMovies().ToList();
 
 			var storedMovie = allMovies.SingleOrDefault(m => m?.MovieInfo.MovieUri == movieUri);
 			Assert.IsNotNull(storedMovie);
@@ -99,15 +99,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			var movies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+			var movies = target.GetAllMovies().ToList();
 
 			// Assert
 
-			var sortedMovies = movies.OrderBy(m => m.TimestampOfAddingToGetList).ToList();
-
-			Assert.AreEqual(2, sortedMovies.Count);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet1, sortedMovies[0]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet2, sortedMovies[1]);
+			Assert.AreEqual(4, movies.Count);
+			MovieAssert.AreEqual(DataForSeeding.MovieToGet1, movies[0]);
+			MovieAssert.AreEqual(DataForSeeding.MovieToGet2, movies[1]);
+			MovieAssert.AreEqual(DataForSeeding.MovieToGet3, movies[2]);
+			MovieAssert.AreEqual(DataForSeeding.MovieToGet4, movies[3]);
 		}
 
 		[TestMethod]
@@ -120,11 +120,35 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			var movies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+			var movies = target.GetAllMovies().ToList();
 
 			// Assert
 
 			CollectionAssert.AreEqual(Array.Empty<MovieToGetModel>(), movies);
+		}
+
+		// With default serialization of DateTimeOffset to array in MongoDB, the sorting by TimestampOfAddingToGetList works incorrectly.
+		// This test verifies the fix for this case.
+		[TestMethod]
+		public async Task GetAllMovies_PagingIsApplied_ReturnsCorrectMovies()
+		{
+			// Arrange
+
+			var serviceProvider = await BootstrapTests(seedData: true);
+			var target = serviceProvider.GetRequiredService<IMoviesToGetService>();
+
+			// Act
+
+			var movies = target.GetAllMovies()
+				.Skip(2)
+				.Take(2)
+				.ToList();
+
+			// Assert
+
+			Assert.AreEqual(2, movies.Count);
+			MovieAssert.AreEqual(DataForSeeding.MovieToGet3, movies[0]);
+			MovieAssert.AreEqual(DataForSeeding.MovieToGet4, movies[1]);
 		}
 
 		[TestMethod]
@@ -135,7 +159,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 			var serviceProvider = await BootstrapTests(seedData: true);
 			var target = serviceProvider.GetRequiredService<IMoviesToGetService>();
 
-			var movieId = await GetMovieId(serviceProvider, DataForSeeding.MovieToGet1);
+			var movieId = GetMovieId(serviceProvider, DataForSeeding.MovieToGet1);
 
 			// Act
 
@@ -173,7 +197,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 			var serviceProvider = await BootstrapTests(seedData: true, StubClock(new DateTimeOffset(2020, 04, 27, 11, 41, 27, TimeSpan.FromHours(3))));
 			var target = serviceProvider.GetRequiredService<IMoviesToGetService>();
 
-			var movieId = await GetMovieId(serviceProvider, DataForSeeding.MovieToGet1);
+			var movieId = GetMovieId(serviceProvider, DataForSeeding.MovieToGet1);
 
 			// Act
 
@@ -181,15 +205,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var movies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+			var movies = target.GetAllMovies().ToList();
 
 			var oldMovie = movies.SingleOrDefault(m => m.Id == movieId);
 			Assert.IsNull(oldMovie);
 
 			// Checking that movie presents among movies to see.
 			var moviesToSeeService = serviceProvider.GetRequiredService<IMoviesToSeeService>();
-			var allMoviesToSee = await moviesToSeeService.GetAllMovies(CancellationToken.None).ToListAsync();
-			var movieToSee = allMoviesToSee.SingleOrDefault(m => m.MovieInfo.MovieUri == DataForSeeding.MovieToGet1.MovieInfo.MovieUri);
+			var movieToSee = moviesToSeeService.GetAllMovies()
+				.SingleOrDefault(m => m.MovieInfo.MovieUri == DataForSeeding.MovieToGet1.MovieInfo.MovieUri);
 			Assert.IsNotNull(movieToSee);
 
 			// The new id must be generated for new movies list.
@@ -225,7 +249,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 			var serviceProvider = await BootstrapTests(seedData: true);
 			var target = serviceProvider.GetRequiredService<IMoviesToGetService>();
 
-			var movieId = await GetMovieId(serviceProvider, DataForSeeding.MovieToGet1);
+			var movieId = GetMovieId(serviceProvider, DataForSeeding.MovieToGet1);
 
 			// Act
 
@@ -233,10 +257,12 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var movies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
+			var movies = target.GetAllMovies().ToList();
 
-			Assert.AreEqual(1, movies.Count);
+			Assert.AreEqual(3, movies.Count);
 			MovieAssert.AreEqual(DataForSeeding.MovieToGet2, movies[0]);
+			MovieAssert.AreEqual(DataForSeeding.MovieToGet3, movies[1]);
+			MovieAssert.AreEqual(DataForSeeding.MovieToGet4, movies[2]);
 		}
 
 		[TestMethod]
@@ -258,12 +284,13 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
 		}
 
-		private static async Task<MovieId> GetMovieId(IServiceProvider serviceProvider, MovieToGetModel movie)
+		private static MovieId GetMovieId(IServiceProvider serviceProvider, MovieToGetModel movie)
 		{
 			var target = serviceProvider.GetRequiredService<IMoviesToGetService>();
 
-			var allMovies = await target.GetAllMovies(CancellationToken.None).ToListAsync();
-			return allMovies.Single(m => m.MovieInfo.MovieUri == movie.MovieInfo.MovieUri).Id;
+			return target
+				.GetAllMovies()
+				.Single(m => m.MovieInfo.MovieUri == movie.MovieInfo.MovieUri).Id;
 		}
 	}
 }

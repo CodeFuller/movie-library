@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
@@ -36,14 +35,28 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 			return document.Id.ToMovieId();
 		}
 
-		public async IAsyncEnumerable<MovieToSeeModel> GetAllMovies([EnumeratorCancellation] CancellationToken cancellationToken)
+		public IQueryable<MovieToSeeModel> GetAllMovies()
 		{
-			using var cursor = await collection.FindAsync(FilterDefinition<MovieToSeeDocument>.Empty, cancellationToken: cancellationToken);
-
-			await foreach (var document in cursor.AsAsyncEnumerable(cancellationToken))
-			{
-				yield return document.ToModel();
-			}
+			return collection
+				.AsQueryable()
+				.Select(d => new MovieToSeeModel
+				{
+					Id = new MovieId(d.Id.ToString()),
+					MovieInfo = new MovieInfoModel
+					{
+						Title = d.MovieInfo.Title,
+						Year = d.MovieInfo.Year,
+						MovieUri = d.MovieInfo.MovieUri,
+						PosterUri = d.MovieInfo.PosterUri,
+						Directors = d.MovieInfo.Directors,
+						Cast = d.MovieInfo.Cast,
+						Rating = d.MovieInfo.RatingValue != null ? new MovieRatingModel(d.MovieInfo.RatingValue.Value, d.MovieInfo.RatingVotesNumber) : null,
+						Duration = d.MovieInfo.Duration,
+						Genres = d.MovieInfo.Genres,
+						Summary = d.MovieInfo.Summary,
+					},
+					TimestampOfAddingToSeeList = d.TimestampOfAddingToSeeList,
+				});
 		}
 
 		public async Task<MovieToSeeModel> GetMovie(MovieId movieId, CancellationToken cancellationToken)

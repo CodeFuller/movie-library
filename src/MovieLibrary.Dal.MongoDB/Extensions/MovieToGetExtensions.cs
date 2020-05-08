@@ -21,7 +21,12 @@ namespace MovieLibrary.Dal.MongoDB.Extensions
 			var id = document.Id.ToMovieId();
 			var movieInfo = document.MovieInfo.ToModel();
 
-			return new MovieToGetModel(id, document.TimestampOfAddingToGetList, movieInfo);
+			return new MovieToGetModel
+			{
+				Id = id,
+				TimestampOfAddingToGetList = document.TimestampOfAddingToGetList,
+				MovieInfo = movieInfo,
+			};
 		}
 	}
 }

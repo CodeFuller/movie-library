@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,16 +27,19 @@ namespace MovieLibrary.Logic.Services
 		{
 			logger.LogInformation("Adding movie to see '{SourceMovieUri}' ...", movieInfo.MovieUri);
 
-			var movieToSee = new MovieToSeeModel(clock.Now, movieInfo);
+			var movieToSee = new MovieToSeeModel
+			{
+				TimestampOfAddingToSeeList = clock.Now,
+				MovieInfo = movieInfo,
+			};
 
 			return await repository.AddMovie(movieToSee, cancellationToken);
 		}
 
-		public IAsyncEnumerable<MovieToSeeModel> GetAllMovies(CancellationToken cancellationToken)
+		public IQueryable<MovieToSeeModel> GetAllMovies()
 		{
 			return repository
-				.GetAllMovies(cancellationToken)
-				.Select(m => new MovieToSeeModel(m.Id, m.TimestampOfAddingToSeeList, m.MovieInfo))
+				.GetAllMovies()
 				.OrderBy(m => m.TimestampOfAddingToSeeList);
 		}
 
