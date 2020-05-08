@@ -29,9 +29,14 @@ namespace MovieLibrary.Controllers
 			var moviesCount = moviesQueryable.Count();
 			var totalPagesNumber = (int)Math.Ceiling(moviesCount / (double)settings.MoviesPageSize);
 
+			if (totalPagesNumber == 0 && pageNumber != 1)
+			{
+				return RedirectToAction("Index", ControllerName);
+			}
+
 			if (pageNumber < 1)
 			{
-				return RedirectToAction("Index", ControllerName, new { pageNumber = 1 });
+				return RedirectToAction("Index", ControllerName);
 			}
 
 			if (pageNumber > totalPagesNumber && totalPagesNumber != 0)
