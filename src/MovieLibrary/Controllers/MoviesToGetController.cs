@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using MovieLibrary.Models;
 
 namespace MovieLibrary.Controllers
 {
-	public class MoviesToGetController : Controller
+	public class MoviesToGetController : BasicMovieController<MovieToGetModel, MoviesToGetViewModel>
 	{
 		private const string TempDataAddedMovie = "AddedMovie";
 		private const string TempDataMovedMovie = "MovedMovie";
@@ -22,13 +23,13 @@ namespace MovieLibrary.Controllers
 
 		private readonly IMovieInfoService movieInfoService;
 
-		private readonly AppSettings settings;
+		protected override string ControllerName => "MoviesToGet";
 
 		public MoviesToGetController(IMoviesToGetService moviesToGetService, IMovieInfoService movieInfoService, IOptions<AppSettings> options)
+			: base(options)
 		{
 			this.moviesToGetService = moviesToGetService ?? throw new ArgumentNullException(nameof(moviesToGetService));
 			this.movieInfoService = movieInfoService ?? throw new ArgumentNullException(nameof(movieInfoService));
-			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		[HttpGet]
@@ -69,12 +70,7 @@ namespace MovieLibrary.Controllers
 		[Authorize(Roles = Roles.CanAddMoviesToSee)]
 		public async Task<IActionResult> ConfirmMovingToSee(string id, CancellationToken cancellationToken)
 		{
-			_ = id ?? throw new ArgumentNullException(nameof(id));
-			var movieId = new MovieId(id);
-
-			var movie = await moviesToGetService.GetMovie(movieId, cancellationToken);
-			var viewModel = new MovieToGetViewModel(movie);
-
+			var viewModel = await CreateMovieViewModel(id, cancellationToken);
 			return View(viewModel);
 		}
 
@@ -96,12 +92,7 @@ namespace MovieLibrary.Controllers
 		[Authorize(Roles = Roles.CanDeleteMoviesToGet)]
 		public async Task<IActionResult> ConfirmMovieDeletion(string id, CancellationToken cancellationToken)
 		{
-			_ = id ?? throw new ArgumentNullException(nameof(id));
-			var movieId = new MovieId(id);
-
-			var movie = await moviesToGetService.GetMovie(movieId, cancellationToken);
-			var viewModel = new MovieToGetViewModel(movie);
-
+			var viewModel = await CreateMovieViewModel(id, cancellationToken);
 			return View(viewModel);
 		}
 
@@ -119,40 +110,28 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
-		private IActionResult MoviesPageView(int pageNumber)
+		protected override IQueryable<MovieToGetModel> GetAllMovies()
 		{
-			var moviesQueryable = moviesToGetService.GetAllMovies();
-
-			var moviesCount = moviesQueryable.Count();
-			var totalPagesNumber = (int)Math.Ceiling(moviesCount / (double)settings.MoviesPageSize);
-
-			if (pageNumber < 1)
-			{
-				return RedirectToAction("Index", new { pageNumber = 1 });
-			}
-
-			if (pageNumber > totalPagesNumber)
-			{
-				return RedirectToAction("Index", new { pageNumber = totalPagesNumber });
-			}
-
-			return CreateMoviesPageView(moviesQueryable, pageNumber, totalPagesNumber);
+			return moviesToGetService.GetAllMovies();
 		}
 
-		private ViewResult CreateMoviesPageView(IQueryable<MovieToGetModel> movies, int pageNumber, int totalPagesNumber)
+		protected override MoviesToGetViewModel CreateMoviesPageViewModel(IEnumerable<MovieToGetModel> movies, int pageNumber, int totalPagesNumber)
 		{
-			var pageMovies = movies
-				.Skip((pageNumber - 1) * settings.MoviesPageSize)
-				.Take(settings.MoviesPageSize);
-
-			var viewModel = new MoviesToGetViewModel(pageMovies, pageNumber, totalPagesNumber)
+			return new MoviesToGetViewModel(movies, pageNumber, totalPagesNumber)
 			{
 				AddedMovie = TempData.GetBooleanValue(TempDataAddedMovie),
 				MovedMovie = TempData.GetBooleanValue(TempDataMovedMovie),
 				DeletedMovie = TempData.GetBooleanValue(TempDataDeletedMovie),
 			};
+		}
 
-			return View("Index", viewModel);
+		private async Task<MovieToGetViewModel> CreateMovieViewModel(string id, CancellationToken cancellationToken)
+		{
+			_ = id ?? throw new ArgumentNullException(nameof(id));
+			var movieId = new MovieId(id);
+
+			var movie = await moviesToGetService.GetMovie(movieId, cancellationToken);
+			return new MovieToGetViewModel(movie);
 		}
 	}
 }
