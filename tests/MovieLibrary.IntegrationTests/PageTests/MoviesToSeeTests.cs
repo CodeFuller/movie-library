@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -40,6 +42,48 @@ namespace MovieLibrary.IntegrationTests.PageTests
 			// Assert
 
 			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
+		public async Task ConfirmMovieAddingPage_ForAdministratorAccount_IsLoadedCorrectly()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToSee/ConfirmMovieAdding"), formContent, CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
+		public async Task ConfirmMovieAddingPage_ForUserAccount_RedirectsToAccessDeniedPage()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToSee/ConfirmMovieAdding"), formContent, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/AccessDenied?ReturnUrl=%2FMoviesToSee%2FConfirmMovieAdding"));
 		}
 
 		[TestMethod]

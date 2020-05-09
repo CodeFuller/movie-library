@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,6 +38,48 @@ namespace MovieLibrary.IntegrationTests.PageTests
 			// Act
 
 			using var response = await client.GetAsync(new Uri("https://localhost:5001/MoviesToGet"), CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
+		public async Task ConfirmMovieAddingPage_ForAdministratorAccount_IsLoadedCorrectly()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToGet/ConfirmMovieAdding"), formContent, CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
+		public async Task ConfirmMovieAddingPage_ForUserAccount_IsLoadedCorrectly()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToGet/ConfirmMovieAdding"), formContent, CancellationToken.None);
 
 			// Assert
 
