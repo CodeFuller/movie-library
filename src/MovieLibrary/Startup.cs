@@ -58,7 +58,9 @@ namespace MovieLibrary
 			services.AddIdentityMongoDbProvider<MongoUser>(mongoIdentityOptions => mongoIdentityOptions.ConnectionString = connectionString)
 				.AddDefaultUI();
 
+			services.AddSingleton<IApplicationBootstrapper, ApplicationBootstrapper>();
 			services.AddSingleton<IApplicationInitializer, RolesInitializer>();
+			services.AddSingleton<ICompositeApplicationInitializer, CompositeApplicationInitializer>();
 
 			services.AddUserManagement();
 
@@ -68,7 +70,7 @@ namespace MovieLibrary
 			});
 		}
 
-		public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApplicationInitializer appInitializer)
+		public static void Configure(IApplicationBuilder app, IApplicationBootstrapper appBootstrapper, IWebHostEnvironment env, ICompositeApplicationInitializer appInitializer)
 		{
 			appInitializer.Initialize(CancellationToken.None).Wait();
 
@@ -91,7 +93,8 @@ namespace MovieLibrary
 
 			app.UseRouting();
 
-			app.UseAuthentication();
+			appBootstrapper.AddAuthenticationMiddleware(app);
+
 			app.UseAuthorization();
 
 			app.UseEndpoints(ConfigureRoutes);

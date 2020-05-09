@@ -47,7 +47,7 @@
         {
             <li id="movie-@movie.Id.Value" class="movies-list-item">
                 <div class="movie-info-and-actions">
-                    @await Html.PartialAsync("_MovieInfoPartial", movie.MovieInfo)
+                    @await Html.PartialAsync("_MovieInfoPartial", (movie.MovieInfo, movie.Id.Value))
                     <div class="movie-actions">
                         @if (User.IsInRole(Roles.CanMarkMoviesAsSeen))
                         {

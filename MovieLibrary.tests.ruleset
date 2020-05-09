@@ -21,6 +21,7 @@
     <Rule Id="CA1062" Action="None" Description="Validate arguments of public methods."/>
     <Rule Id="CA1303" Action="None" Description="Do not pass literals as localized parameters."/>
     <Rule Id="CA1707" Action="None" Description="Identifiers should not contain underscores." />
+    <Rule Id="CA1812" Action="None" Description="Avoid uninstantiated internal classes."/>
     <Rule Id="CA2000" Action="None" Description="Dispose objects before losing scope."/>
     <Rule Id="CA2007" Action="None" Description="Do not directly await a Task without calling ConfigureAwait."/>
   </Rules>

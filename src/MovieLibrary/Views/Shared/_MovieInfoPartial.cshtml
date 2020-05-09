@@ -1,20 +1,20 @@
-﻿@model MovieInfoViewModel
+﻿@model (MovieInfoViewModel Info, string MovieId)
 
 <div class="movie-info">
-    <img class="movie-info-poster" src="@GetSafePosterUri(Model.PosterUri)" alt="Poster for movie &quot;Model.Title&quot;" />
+    <img class="movie-info-poster" src="@GetSafePosterUri(Model.Info.PosterUri)" alt="Poster for movie &quot;Model.Title&quot;" />
     <div class="movie-info-details">
-        <a class="movie-info-title" href="@Model.MovieUri">@Model.Title</a>
+        <a class="movie-info-title" href="@Model.Info.MovieUri">@Model.Info.Title</a>
         <table class="movie-info-table">
             <tbody>
                 <tr>
                     <td class="movie-info-table-key">Year</td>
-                    <td class="movie-info-table-value">@Model.Year</td>
+                    <td class="movie-info-table-value">@Model.Info.Year</td>
                 </tr>
                 <tr>
                     <td class="movie-info-table-key">Genres</td>
                     <td class="movie-info-table-value">
                         @{
-                            ProduceCollection(Model.Genres);
+                            ProduceCollection(Model.Info.Genres);
                         }
                     </td>
                 </tr>
@@ -22,7 +22,7 @@
                     <td class="movie-info-table-key">Director</td>
                     <td class="movie-info-table-value">
                         @{
-                            ProduceCollection(Model.Directors);
+                            ProduceCollection(Model.Info.Directors);
                         }
                     </td>
                 </tr>
@@ -30,30 +30,30 @@
                     <td class="movie-info-table-key">Cast</td>
                     <td class="movie-info-table-value">
                         @{
-                            ProduceCollection(Model.Cast);
+                            ProduceCollection(Model.Info.Cast);
                         }
                     </td>
                 </tr>
                 <tr>
                     <td class="movie-info-table-key">Rating</td>
-                    <td class="movie-info-table-value">@Model.Rating</td>
+                    <td class="movie-info-table-value">@Model.Info.Rating</td>
                 </tr>
                 <tr>
                     <td class="movie-info-table-key">Duration</td>
-                    <td class="movie-info-table-value">@Model.Duration</td>
+                    <td class="movie-info-table-value">@Model.Info.Duration</td>
                 </tr>
             </tbody>
         </table>
-        @if (Model.Summary.Any())
+        @if (Model.Info.Summary.Any())
         {
-            var collapseId = $"collapseSummary-{Guid.NewGuid():N}";
+            var collapseId = $"collapseSummary-{Model.MovieId}";
             <div class="movie-info-summary">
                 <a class="collapsed" data-toggle="collapse" href="#@collapseId">
                     <span class="if-collapsed">Show summary</span>
                     <span class="if-not-collapsed">Hide summary</span>
                 </a>
                 <div id="@collapseId" class="collapse">
-                    @foreach (var paragraph in Model.Summary)
+                    @foreach (var paragraph in Model.Info.Summary)
                     {
                         <p>
                             @paragraph

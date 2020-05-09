@@ -1,5 +1,5 @@
 {
 	"connectionStrings": {
-		"movieLibraryTestDatabase": "mongodb://localhost:27017/movieLibraryTestDB"
+		"movieLibraryDatabase": "mongodb://localhost:27017/movieLibraryTestDB"
 	}
 }
