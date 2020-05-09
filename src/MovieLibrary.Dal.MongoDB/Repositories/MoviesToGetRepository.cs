@@ -6,6 +6,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MovieLibrary.Dal.MongoDB.Documents;
 using MovieLibrary.Dal.MongoDB.Extensions;
+using MovieLibrary.Dal.MongoDB.Internal;
 using MovieLibrary.Logic.Exceptions;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
@@ -16,14 +17,18 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 	{
 		private readonly IMongoCollection<MovieToGetDocument> collection;
 
-		public MoviesToGetRepository(IMongoCollection<MovieToGetDocument> collection)
+		private readonly IDocumentIdGenerator documentIdGenerator;
+
+		public MoviesToGetRepository(IMongoCollection<MovieToGetDocument> collection, IDocumentIdGenerator documentIdGenerator)
 		{
 			this.collection = collection ?? throw new ArgumentNullException(nameof(collection));
+			this.documentIdGenerator = documentIdGenerator ?? throw new ArgumentNullException(nameof(documentIdGenerator));
 		}
 
 		public async Task<MovieId> AddMovie(MovieToGetModel movie, CancellationToken cancellationToken)
 		{
 			var document = movie.ToDocument();
+			document.Id = documentIdGenerator.GenerateIdForNewDocument();
 
 			var insertOptions = new InsertOneOptions
 			{

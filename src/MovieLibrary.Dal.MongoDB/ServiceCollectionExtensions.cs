@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using MovieLibrary.Dal.MongoDB.Documents;
+using MovieLibrary.Dal.MongoDB.Internal;
 using MovieLibrary.Dal.MongoDB.Repositories;
 using MovieLibrary.Logic.Interfaces;
 
@@ -26,6 +27,7 @@ namespace MovieLibrary.Dal.MongoDB
 			services.AddMongoCollection<MovieToGetDocument>("MoviesToGet");
 			services.AddMongoCollection<MovieToSeeDocument>("MoviesToSee");
 
+			services.AddSingleton<IDocumentIdGenerator, AutoIdGenerator>();
 			services.AddSingleton<IMoviesToGetRepository, MoviesToGetRepository>();
 			services.AddSingleton<IMoviesToSeeRepository, MoviesToSeeRepository>();
 

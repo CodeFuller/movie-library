@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using MovieLibrary.Dal.MongoDB.Internal;
 using MovieLibrary.IntegrationTests.Internal;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
@@ -43,6 +44,7 @@ namespace MovieLibrary.IntegrationTests
 				services.AddSingleton<IApplicationInitializer, DatabaseSeeder>();
 
 				services.AddSingleton<IMovieInfoProvider>(StubMovieInfoProvider());
+				services.AddSingleton<IDocumentIdGenerator, FakeIdGenerator>();
 
 				services.AddHttpsRedirection(options =>
 				{
