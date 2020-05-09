@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
@@ -35,7 +36,9 @@ namespace MovieLibrary.IntegrationTests.Internal
 					}
 					.Concat(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-				context.User = new ClaimsPrincipal(new ClaimsIdentity(claims, "Fake Authentication"));
+				// Using Identity authentication type, so that SignInManager.IsSignedIn(User) returns true.
+				var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+				context.User = new ClaimsPrincipal(identity);
 			}
 
 			await next(context);
