@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,9 +11,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal static class PageAssert
+	internal static class ResponseAssert
 	{
-		public static async Task VerifyResponse(HttpResponseMessage response, [CallerFilePath] string callerFilePath = null, [CallerMemberName] string callerMethodName = null)
+		public static async Task VerifyPageLoaded(HttpResponseMessage response, [CallerFilePath] string callerFilePath = null, [CallerMemberName] string callerMethodName = null)
 		{
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
@@ -60,6 +61,12 @@ namespace MovieLibrary.IntegrationTests.Internal
 			}
 
 			return htmlDoc.DocumentNode.OuterHtml;
+		}
+
+		public static void VerifyRedirect(HttpResponseMessage response, Uri expectedRedirectUri)
+		{
+			Assert.AreEqual(HttpStatusCode.Redirect, response.StatusCode);
+			Assert.AreEqual(expectedRedirectUri, response.Headers.Location);
 		}
 	}
 }
