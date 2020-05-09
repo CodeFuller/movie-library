@@ -11,7 +11,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 	public class MoviesToGetTests
 	{
 		[TestMethod]
-		public async Task MoviesToGetPage_ForAdministratorAccount_IsLoadedCorrectly()
+		public async Task IndexPage_ForAdministratorAccount_IsLoadedCorrectly()
 		{
 			// Arrange
 
@@ -27,7 +27,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task MoviesToGetPage_ForUserAccount_IsLoadedCorrectly()
+		public async Task IndexPage_ForUserAccount_IsLoadedCorrectly()
 		{
 			// Arrange
 
