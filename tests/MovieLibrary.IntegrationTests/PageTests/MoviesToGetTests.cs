@@ -149,5 +149,50 @@ namespace MovieLibrary.IntegrationTests.PageTests
 
 			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/AccessDenied?ReturnUrl=%2FMoviesToGet%2FConfirmMovieDeletion%2F5eac4f407a15596e90c09d7b"));
 		}
+
+		[TestMethod]
+		public async Task DeleteMovieAction_ForAdministratorAccount_DeletesMovieCorrectly()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToGet/DeleteMovie"), formContent, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("/MoviesToGet", UriKind.Relative));
+
+			using var indexResponse = await client.GetAsync(new Uri("https://localhost:5001/MoviesToGet"), CancellationToken.None);
+			await ResponseAssert.VerifyPageLoaded(indexResponse);
+		}
+
+		[TestMethod]
+		public async Task DeleteMovieAction_ForUserAccount_RedirectsToAccessDeniedPage()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToGet/DeleteMovie"), formContent, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/AccessDenied?ReturnUrl=%2FMoviesToGet%2FDeleteMovie"));
+		}
 	}
 }
