@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MovieLibrary.IntegrationTests.Internal;
 
 namespace MovieLibrary.IntegrationTests
 {

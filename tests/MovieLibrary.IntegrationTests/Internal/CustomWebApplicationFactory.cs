@@ -9,11 +9,10 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MovieLibrary.Dal.MongoDB.Internal;
-using MovieLibrary.IntegrationTests.Internal;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
 
-namespace MovieLibrary.IntegrationTests
+namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal class CustomWebApplicationFactory : WebApplicationFactory<Startup>, IHttpClientFactory
 	{

@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.IntegrationTests.Internal;
-using static MovieLibrary.IntegrationTests.CustomWebApplicationFactory;
+using static MovieLibrary.IntegrationTests.Internal.CustomWebApplicationFactory;
 
 namespace MovieLibrary.IntegrationTests.Controllers
 {
