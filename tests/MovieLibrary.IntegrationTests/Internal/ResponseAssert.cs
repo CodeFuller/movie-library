@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
-using FluentAssertions;
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -25,18 +26,24 @@ namespace MovieLibrary.IntegrationTests.Internal
 			if (File.Exists(snapshotFileName))
 			{
 				var snapshotContent = File.ReadAllText(snapshotFileName);
-				content.Should().Be(snapshotContent);
+				ComparePageContent(content, snapshotContent);
 			}
 			else
 			{
-				// We save snapshot not in tests bin directory, but in the sources.
-				var saveSnapshotFileName = Path.Combine("..", "..", "..", snapshotFileName);
-				var directoryName = Path.GetDirectoryName(saveSnapshotFileName);
-				Directory.CreateDirectory(directoryName);
-				File.WriteAllText(saveSnapshotFileName, content);
+				StoreSnapshot(snapshotFileName, content);
 
 				Assert.Inconclusive("The test was executed in dump-snapshot mode");
 			}
+		}
+
+		private static void StoreSnapshot(string snapshotFileName, string content)
+		{
+			// We save snapshot not in tests bin directory, but in the sources.
+			var saveSnapshotFileName = Path.Combine("..", "..", "..", snapshotFileName);
+			var directoryName = Path.GetDirectoryName(saveSnapshotFileName);
+			Directory.CreateDirectory(directoryName);
+
+			File.WriteAllText(saveSnapshotFileName, content);
 		}
 
 		private static string GetSnapshotFileName(string callerFilePath, string snapshotName)
@@ -61,6 +68,38 @@ namespace MovieLibrary.IntegrationTests.Internal
 			}
 
 			return htmlDoc.DocumentNode.OuterHtml;
+		}
+
+		private static void ComparePageContent(string actualContent, string expectedContent)
+		{
+			var actualContentLines = SplitContentIntoLines(actualContent);
+			var expectedContentLines = SplitContentIntoLines(expectedContent);
+
+			CompareContentLines(actualContentLines, expectedContentLines);
+		}
+
+		private static void CompareContentLines(IReadOnlyList<string> actualContent, IReadOnlyList<string> expectedContent)
+		{
+			for (var i = 0; i < Math.Min(actualContent.Count, expectedContent.Count); ++i)
+			{
+				if (!String.Equals(actualContent[i], expectedContent[i], StringComparison.Ordinal))
+				{
+					var messageBuilder = new StringBuilder();
+					messageBuilder.AppendLine($"Content differs at line {i + 1}:");
+					messageBuilder.AppendLine();
+					messageBuilder.AppendLine($"Expected: '{expectedContent[i]}'");
+					messageBuilder.AppendLine($"Actual:   '{actualContent[i]}'");
+
+					Assert.Fail(messageBuilder.ToString());
+				}
+			}
+
+			Assert.AreEqual(expectedContent.Count, actualContent.Count, "Content lengths differ");
+		}
+
+		private static IReadOnlyList<string> SplitContentIntoLines(string content)
+		{
+			return content.Split(Environment.NewLine);
 		}
 
 		public static void VerifyRedirect(HttpResponseMessage response, Uri expectedRedirectUri)
