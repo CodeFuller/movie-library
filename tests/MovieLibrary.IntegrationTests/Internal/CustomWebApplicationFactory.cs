@@ -55,10 +55,10 @@ namespace MovieLibrary.IntegrationTests.Internal
 				services.AddScoped<IApplicationInitializer, DatabaseSeeder>();
 				services.AddSingleton<IMovieInfoProvider>(fakeMovieInfoProviderFactory());
 
-				// Same instance should be registered for IIdGenerator and IFakeIdGenerator
-				services.AddSingleton<FakeIdGenerator<ObjectId>>();
-				services.AddSingleton<IIdGenerator<ObjectId>>(sp => sp.GetRequiredService<FakeIdGenerator<ObjectId>>());
-				services.AddSingleton<IFakeIdGenerator<ObjectId>>(sp => sp.GetRequiredService<FakeIdGenerator<ObjectId>>());
+				// Same instance should be registered for IIdGeneratorQueue and IIdGenerator.
+				services.AddSingleton<FakeIdGenerator>();
+				services.AddSingleton<IIdGeneratorQueue>(sp => sp.GetRequiredService<FakeIdGenerator>());
+				services.AddSingleton<IIdGenerator<ObjectId>>(sp => sp.GetRequiredService<FakeIdGenerator>());
 
 				services.AddHttpsRedirection(options =>
 				{

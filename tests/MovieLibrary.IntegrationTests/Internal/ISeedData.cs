@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using MovieLibrary.Dal.MongoDB.Documents;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal interface ISeedData
 	{
-		IEnumerable<MovieToGetDocument> MoviesToGet { get; }
+		IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToGet { get; }
 
-		IEnumerable<MovieToSeeDocument> MoviesToSee { get; }
+		IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToSee { get; }
 
 		IEnumerable<UserSeedData> Users { get; }
 	}

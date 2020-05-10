@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MongoDB.Bson;
-using MovieLibrary.Dal.MongoDB.Documents;
+using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
@@ -11,46 +10,36 @@ namespace MovieLibrary.IntegrationTests.Internal
 		// We need 10 pages with 2 movies per page.
 		private const int MoviesNumber = 10 * 2;
 
-		public IEnumerable<MovieToGetDocument> MoviesToGet
+		public IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToGet
 		{
 			get
 			{
 				for (var i = 1; i <= MoviesNumber; ++i)
 				{
-					var movie = new MovieToGetDocument
+					var movieInfo = new MovieInfoModel
 					{
-						Id = new ObjectId($"{i:D24}"),
-						TimestampOfAddingToGetList = new DateTimeOffset(2020, 05, 10, 10, 54, i, TimeSpan.FromHours(3)),
-						MovieInfo = new MovieInfoDocument
-						{
-							Title = $"Paging Movie #{i}",
-							MovieUri = new Uri($"https://www.kinopoisk.ru/film/{i}/"),
-						},
+						Title = $"Paging Movie #{i}",
+						MovieUri = new Uri($"https://www.kinopoisk.ru/film/{i}/"),
 					};
 
-					yield return movie;
+					yield return (new MovieId($"{i:D24}"), movieInfo);
 				}
 			}
 		}
 
-		public IEnumerable<MovieToSeeDocument> MoviesToSee
+		public IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToSee
 		{
 			get
 			{
 				for (var i = 1; i <= MoviesNumber; ++i)
 				{
-					var movie = new MovieToSeeDocument
+					var movieInfo = new MovieInfoModel
 					{
-						Id = new ObjectId($"{i:D24}"),
-						TimestampOfAddingToSeeList = new DateTimeOffset(2020, 05, 10, 10, 54, i, TimeSpan.FromHours(3)),
-						MovieInfo = new MovieInfoDocument
-						{
-							Title = $"Paging Movie #{i}",
-							MovieUri = new Uri($"https://www.kinopoisk.ru/film/{i}/"),
-						},
+						Title = $"Paging Movie #{i}",
+						MovieUri = new Uri($"https://www.kinopoisk.ru/film/{i}/"),
 					};
 
-					yield return movie;
+					yield return (new MovieId($"{i:D24}"), movieInfo);
 				}
 			}
 		}

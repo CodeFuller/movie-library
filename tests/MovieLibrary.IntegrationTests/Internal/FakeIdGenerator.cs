@@ -1,34 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using MongoDB.Bson;
+using MovieLibrary.Logic.Interfaces;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal class FakeIdGenerator<TId> : IFakeIdGenerator<TId>
+	internal class FakeIdGenerator : IIdGeneratorQueue, IIdGenerator<ObjectId>
 	{
-		private readonly Queue<TId> idsQueue = new Queue<TId>();
+		private string NextId { get; set; }
 
-		public void SeedIds(IEnumerable<TId> ids)
+		public void SetNextId(string id)
 		{
-			if (idsQueue.Any())
+			if (NextId != null)
 			{
-				throw new InvalidOperationException("Not all seeded ids were used");
+				throw new InvalidOperationException("Previous fake id was not used");
 			}
 
-			foreach (var id in ids)
-			{
-				idsQueue.Enqueue(id);
-			}
+			NextId = id;
 		}
 
-		public TId GenerateId()
+		public ObjectId GenerateId()
 		{
-			if (!idsQueue.Any())
+			if (NextId == null)
 			{
-				throw new InvalidOperationException("The are no more seeded ids");
+				throw new InvalidOperationException("Fake id was not set");
 			}
 
-			return idsQueue.Dequeue();
+			var id = new ObjectId(NextId);
+
+			NextId = null;
+
+			return id;
 		}
 	}
 }
