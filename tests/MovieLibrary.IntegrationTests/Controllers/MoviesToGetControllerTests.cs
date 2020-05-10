@@ -54,7 +54,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
 
-			using var client = CreateHttpClient(UserRoles.AdministratorRoles, FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
 
 			// Act
 
@@ -75,7 +75,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/13/"),
 			});
 
-			using var client = CreateHttpClient(UserRoles.AdministratorRoles, FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
 
 			// Act
 
@@ -96,7 +96,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
 
-			using var client = CreateHttpClient(UserRoles.LimitedUserRoles, FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
 
 			// Act
 

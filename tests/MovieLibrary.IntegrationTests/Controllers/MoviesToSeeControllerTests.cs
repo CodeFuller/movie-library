@@ -45,6 +45,54 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
+		public async Task Index_ForFirstPage_ReturnsCorrectPagingBar()
+		{
+			// Arrange
+
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles, seedData: new PagingSeedData(), moviesPageSize: 2);
+
+			// Act
+
+			using var response = await client.GetAsync(new Uri("https://localhost:5001/MoviesToSee"), CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
+		public async Task Index_ForMiddlePage_ReturnsCorrectPagingBar()
+		{
+			// Arrange
+
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles, seedData: new PagingSeedData(), moviesPageSize: 2);
+
+			// Act
+
+			using var response = await client.GetAsync(new Uri("https://localhost:5001/MoviesToSee/page-5"), CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
+		public async Task Index_ForLastPage_ReturnsCorrectPagingBar()
+		{
+			// Arrange
+
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles, seedData: new PagingSeedData(), moviesPageSize: 2);
+
+			// Act
+
+			using var response = await client.GetAsync(new Uri("https://localhost:5001/MoviesToSee/page-10"), CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
 		public async Task ConfirmMovieAdding_ForAdministratorAccountAndMovieWithAllInfoFilled_ReturnsCorrectPage()
 		{
 			// Arrange
@@ -54,7 +102,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
 
-			using var client = CreateHttpClient(UserRoles.AdministratorRoles, FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
 
 			// Act
 
@@ -75,7 +123,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/13/"),
 			});
 
-			using var client = CreateHttpClient(UserRoles.AdministratorRoles, FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
 
 			// Act
 

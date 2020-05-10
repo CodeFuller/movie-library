@@ -2,6 +2,6 @@
 {
 	public class AppSettings
 	{
-		public int MoviesPageSize { get; set; }
+		public int MoviesPageSize { get; set; } = 10;
 	}
 }

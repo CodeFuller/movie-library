@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -18,11 +19,17 @@ namespace MovieLibrary.IntegrationTests.Internal
 	{
 		private readonly IEnumerable<string> userRoles;
 
+		private readonly ISeedData seedData;
+
+		private readonly int? moviesPageSize;
+
 		private readonly Func<IMovieInfoProvider> fakeMovieInfoProviderFactory;
 
-		public CustomWebApplicationFactory(IEnumerable<string> userRoles, Func<IMovieInfoProvider> fakeMovieInfoProviderFactory)
+		public CustomWebApplicationFactory(IEnumerable<string> userRoles, ISeedData seedData, int? moviesPageSize, Func<IMovieInfoProvider> fakeMovieInfoProviderFactory)
 		{
 			this.userRoles = userRoles;
+			this.seedData = seedData ?? new DefaultSeedData();
+			this.moviesPageSize = moviesPageSize;
 			this.fakeMovieInfoProviderFactory = fakeMovieInfoProviderFactory ?? FakeMovieInfoProvider.StubFailingProvider;
 		}
 
@@ -33,6 +40,11 @@ namespace MovieLibrary.IntegrationTests.Internal
 			builder.ConfigureAppConfiguration((context, configBuilder) =>
 			{
 				configBuilder.AddJsonFile(GetTestRunSettingsPath(), optional: false);
+
+				if (moviesPageSize != null)
+				{
+					configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("moviesPageSize", moviesPageSize.Value.ToString(CultureInfo.InvariantCulture)) });
+				}
 			});
 
 			builder.ConfigureServices(services =>
@@ -40,6 +52,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 				services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper(userRoles));
 				services.AddSingleton<IHttpClientFactory>(this);
 
+				services.AddSingleton<ISeedData>(seedData);
 				services.AddSingleton<IApplicationInitializer, DatabaseSeeder>();
 				services.AddSingleton<IMovieInfoProvider>(fakeMovieInfoProviderFactory());
 				services.AddSingleton<IDocumentIdGenerator, FakeIdGenerator>();
@@ -55,9 +68,9 @@ namespace MovieLibrary.IntegrationTests.Internal
 			});
 		}
 
-		public static HttpClient CreateHttpClient(IEnumerable<string> userRoles = null, Func<IMovieInfoProvider> fakeMovieInfoProviderFactory = null)
+		public static HttpClient CreateHttpClient(IEnumerable<string> userRoles = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
 		{
-			var factory = new CustomWebApplicationFactory(userRoles, fakeMovieInfoProviderFactory);
+			var factory = new CustomWebApplicationFactory(userRoles, seedData, moviesPageSize, movieInfoProvider);
 
 			var options = new WebApplicationFactoryClientOptions
 			{
