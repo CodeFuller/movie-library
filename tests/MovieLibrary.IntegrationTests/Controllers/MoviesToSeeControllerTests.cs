@@ -7,13 +7,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.IntegrationTests.Internal;
 using static MovieLibrary.IntegrationTests.CustomWebApplicationFactory;
 
-namespace MovieLibrary.IntegrationTests.PageTests
+namespace MovieLibrary.IntegrationTests.Controllers
 {
 	[TestClass]
-	public class MoviesToSeeTests
+	public class MoviesToSeeControllerTests
 	{
 		[TestMethod]
-		public async Task IndexPage_ForAdministratorAccount_IsLoadedCorrectly()
+		public async Task Index_ForAdministratorAccount_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -29,7 +29,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task IndexPage_ForUserAccount_IsLoadedCorrectly()
+		public async Task Index_ForUserAccount_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -45,7 +45,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task ConfirmMovieAddingPage_ForAdministratorAccountAndMovieWithAllInfoFilled_IsLoadedCorrectly()
+		public async Task ConfirmMovieAdding_ForAdministratorAccountAndMovieWithAllInfoFilled_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -66,7 +66,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task ConfirmMovieAddingPage_ForAdministratorAccountAndMovieWithAllInfoMissing_IsLoadedCorrectly()
+		public async Task ConfirmMovieAdding_ForAdministratorAccountAndMovieWithAllInfoMissing_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -87,7 +87,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task ConfirmMovieAddingPage_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task ConfirmMovieAdding_ForUserAccount_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -108,7 +108,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task AddMovieAction_ForAdministratorAccountAndMovieWithAllInfoFilled_AddsMovieCorrectly()
+		public async Task AddMovie_ForAdministratorAccountAndMovieWithAllInfoFilled_AddsMovieCorrectly()
 		{
 			// Arrange
 
@@ -155,7 +155,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task AddMovieAction_ForAdministratorAccountAndMovieWithAllInfoMissing_AddsMovieCorrectly()
+		public async Task AddMovie_ForAdministratorAccountAndMovieWithAllInfoMissing_AddsMovieCorrectly()
 		{
 			// Arrange
 
@@ -186,7 +186,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task AddMovieAction_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task AddMovie_ForUserAccount_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -213,7 +213,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task ConfirmMarkingAsSeenPage_ForAdministratorAccount_IsLoadedCorrectly()
+		public async Task ConfirmMarkingAsSeen_ForAdministratorAccount_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -229,7 +229,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task ConfirmMarkingAsSeenPage_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task ConfirmMarkingAsSeen_ForUserAccount_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -269,7 +269,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task MoveToMoviesToSeeAction_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task MoveToMoviesToSee_ForUserAccount_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -290,7 +290,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task ConfirmMovieDeletionPage_ForAdministratorAccount_IsLoadedCorrectly()
+		public async Task ConfirmMovieDeletion_ForAdministratorAccount_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -306,7 +306,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task ConfirmMovieDeletionPage_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task ConfirmMovieDeletion_ForUserAccount_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -322,7 +322,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task DeleteMovieAction_ForAdministratorAccount_DeletesMovieCorrectly()
+		public async Task DeleteMovie_ForAdministratorAccount_DeletesMovieCorrectly()
 		{
 			// Arrange
 
@@ -346,7 +346,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task DeleteMovieAction_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task DeleteMovie_ForUserAccount_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
