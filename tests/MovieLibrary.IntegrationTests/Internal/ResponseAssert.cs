@@ -30,9 +30,12 @@ namespace MovieLibrary.IntegrationTests.Internal
 			}
 			else
 			{
+#if DEBUG
 				StoreSnapshot(snapshotFileName, content);
-
 				Assert.Inconclusive("The test was executed in dump-snapshot mode");
+#endif
+
+				Assert.Fail($"The snapshot file is missing: {snapshotFileName}");
 			}
 		}
 
