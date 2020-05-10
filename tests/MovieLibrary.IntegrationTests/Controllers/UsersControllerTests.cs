@@ -190,7 +190,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Permissions[7].Assigned", "false"),
 			});
 
-			var webApplicationFactory = new CustomWebApplicationFactory(UserRoles.AdministratorRoles);
+			using var webApplicationFactory = new CustomWebApplicationFactory(UserRoles.AdministratorRoles);
 			using var client = webApplicationFactory.CreateHttpClient();
 
 			// Act

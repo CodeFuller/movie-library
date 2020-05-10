@@ -284,11 +284,10 @@ namespace MovieLibrary.IntegrationTests.Controllers
 
 			ResponseAssert.VerifyRedirect(response, new Uri("/MoviesToGet", UriKind.Relative));
 
-			using var moviesToGetResponse = await client.GetAsync(new Uri("https://localhost:5001/MoviesToGet"), CancellationToken.None);
-			await ResponseAssert.VerifyPageLoaded(moviesToGetResponse, snapshotName: "MoveToMoviesToSee_ForAdministratorAccount_ResultMoviesToGet");
+			using var indexResponse = await client.GetAsync(new Uri("https://localhost:5001/MoviesToGet"), CancellationToken.None);
+			await ResponseAssert.VerifyPageLoaded(indexResponse);
 
-			using var moviesToSeeResponse = await client.GetAsync(new Uri("https://localhost:5001/MoviesToSee"), CancellationToken.None);
-			await ResponseAssert.VerifyPageLoaded(moviesToSeeResponse, snapshotName: "MoveToMoviesToSee_ForAdministratorAccount_ResultMoviesToSee");
+			// The fact, that movie was actually added to movies to see, is checked by ITs for services layer.
 		}
 
 		[TestMethod]
