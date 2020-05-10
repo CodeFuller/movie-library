@@ -1,7 +1,9 @@
 ﻿@model (MovieInfoViewModel Info, string MovieId)
 
 <div class="movie-info">
-    <img class="movie-info-poster" src="@GetSafePosterUri(Model.Info.PosterUri)" alt="Poster for movie &quot;@Model.Info.Title&quot;" />
+    <a href="@Model.Info.MovieUri">
+        <img class="movie-info-poster" src="@GetSafePosterUri(Model.Info.PosterUri)" alt="Poster for movie &quot;@Model.Info.Title&quot;"/>
+    </a>
     <div class="movie-info-details">
         <a class="movie-info-title" href="@Model.Info.MovieUri">@Model.Info.Title</a>
         <table class="movie-info-table">
