@@ -110,5 +110,11 @@ namespace MovieLibrary.IntegrationTests.Internal
 			Assert.AreEqual(HttpStatusCode.Redirect, response.StatusCode);
 			Assert.AreEqual(expectedRedirectUri, response.Headers.Location);
 		}
+
+		public static void VerifyMovedPermanently(HttpResponseMessage response, Uri expectedRedirectUri)
+		{
+			Assert.AreEqual(HttpStatusCode.MovedPermanently, response.StatusCode);
+			Assert.AreEqual(expectedRedirectUri, response.Headers.Location);
+		}
 	}
 }

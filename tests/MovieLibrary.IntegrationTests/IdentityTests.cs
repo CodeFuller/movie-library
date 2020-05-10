@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.IntegrationTests.Internal;
+using static MovieLibrary.IntegrationTests.Internal.CustomWebApplicationFactory;
 
 namespace MovieLibrary.IntegrationTests
 {
@@ -16,7 +16,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CustomWebApplicationFactory.CreateHttpClient();
+			using var client = CreateHttpClient();
 
 			// Act
 
@@ -24,8 +24,7 @@ namespace MovieLibrary.IntegrationTests
 
 			// Assert
 
-			Assert.AreEqual(HttpStatusCode.MovedPermanently, response.StatusCode);
-			Assert.AreEqual(new Uri("/Identity/Account/Login", UriKind.Relative), response.Headers.Location);
+			ResponseAssert.VerifyMovedPermanently(response, new Uri("/Identity/Account/Login", UriKind.Relative));
 		}
 
 		[TestMethod]
@@ -33,7 +32,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CustomWebApplicationFactory.CreateHttpClient();
+			using var client = CreateHttpClient();
 
 			using var content = new StringContent(String.Empty);
 
@@ -43,8 +42,23 @@ namespace MovieLibrary.IntegrationTests
 
 			// Assert
 
-			Assert.AreEqual(HttpStatusCode.MovedPermanently, response.StatusCode);
-			Assert.AreEqual(new Uri("/Identity/Account/Login", UriKind.Relative), response.Headers.Location);
+			ResponseAssert.VerifyMovedPermanently(response, new Uri("/Identity/Account/Login", UriKind.Relative));
+		}
+
+		[TestMethod]
+		public async Task GetLogin_ForUnauthenticatedUser_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			using var client = CreateHttpClient(userRoles: null);
+
+			// Act
+
+			using var response = await client.GetAsync(new Uri("https://localhost:5001/Identity/Account/Login"), CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
 		}
 	}
 }
