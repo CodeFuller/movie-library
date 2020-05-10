@@ -245,6 +245,51 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
+		public async Task MarkMovieAsSeen_ForAdministratorAccount_DeletesMovie()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("id", "5ead62d14be68246b45bba82"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToSee/MarkMovieAsSeen/5ead62d14be68246b45bba82"), formContent, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("/MoviesToSee", UriKind.Relative));
+
+			using var indexResponse = await client.GetAsync(new Uri("https://localhost:5001/MoviesToSee"), CancellationToken.None);
+			await ResponseAssert.VerifyPageLoaded(indexResponse);
+		}
+
+		[TestMethod]
+		public async Task MoveToMoviesToSeeAction_ForUserAccount_RedirectsToAccessDeniedPage()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("id", "5ead62d14be68246b45bba82"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToSee/MarkMovieAsSeen/5ead62d14be68246b45bba82"), formContent, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/AccessDenied?ReturnUrl=%2FMoviesToSee%2FMarkMovieAsSeen%2F5ead62d14be68246b45bba82"));
+		}
+
+		[TestMethod]
 		public async Task ConfirmMovieDeletionPage_ForAdministratorAccount_IsLoadedCorrectly()
 		{
 			// Arrange

@@ -13,14 +13,14 @@ namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal static class ResponseAssert
 	{
-		public static async Task VerifyPageLoaded(HttpResponseMessage response, [CallerFilePath] string callerFilePath = null, [CallerMemberName] string callerMethodName = null)
+		public static async Task VerifyPageLoaded(HttpResponseMessage response, [CallerFilePath] string callerFilePath = null, [CallerMemberName] string snapshotName = null)
 		{
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
 			var content = await response.Content.ReadAsStringAsync();
 			content = UnifyPageContent(content);
 
-			var snapshotFileName = GetSnapshotFileName(callerFilePath, callerMethodName);
+			var snapshotFileName = GetSnapshotFileName(callerFilePath, snapshotName);
 
 			if (File.Exists(snapshotFileName))
 			{
@@ -39,11 +39,11 @@ namespace MovieLibrary.IntegrationTests.Internal
 			}
 		}
 
-		private static string GetSnapshotFileName(string callerFilePath, string callerMethodName)
+		private static string GetSnapshotFileName(string callerFilePath, string snapshotName)
 		{
 			var snapshotDirectoryName = Path.GetFileNameWithoutExtension(Path.GetFileName(callerFilePath));
 
-			var snapshotFileName = Path.Combine("snapshots", snapshotDirectoryName, callerMethodName);
+			var snapshotFileName = Path.Combine("snapshots", snapshotDirectoryName, snapshotName);
 			snapshotFileName = Path.ChangeExtension(snapshotFileName, "html");
 
 			return snapshotFileName;

@@ -265,6 +265,54 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
+		public async Task MoveToMoviesToSeeAction_ForAdministratorAccount_MovesMovieToMoviesToSee()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToGet/MoveToMoviesToSee/5eac4f407a15596e90c09d7b"), formContent, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("/MoviesToGet", UriKind.Relative));
+
+			using var moviesToGetResponse = await client.GetAsync(new Uri("https://localhost:5001/MoviesToGet"), CancellationToken.None);
+			await ResponseAssert.VerifyPageLoaded(moviesToGetResponse, snapshotName: "MoveToMoviesToSeeAction_ForAdministratorAccount_ResultMoviesToGet");
+
+			using var moviesToSeeResponse = await client.GetAsync(new Uri("https://localhost:5001/MoviesToSee"), CancellationToken.None);
+			await ResponseAssert.VerifyPageLoaded(moviesToSeeResponse, snapshotName: "MoveToMoviesToSeeAction_ForAdministratorAccount_ResultMoviesToSee");
+		}
+
+		[TestMethod]
+		public async Task MoveToMoviesToSeeAction_ForUserAccount_RedirectsToAccessDeniedPage()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToGet/MoveToMoviesToSee/5eac4f407a15596e90c09d7b"), formContent, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/AccessDenied?ReturnUrl=%2FMoviesToGet%2FMoveToMoviesToSee%2F5eac4f407a15596e90c09d7b"));
+		}
+
+		[TestMethod]
 		public async Task ConfirmMovieDeletionPage_ForAdministratorAccount_IsLoadedCorrectly()
 		{
 			// Arrange
