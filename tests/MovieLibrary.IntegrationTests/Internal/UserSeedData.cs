@@ -2,7 +2,7 @@
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	public class UserSeedData
+	internal class UserSeedData
 	{
 		public string Id { get; set; }
 

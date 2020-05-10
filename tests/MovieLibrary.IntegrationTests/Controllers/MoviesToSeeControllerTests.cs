@@ -45,6 +45,22 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
+		public async Task Index_NoMoviesToSee_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			using var client = CreateHttpClient(UserRoles.LimitedUserRoles, seedData: new EmptySeedData());
+
+			// Act
+
+			using var response = await client.GetAsync(new Uri("https://localhost:5001/MoviesToSee"), CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
 		public async Task Index_ForFirstPage_ReturnsCorrectPagingBar()
 		{
 			// Arrange
