@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MovieLibrary.Dal.MongoDB.Internal;
+using MongoDB.Bson;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal class CustomWebApplicationFactory : WebApplicationFactory<Startup>, IHttpClientFactory
+	internal class CustomWebApplicationFactory : WebApplicationFactory<Startup>
 	{
 		private readonly IEnumerable<string> userRoles;
 
@@ -25,12 +25,12 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 		private readonly Func<IMovieInfoProvider> fakeMovieInfoProviderFactory;
 
-		public CustomWebApplicationFactory(IEnumerable<string> userRoles, ISeedData seedData, int? moviesPageSize, Func<IMovieInfoProvider> fakeMovieInfoProviderFactory)
+		public CustomWebApplicationFactory(IEnumerable<string> userRoles = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
 		{
 			this.userRoles = userRoles;
 			this.seedData = seedData ?? new DefaultSeedData();
 			this.moviesPageSize = moviesPageSize;
-			this.fakeMovieInfoProviderFactory = fakeMovieInfoProviderFactory ?? FakeMovieInfoProvider.StubFailingProvider;
+			this.fakeMovieInfoProviderFactory = movieInfoProvider ?? FakeMovieInfoProvider.StubFailingProvider;
 		}
 
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -50,12 +50,15 @@ namespace MovieLibrary.IntegrationTests.Internal
 			builder.ConfigureServices(services =>
 			{
 				services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper(userRoles));
-				services.AddSingleton<IHttpClientFactory>(this);
 
 				services.AddSingleton<ISeedData>(seedData);
-				services.AddSingleton<IApplicationInitializer, DatabaseSeeder>();
+				services.AddScoped<IApplicationInitializer, DatabaseSeeder>();
 				services.AddSingleton<IMovieInfoProvider>(fakeMovieInfoProviderFactory());
-				services.AddSingleton<IDocumentIdGenerator, FakeIdGenerator>();
+
+				// Same instance should be registered for IIdGenerator and IFakeIdGenerator
+				services.AddSingleton<FakeIdGenerator<ObjectId>>();
+				services.AddSingleton<IIdGenerator<ObjectId>>(sp => sp.GetRequiredService<FakeIdGenerator<ObjectId>>());
+				services.AddSingleton<IFakeIdGenerator<ObjectId>>(sp => sp.GetRequiredService<FakeIdGenerator<ObjectId>>());
 
 				services.AddHttpsRedirection(options =>
 				{
@@ -71,18 +74,17 @@ namespace MovieLibrary.IntegrationTests.Internal
 		public static HttpClient CreateHttpClient(IEnumerable<string> userRoles = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
 		{
 			var factory = new CustomWebApplicationFactory(userRoles, seedData, moviesPageSize, movieInfoProvider);
+			return factory.CreateHttpClient();
+		}
 
+		public HttpClient CreateHttpClient()
+		{
 			var options = new WebApplicationFactoryClientOptions
 			{
 				AllowAutoRedirect = false,
 			};
 
-			return factory.CreateClient(options);
-		}
-
-		public HttpClient CreateClient(string name)
-		{
-			return CreateClient();
+			return CreateClient(options);
 		}
 
 		private static string GetTestRunSettingsPath()

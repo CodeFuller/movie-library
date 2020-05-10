@@ -60,7 +60,7 @@ namespace MovieLibrary
 
 			services.AddSingleton<IApplicationBootstrapper, ApplicationBootstrapper>();
 			services.AddSingleton<IApplicationInitializer, RolesInitializer>();
-			services.AddSingleton<ICompositeApplicationInitializer, CompositeApplicationInitializer>();
+			services.AddScoped<ICompositeApplicationInitializer, CompositeApplicationInitializer>();
 
 			services.AddUserManagement();
 

@@ -1,10 +1,11 @@
 ﻿using MongoDB.Bson;
+using MovieLibrary.Logic.Interfaces;
 
 namespace MovieLibrary.Dal.MongoDB.Internal
 {
-	internal class AutoIdGenerator : IDocumentIdGenerator
+	internal class AutoIdGenerator : IIdGenerator<ObjectId>
 	{
-		public ObjectId GenerateIdForNewDocument()
+		public ObjectId GenerateId()
 		{
 			return ObjectId.Empty;
 		}

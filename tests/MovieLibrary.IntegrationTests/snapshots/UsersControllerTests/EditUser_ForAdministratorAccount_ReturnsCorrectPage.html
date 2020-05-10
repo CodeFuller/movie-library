@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit User SomeLimitedUser@test.com - Movie Library</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    
+
+<ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-dark" title="Manage" href="/Identity/Account/Manage">Fake User</a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" action="/Identity/Account/Logout?returnUrl=%2F" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            <input name="__RequestVerificationToken" type="hidden" value="Some AFT Value" /></form>
+        </li>
+</ul>
+
+                    <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="/MoviesToGet">Movies to Get</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="/MoviesToSee">Movies to See</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="/Users">Manage Users</a>
+        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            
+
+<form method="post" action="/Users/UpdateUser">
+    <table class="table table-hover table-responsive table-sm">
+        <thead>
+        <tr>
+            <th scope="col">Permission</th>
+            <th class="text-center" scope="col">Assigned</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Administrator</td>
+                <td class="text-center">
+                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_0__Assigned" name="Permissions[0].Assigned" value="true" />
+                    <input type="hidden" id="Permissions_0__PermissionName" name="Permissions[0].PermissionName" value="Administrator" />
+                </td>
+            </tr>
+            <tr>
+                <td>CanAddMoviesToGet</td>
+                <td class="text-center">
+                    <input type="checkbox" checked="checked" data-val="true" data-val-required="The Assigned field is required." id="Permissions_1__Assigned" name="Permissions[1].Assigned" value="true" />
+                    <input type="hidden" id="Permissions_1__PermissionName" name="Permissions[1].PermissionName" value="CanAddMoviesToGet" />
+                </td>
+            </tr>
+            <tr>
+                <td>CanReadMoviesToGet</td>
+                <td class="text-center">
+                    <input type="checkbox" checked="checked" data-val="true" data-val-required="The Assigned field is required." id="Permissions_2__Assigned" name="Permissions[2].Assigned" value="true" />
+                    <input type="hidden" id="Permissions_2__PermissionName" name="Permissions[2].PermissionName" value="CanReadMoviesToGet" />
+                </td>
+            </tr>
+            <tr>
+                <td>CanDeleteMoviesToGet</td>
+                <td class="text-center">
+                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_3__Assigned" name="Permissions[3].Assigned" value="true" />
+                    <input type="hidden" id="Permissions_3__PermissionName" name="Permissions[3].PermissionName" value="CanDeleteMoviesToGet" />
+                </td>
+            </tr>
+            <tr>
+                <td>CanAddMoviesToSee</td>
+                <td class="text-center">
+                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_4__Assigned" name="Permissions[4].Assigned" value="true" />
+                    <input type="hidden" id="Permissions_4__PermissionName" name="Permissions[4].PermissionName" value="CanAddMoviesToSee" />
+                </td>
+            </tr>
+            <tr>
+                <td>CanReadMoviesToSee</td>
+                <td class="text-center">
+                    <input type="checkbox" checked="checked" data-val="true" data-val-required="The Assigned field is required." id="Permissions_5__Assigned" name="Permissions[5].Assigned" value="true" />
+                    <input type="hidden" id="Permissions_5__PermissionName" name="Permissions[5].PermissionName" value="CanReadMoviesToSee" />
+                </td>
+            </tr>
+            <tr>
+                <td>CanMarkMoviesAsSeen</td>
+                <td class="text-center">
+                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_6__Assigned" name="Permissions[6].Assigned" value="true" />
+                    <input type="hidden" id="Permissions_6__PermissionName" name="Permissions[6].PermissionName" value="CanMarkMoviesAsSeen" />
+                </td>
+            </tr>
+            <tr>
+                <td>CanDeleteMoviesToSee</td>
+                <td class="text-center">
+                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_7__Assigned" name="Permissions[7].Assigned" value="true" />
+                    <input type="hidden" id="Permissions_7__PermissionName" name="Permissions[7].PermissionName" value="CanDeleteMoviesToSee" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <input type="hidden" id="UserId" name="UserId" value="5eb7eb9f1fdada19f4eb59b1" />
+
+    <button class="btn btn-primary" type="submit">Update</button>
+    <a class="btn btn-secondary" href="/Users">Cancel</a>
+<input name="__RequestVerificationToken" type="hidden" value="Some AFT Value" /><input name="Permissions[0].Assigned" type="hidden" value="false" /><input name="Permissions[1].Assigned" type="hidden" value="false" /><input name="Permissions[2].Assigned" type="hidden" value="false" /><input name="Permissions[3].Assigned" type="hidden" value="false" /><input name="Permissions[4].Assigned" type="hidden" value="false" /><input name="Permissions[5].Assigned" type="hidden" value="false" /><input name="Permissions[6].Assigned" type="hidden" value="false" /><input name="Permissions[7].Assigned" type="hidden" value="false" /></form>
+
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - Movie Library - by&nbsp;<a href="http://codefuller.com/">CodeFuller</a>
+        </div>
+    </footer>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js?v=4q1jwFhaPaZgr8WAUSrux6hAuh0XDg9kPS3xIVq36I0"></script>
+    
+</body>
+</html>

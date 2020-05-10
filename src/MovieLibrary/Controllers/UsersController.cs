@@ -68,7 +68,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Edit(string id, CancellationToken cancellationToken)
+		public async Task<IActionResult> EditUser(string id, CancellationToken cancellationToken)
 		{
 			return await UserDetailsView(id, cancellationToken);
 		}
@@ -122,7 +122,7 @@ namespace MovieLibrary.Controllers
 			var userDetails = await userService.GetUser(userId, cancellationToken);
 			var viewModel = new UserDetailsViewModel(userDetails);
 
-			return View("Edit", viewModel);
+			return View("EditUser", viewModel);
 		}
 	}
 }

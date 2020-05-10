@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using MovieLibrary.Exceptions;
 using MovieLibrary.Logic.Exceptions;
+using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.UserManagement.Models;
 
 namespace MovieLibrary.UserManagement
@@ -21,19 +22,23 @@ namespace MovieLibrary.UserManagement
 
 		private readonly IUserStore<TUser> userStore;
 
-		public UserService(IUserManager<TUser, TKey> userManager, IRoleManager<TRole, TKey> roleManager, IUserStore<TUser> userStore)
+		private readonly IIdGenerator<TKey> idGenerator;
+
+		public UserService(IUserManager<TUser, TKey> userManager, IRoleManager<TRole, TKey> roleManager, IUserStore<TUser> userStore, IIdGenerator<TKey> idGenerator)
 		{
 			this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
 			this.userStore = userStore ?? throw new ArgumentNullException(nameof(userStore));
+			this.idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
 		}
 
-		public async Task CreateUser(NewUserModel user, CancellationToken cancellationToken)
+		public async Task<string> CreateUser(NewUserModel user, CancellationToken cancellationToken)
 		{
 			var userEmail = user.Email;
 
 			var newUser = new TUser
 			{
+				Id = idGenerator.GenerateId(),
 				Email = userEmail,
 			};
 
@@ -44,6 +49,8 @@ namespace MovieLibrary.UserManagement
 			{
 				throw new UserUpdateFailedException($"Failed to create the user. {result}");
 			}
+
+			return newUser.Id.ToString();
 		}
 
 		public async IAsyncEnumerable<UserModel> GetAllUsers([EnumeratorCancellation] CancellationToken cancellationToken)
@@ -74,13 +81,13 @@ namespace MovieLibrary.UserManagement
 			};
 		}
 
-		public async Task AssignUserPermissions(string userId, IEnumerable<string> roles, CancellationToken cancellationToken)
+		public async Task AssignUserPermissions(string userId, IEnumerable<string> permissions, CancellationToken cancellationToken)
 		{
 			var user = await FindUser(userId);
 
 			var currentRoles = await userManager.GetRolesAsync(user);
 
-			var rolesSet = roles.ToHashSet();
+			var rolesSet = permissions.ToHashSet();
 			var rolesToAdd = rolesSet.Where(r => !currentRoles.Contains(r)).ToList();
 			var rolesToRemove = currentRoles.Where(r => !rolesSet.Contains(r)).ToList();
 

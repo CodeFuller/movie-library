@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Bson;
 using MovieLibrary.Dal.MongoDB.Documents;
 
@@ -10,12 +11,10 @@ namespace MovieLibrary.IntegrationTests.Internal
 		// We need 10 pages with 2 movies per page.
 		private const int MoviesNumber = 10 * 2;
 
-		public IReadOnlyCollection<MovieToGetDocument> MoviesToGet
+		public IEnumerable<MovieToGetDocument> MoviesToGet
 		{
 			get
 			{
-				var movies = new List<MovieToGetDocument>(MoviesNumber);
-
 				for (var i = 1; i <= MoviesNumber; ++i)
 				{
 					var movie = new MovieToGetDocument
@@ -29,19 +28,15 @@ namespace MovieLibrary.IntegrationTests.Internal
 						},
 					};
 
-					movies.Add(movie);
+					yield return movie;
 				}
-
-				return movies;
 			}
 		}
 
-		public IReadOnlyCollection<MovieToSeeDocument> MoviesToSee
+		public IEnumerable<MovieToSeeDocument> MoviesToSee
 		{
 			get
 			{
-				var movies = new List<MovieToSeeDocument>(MoviesNumber);
-
 				for (var i = 1; i <= MoviesNumber; ++i)
 				{
 					var movie = new MovieToSeeDocument
@@ -55,11 +50,11 @@ namespace MovieLibrary.IntegrationTests.Internal
 						},
 					};
 
-					movies.Add(movie);
+					yield return movie;
 				}
-
-				return movies;
 			}
 		}
+
+		public IEnumerable<UserSeedData> Users => Enumerable.Empty<UserSeedData>();
 	}
 }

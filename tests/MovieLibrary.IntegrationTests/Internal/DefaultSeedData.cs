@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Bson;
 using MovieLibrary.Dal.MongoDB.Documents;
 
@@ -7,11 +8,11 @@ namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal class DefaultSeedData : ISeedData
 	{
-		public IReadOnlyCollection<MovieToGetDocument> MoviesToGet
+		public IEnumerable<MovieToGetDocument> MoviesToGet
 		{
 			get
 			{
-				var movieToGet1 = new MovieToGetDocument
+				yield return new MovieToGetDocument
 				{
 					Id = new ObjectId("5eac4f407a15596e90c09d7b"),
 					TimestampOfAddingToGetList = new DateTimeOffset(2019, 11, 28, 19, 23, 12, TimeSpan.FromHours(3)),
@@ -33,7 +34,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 					},
 				};
 
-				var movieToGet2 = new MovieToGetDocument
+				yield return new MovieToGetDocument
 				{
 					Id = new ObjectId("5ead62931969f95b005c1f68"),
 					TimestampOfAddingToGetList = new DateTimeOffset(2020, 04, 03, 08, 12, 23, TimeSpan.FromHours(3)),
@@ -43,20 +44,14 @@ namespace MovieLibrary.IntegrationTests.Internal
 						MovieUri = new Uri("https://www.kinopoisk.ru/film/777/"),
 					},
 				};
-
-				return new[]
-				{
-					movieToGet1,
-					movieToGet2,
-				};
 			}
 		}
 
-		public IReadOnlyCollection<MovieToSeeDocument> MoviesToSee
+		public IEnumerable<MovieToSeeDocument> MoviesToSee
 		{
 			get
 			{
-				var movieToSee1 = new MovieToSeeDocument
+				yield return new MovieToSeeDocument
 				{
 					Id = new ObjectId("5ead62d14be68246b45bba82"),
 					TimestampOfAddingToSeeList = new DateTimeOffset(2019, 04, 30, 12, 15, 47, TimeSpan.FromHours(3)),
@@ -76,7 +71,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 					},
 				};
 
-				var movieToSee2 = new MovieToSeeDocument
+				yield return new MovieToSeeDocument
 				{
 					Id = new ObjectId("5ead645f6a24e267d02651d5"),
 					TimestampOfAddingToSeeList = new DateTimeOffset(2019, 10, 23, 06, 31, 28, TimeSpan.FromHours(3)),
@@ -86,11 +81,27 @@ namespace MovieLibrary.IntegrationTests.Internal
 						MovieUri = new Uri("https://www.kinopoisk.ru/film/888/"),
 					},
 				};
+			}
+		}
 
-				return new[]
+		public IEnumerable<UserSeedData> Users
+		{
+			get
+			{
+				yield return new UserSeedData
 				{
-					movieToSee1,
-					movieToSee2,
+					Id = "5eb7eb9e1fdada19f4eb59b0",
+					Email = "SomeAdministrator@test.com",
+					Password = "Qwerty123!",
+					Roles = UserRoles.AdministratorRoles.ToList(),
+				};
+
+				yield return new UserSeedData
+				{
+					Id = "5eb7eb9f1fdada19f4eb59b1",
+					Email = "SomeLimitedUser@test.com",
+					Password = "Qwerty321!",
+					Roles = UserRoles.LimitedUserRoles.ToList(),
 				};
 			}
 		}

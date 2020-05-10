@@ -5,8 +5,10 @@ namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal interface ISeedData
 	{
-		IReadOnlyCollection<MovieToGetDocument> MoviesToGet { get; }
+		IEnumerable<MovieToGetDocument> MoviesToGet { get; }
 
-		IReadOnlyCollection<MovieToSeeDocument> MoviesToSee { get; }
+		IEnumerable<MovieToSeeDocument> MoviesToSee { get; }
+
+		IEnumerable<UserSeedData> Users { get; }
 	}
 }
