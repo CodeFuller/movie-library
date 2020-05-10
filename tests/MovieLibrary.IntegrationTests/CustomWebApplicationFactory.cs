@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
-using System.Threading;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using MovieLibrary.Dal.MongoDB.Internal;
 using MovieLibrary.IntegrationTests.Internal;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
-using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.IntegrationTests
 {
-	public class CustomWebApplicationFactory : WebApplicationFactory<Startup>, IHttpClientFactory
+	internal class CustomWebApplicationFactory : WebApplicationFactory<Startup>, IHttpClientFactory
 	{
 		private readonly IEnumerable<string> userRoles;
 
-		public CustomWebApplicationFactory(IEnumerable<string> userRoles)
+		private readonly Func<IMovieInfoProvider> fakeMovieInfoProviderFactory;
+
+		public CustomWebApplicationFactory(IEnumerable<string> userRoles, Func<IMovieInfoProvider> fakeMovieInfoProviderFactory)
 		{
 			this.userRoles = userRoles;
+			this.fakeMovieInfoProviderFactory = fakeMovieInfoProviderFactory ?? FakeMovieInfoProvider.StubFailingProvider;
 		}
 
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -42,8 +42,7 @@ namespace MovieLibrary.IntegrationTests
 				services.AddSingleton<IHttpClientFactory>(this);
 
 				services.AddSingleton<IApplicationInitializer, DatabaseSeeder>();
-
-				services.AddSingleton<IMovieInfoProvider>(StubMovieInfoProvider());
+				services.AddSingleton<IMovieInfoProvider>(fakeMovieInfoProviderFactory());
 				services.AddSingleton<IDocumentIdGenerator, FakeIdGenerator>();
 
 				services.AddHttpsRedirection(options =>
@@ -57,9 +56,9 @@ namespace MovieLibrary.IntegrationTests
 			});
 		}
 
-		public static HttpClient CreateHttpClient(IEnumerable<string> userRoles = null)
+		public static HttpClient CreateHttpClient(IEnumerable<string> userRoles = null, Func<IMovieInfoProvider> fakeMovieInfoProviderFactory = null)
 		{
-			var factory = new CustomWebApplicationFactory(userRoles);
+			var factory = new CustomWebApplicationFactory(userRoles, fakeMovieInfoProviderFactory);
 
 			var options = new WebApplicationFactoryClientOptions
 			{
@@ -83,29 +82,6 @@ namespace MovieLibrary.IntegrationTests
 		{
 			var currentAssembly = Assembly.GetExecutingAssembly().Location;
 			return Path.GetDirectoryName(currentAssembly) ?? throw new InvalidOperationException("Failed to get current directory");
-		}
-
-		private IMovieInfoProvider StubMovieInfoProvider()
-		{
-			var movieInfoProviderStub = new Mock<IMovieInfoProvider>();
-
-			var movieInfoModel = new MovieInfoModel
-			{
-				Title = "Темный рыцарь",
-				Year = 2008,
-				MovieUri = new Uri("https://www.kinopoisk.ru/film/111543/"),
-				PosterUri = new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_111543.jpg"),
-				Directors = new[] { "Кристофер Нолан" },
-				Cast = new[] { "Кристиан Бэйл", "Хит Леджер", "Аарон Экхарт", "Мэгги Джилленхол", "Гари Олдман", "Майкл Кейн", "Морган Фриман", "Чинь Хань", "Нестор Карбонелл", "Эрик Робертс", },
-				Rating = new MovieRatingModel(8.499M, 467198),
-				Duration = TimeSpan.FromMinutes(152),
-				Genres = new[] { "фантастика", "боевик", "триллер", "криминал", "драма", },
-				Summary = "Бэтмен поднимает ставки в войне с криминалом. С помощью лейтенанта Джима Гордона и прокурора Харви Дента он намерен очистить улицы от преступности, отравляющей город. Сотрудничество оказывается эффективным, но скоро они обнаружат себя посреди хаоса, развязанного восходящим криминальным гением, известным испуганным горожанам под именем Джокер.",
-			};
-
-			movieInfoProviderStub.Setup(x => x.GetMovieInfo(new Uri("https://www.kinopoisk.ru/film/111543/"), It.IsAny<CancellationToken>())).ReturnsAsync(movieInfoModel);
-
-			return movieInfoProviderStub.Object;
 		}
 	}
 }

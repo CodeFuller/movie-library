@@ -45,7 +45,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 		}
 
 		[TestMethod]
-		public async Task ConfirmMovieAddingPage_ForAdministratorAccount_IsLoadedCorrectly()
+		public async Task ConfirmMovieAddingPage_ForAdministratorAccountAndMovieWithAllInfoFilled_IsLoadedCorrectly()
 		{
 			// Arrange
 
@@ -54,7 +54,28 @@ namespace MovieLibrary.IntegrationTests.PageTests
 				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
 
-			using var client = CreateHttpClient(UserRoles.AdministratorRoles);
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles, FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToSee/ConfirmMovieAdding"), formContent, CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
+		public async Task ConfirmMovieAddingPage_ForAdministratorAccountAndMovieWithAllInfoMissing_IsLoadedCorrectly()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/13/"),
+			});
+
+			using var client = CreateHttpClient(UserRoles.AdministratorRoles, FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
 
 			// Act
 
@@ -141,6 +162,7 @@ namespace MovieLibrary.IntegrationTests.PageTests
 			var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Title", "New Movie Without Info"),
+				new KeyValuePair<string, string>("Year", String.Empty),
 				new KeyValuePair<string, string>("MovieUri", "https://www.kinopoisk.ru/film/13/"),
 				new KeyValuePair<string, string>("PosterUri", String.Empty),
 				new KeyValuePair<string, string>("RatingValue", String.Empty),

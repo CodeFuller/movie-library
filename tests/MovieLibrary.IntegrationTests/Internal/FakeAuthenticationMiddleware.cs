@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	public class FakeAuthenticationMiddleware
+	internal class FakeAuthenticationMiddleware
 	{
 		private readonly RequestDelegate next;
 

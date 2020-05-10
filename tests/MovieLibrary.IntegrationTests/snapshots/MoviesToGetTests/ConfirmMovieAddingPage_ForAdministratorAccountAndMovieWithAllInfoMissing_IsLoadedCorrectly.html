@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirm Movie Adding - Movie Library</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    
+
+<ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-dark" title="Manage" href="/Identity/Account/Manage">Fake User</a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" action="/Identity/Account/Logout?returnUrl=%2F" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            <input name="__RequestVerificationToken" type="hidden" value="Some AFT Value" /></form>
+        </li>
+</ul>
+
+                    <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="/MoviesToGet">Movies to Get</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="/MoviesToSee">Movies to See</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="/Users">Manage Users</a>
+        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            
+
+<div class="alert alert-warning" role="alert">
+    Are you sure you want to add the following movie?
+</div>
+
+<div class="single-movie-item">
+    
+<div class="movie-info">
+    <img class="movie-info-poster" src="/img/no-poster.jpg" alt="Poster for movie &quot;Model.Title&quot;" />
+    <div class="movie-info-details">
+        <a class="movie-info-title" href="https://www.kinopoisk.ru/film/13/">Movie Without Any Info</a>
+        <table class="movie-info-table">
+            <tbody>
+                <tr>
+                    <td class="movie-info-table-key">Year</td>
+                    <td class="movie-info-table-value">N/A</td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Genres</td>
+                    <td class="movie-info-table-value">
+            <span>N/A</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Director</td>
+                    <td class="movie-info-table-value">
+            <span>N/A</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Cast</td>
+                    <td class="movie-info-table-value">
+            <span>N/A</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Rating</td>
+                    <td class="movie-info-table-value">N/A</td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Duration</td>
+                    <td class="movie-info-table-value">N/A</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+</div>
+
+<form method="post" action="/MoviesToGet/AddMovie">
+    <input type="hidden" id="Title" name="Title" value="Movie Without Any Info" />
+    <input type="hidden" id="Year" name="Year" value="" />
+    <input type="hidden" id="MovieUri" name="MovieUri" value="https://www.kinopoisk.ru/film/13/" />
+    <input type="hidden" id="PosterUri" name="PosterUri" value="" />
+    <input type="hidden" data-val="true" data-val-number="The field RatingValue must be a number." id="RatingValue" name="RatingValue" value="" />
+    <input type="hidden" id="RatingVotesNumber" name="RatingVotesNumber" value="" />
+    <input type="hidden" id="Duration" name="Duration" value="" />
+    <input type="hidden" id="Summary" name="Summary" value="" />
+    <button class="btn btn-primary" type="submit">Add</button>
+    <a class="btn btn-secondary" href="/MoviesToGet">Cancel</a>
+<input name="__RequestVerificationToken" type="hidden" value="Some AFT Value" /></form>
+
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - Movie Library - by&nbsp;<a href="http://codefuller.com/">CodeFuller</a>
+        </div>
+    </footer>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js?v=4q1jwFhaPaZgr8WAUSrux6hAuh0XDg9kPS3xIVq36I0"></script>
+    
+</body>
+</html>
