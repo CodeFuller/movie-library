@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MovieLibrary.Authorization;
 using MovieLibrary.Logic.Models;
 
-namespace MovieLibrary.IntegrationTests.Internal
+namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
 	internal class DefaultSeedData : ISeedData
 	{
@@ -69,6 +70,33 @@ namespace MovieLibrary.IntegrationTests.Internal
 			}
 		}
 
+		public IEnumerable<RoleSeedData> Roles
+		{
+			get
+			{
+				yield return new RoleSeedData
+				{
+					Id = "5eb995ec4083c272a80ca306",
+					RoleName = SecurityConstants.AdministratorRole,
+					Permissions = Enumerable.Empty<string>(),
+				};
+
+				yield return new RoleSeedData
+				{
+					Id = "5eb995ec4083c272a80ca307",
+					RoleName = UserRoles.PrivilegedUserRole,
+					Permissions = UserRoles.PrivilegedUserPermissions,
+				};
+
+				yield return new RoleSeedData
+				{
+					Id = "5eb995ef4083c272a80ca308",
+					RoleName = UserRoles.LimitedUserRole,
+					Permissions = UserRoles.LimitedUserPermissions,
+				};
+			}
+		}
+
 		public IEnumerable<UserSeedData> Users
 		{
 			get
@@ -78,7 +106,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 					Id = "5eb7eb9e1fdada19f4eb59b0",
 					Email = "SomeAdministrator@test.com",
 					Password = "Qwerty123!",
-					Roles = UserRoles.AdministratorRoles.ToList(),
+					Roles = new[] { UserRoles.AdministratorRole, UserRoles.PrivilegedUserRole },
 				};
 
 				yield return new UserSeedData
@@ -86,7 +114,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 					Id = "5eb7eb9f1fdada19f4eb59b1",
 					Email = "SomeLimitedUser@test.com",
 					Password = "Qwerty321!",
-					Roles = UserRoles.LimitedUserRoles.ToList(),
+					Roles = new[] { UserRoles.LimitedUserRole },
 				};
 			}
 		}

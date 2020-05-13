@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MovieLibrary.IntegrationTests.Internal
+namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
 	internal class UserSeedData
 	{

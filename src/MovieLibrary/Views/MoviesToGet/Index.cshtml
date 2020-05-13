@@ -2,7 +2,8 @@
     ViewData["Title"] = "Movies to Get";
 }
 
-@using MovieLibrary.Internal
+@using MovieLibrary.Authorization
+@using MovieLibrary.Extensions
 @model MoviesToGetViewModel
 
 @if (Model.AddedMovie)
@@ -26,7 +27,7 @@
     </div>
 }
 
-@if (User.IsInRole(Roles.CanAddMoviesToGet))
+@if (User.HasPermission(ApplicationPermissions.MoviesToGet.Add))
 {
     <form method="post" asp-action="ConfirmMovieAdding">
         <div asp-validation-summary="All"></div>
@@ -40,7 +41,7 @@
     </form>
 }
 
-@if (User.IsInRole(Roles.CanReadMoviesToGet))
+@if (User.HasPermission(ApplicationPermissions.MoviesToGet.Read))
 {
     <ul class="movies-list">
         @foreach (var movie in Model.Movies)
@@ -49,13 +50,13 @@
                 <div class="movie-info-and-actions">
                     @await Html.PartialAsync("_MovieInfoPartial", (movie.MovieInfo, movie.Id.Value))
                     <div class="movie-actions">
-                        @if (User.IsInRole(Roles.CanAddMoviesToSee))
+                        @if (User.HasPermission(ApplicationPermissions.MoviesToGet.MoveToMoviesToSee))
                         {
                             <div>
                                 <a asp-action="ConfirmMovingToSee" asp-route-id="@movie.Id.Value">To see</a>
                             </div>
                         }
-                        @if (User.IsInRole(Roles.CanDeleteMoviesToGet))
+                        @if (User.HasPermission(ApplicationPermissions.MoviesToGet.Delete))
                         {
                             <div>
                                 <a asp-action="ConfirmMovieDeletion" asp-route-id="@movie.Id.Value">Delete</a>

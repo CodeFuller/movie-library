@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace MovieLibrary.UserManagement
+namespace MovieLibrary.UserManagement.Interfaces
 {
 	internal interface IUserManager<TUser, TKey>
 		where TUser : IdentityUser<TKey>

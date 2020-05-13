@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
+using MovieLibrary.IntegrationTests.Internal.Seeding;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
 
@@ -17,7 +18,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal class CustomWebApplicationFactory : WebApplicationFactory<Startup>
 	{
-		private readonly IEnumerable<string> userRoles;
+		private readonly ApplicationUser authenticatedUser;
 
 		private readonly ISeedData seedData;
 
@@ -25,9 +26,9 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 		private readonly Func<IMovieInfoProvider> fakeMovieInfoProviderFactory;
 
-		public CustomWebApplicationFactory(IEnumerable<string> userRoles = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
+		public CustomWebApplicationFactory(ApplicationUser authenticatedUser = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
 		{
-			this.userRoles = userRoles;
+			this.authenticatedUser = authenticatedUser;
 			this.seedData = seedData ?? new DefaultSeedData();
 			this.moviesPageSize = moviesPageSize;
 			this.fakeMovieInfoProviderFactory = movieInfoProvider ?? FakeMovieInfoProvider.StubFailingProvider;
@@ -49,10 +50,15 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 			builder.ConfigureServices(services =>
 			{
-				services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper(userRoles));
+				if (authenticatedUser != null)
+				{
+					services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper(authenticatedUser));
+				}
+
+				// We insert DatabaseSeeder as first service, so that it is executed before UsersInitializer.
+				services.Insert(0, ServiceDescriptor.Scoped<IApplicationInitializer, DatabaseSeeder>());
 
 				services.AddSingleton<ISeedData>(seedData);
-				services.AddScoped<IApplicationInitializer, DatabaseSeeder>();
 				services.AddSingleton<IMovieInfoProvider>(fakeMovieInfoProviderFactory());
 
 				// Same instance should be registered for IIdGeneratorQueue and IIdGenerator.
@@ -71,13 +77,13 @@ namespace MovieLibrary.IntegrationTests.Internal
 			});
 		}
 
-		public static HttpClient CreateHttpClient(IEnumerable<string> userRoles = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
+		public static HttpClient CreateHttpClient(ApplicationUser authenticatedUser = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
 		{
-			var factory = new CustomWebApplicationFactory(userRoles, seedData, moviesPageSize, movieInfoProvider);
-			return factory.CreateHttpClient();
+			var factory = new CustomWebApplicationFactory(authenticatedUser, seedData, moviesPageSize, movieInfoProvider);
+			return factory.CreateDefaultHttpClient();
 		}
 
-		public HttpClient CreateHttpClient()
+		public HttpClient CreateDefaultHttpClient()
 		{
 			var options = new WebApplicationFactoryClientOptions
 			{

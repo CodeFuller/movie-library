@@ -10,23 +10,14 @@ namespace MovieLibrary.UserManagement.ViewModels
 
 		public string UserName { get; set; }
 
-		public IReadOnlyList<UserPermissionViewModel> Permissions { get; set; }
-
 		public UserDetailsViewModel()
 		{
 		}
 
-		public UserDetailsViewModel(UserDetailsModel model)
+		public UserDetailsViewModel(UserModel model)
 		{
 			UserId = model.Id;
 			UserName = model.UserName;
-			Permissions = model.AllPermissions
-				.Select(p => new UserPermissionViewModel
-				{
-					PermissionName = p,
-					Assigned = model.UserPermissions.Contains(p),
-				})
-				.ToList();
 		}
 	}
 }

@@ -4,14 +4,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieLibrary.Authorization;
 using MovieLibrary.Internal;
-using MovieLibrary.UserManagement;
+using MovieLibrary.UserManagement.Interfaces;
 using MovieLibrary.UserManagement.Models;
 using MovieLibrary.UserManagement.ViewModels;
 
 namespace MovieLibrary.Controllers
 {
-	[Authorize(Roles = Roles.Administrator)]
+	[Authorize(Roles = SecurityConstants.AdministratorRole)]
 	public class UsersController : Controller
 	{
 		private const string TempDataAddedUser = "AddedUser";
@@ -70,7 +71,7 @@ namespace MovieLibrary.Controllers
 		[HttpGet]
 		public async Task<IActionResult> EditUser(string id, CancellationToken cancellationToken)
 		{
-			return await UserDetailsView(id, cancellationToken);
+			return await EditUserView(id, cancellationToken);
 		}
 
 		[HttpPost]
@@ -78,15 +79,10 @@ namespace MovieLibrary.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return await UserDetailsView(model.UserId, cancellationToken);
+				return await EditUserView(model.UserId, cancellationToken);
 			}
 
-			var assignedPermissions = model.Permissions
-				.Where(p => p.Assigned)
-				.Select(p => p.PermissionName);
-
-			await userService.AssignUserPermissions(model.UserId, assignedPermissions, cancellationToken);
-
+			// TBD: Implement update of user permissions
 			TempData[TempDataUpdatedUser] = true;
 
 			return RedirectToAction("Index");
@@ -98,7 +94,7 @@ namespace MovieLibrary.Controllers
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 
 			var user = await userService.GetUser(id, cancellationToken);
-			var viewModel = new UserDetailsViewModel(user);
+			var viewModel = new UserViewModel(user);
 
 			return View(viewModel);
 		}
@@ -115,7 +111,7 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
-		private async Task<IActionResult> UserDetailsView(string userId, CancellationToken cancellationToken)
+		private async Task<IActionResult> EditUserView(string userId, CancellationToken cancellationToken)
 		{
 			_ = userId ?? throw new ArgumentNullException(nameof(userId));
 

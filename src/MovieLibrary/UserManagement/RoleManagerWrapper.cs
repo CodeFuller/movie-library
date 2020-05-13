@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using MovieLibrary.UserManagement.Interfaces;
 
 namespace MovieLibrary.UserManagement
 {

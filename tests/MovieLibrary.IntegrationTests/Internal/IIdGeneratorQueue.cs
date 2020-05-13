@@ -1,7 +1,11 @@
-﻿namespace MovieLibrary.IntegrationTests.Internal
+﻿using System.Collections.Generic;
+
+namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal interface IIdGeneratorQueue
 	{
-		void SetNextId(string id);
+		void EnqueueId(string id);
+
+		void EnqueueIds(IEnumerable<string> ids);
 	}
 }

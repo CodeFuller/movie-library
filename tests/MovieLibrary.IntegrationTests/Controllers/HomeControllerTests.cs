@@ -15,7 +15,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(userRoles: null);
+			using var client = CreateHttpClient(authenticatedUser: null);
 
 			// Act
 
@@ -31,7 +31,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(UserRoles.AdministratorRoles);
+			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
 
 			// Act
 
@@ -47,7 +47,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(UserRoles.LimitedUserRoles);
+			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
 
 			// Act
 

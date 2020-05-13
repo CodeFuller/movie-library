@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MovieLibrary.Authorization;
 using MovieLibrary.Dal.MongoDB;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Extensions;
@@ -58,8 +59,12 @@ namespace MovieLibrary
 			services.AddIdentityMongoDbProvider<MongoUser>(mongoIdentityOptions => mongoIdentityOptions.ConnectionString = connectionString)
 				.AddDefaultUI();
 
+			services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+			services.AddScoped<IAuthorizationHandler, DefaultAdminAuthorizationHandler>();
+			services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+
 			services.AddSingleton<IApplicationBootstrapper, ApplicationBootstrapper>();
-			services.AddSingleton<IApplicationInitializer, RolesInitializer>();
+			services.AddScoped<IApplicationInitializer, UsersInitializer>();
 			services.AddScoped<ICompositeApplicationInitializer, CompositeApplicationInitializer>();
 
 			services.AddUserManagement();

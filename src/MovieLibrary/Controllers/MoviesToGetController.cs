@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using MovieLibrary.Authorization;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Models;
@@ -33,14 +34,14 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = Roles.CanAddOrReadMoviesToGet)]
+		[Authorize(ApplicationPermissions.MoviesToGet.AddOrRead)]
 		public IActionResult Index([FromRoute] int pageNumber)
 		{
 			return MoviesPageView(pageNumber);
 		}
 
 		[HttpPost]
-		[Authorize(Roles = Roles.CanAddMoviesToGet)]
+		[Authorize(ApplicationPermissions.MoviesToGet.Add)]
 		public async Task<IActionResult> ConfirmMovieAdding([FromForm] MoviesToGetViewModel model, CancellationToken cancellationToken)
 		{
 			if (!ModelState.IsValid)
@@ -55,7 +56,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
-		[Authorize(Roles = Roles.CanAddMoviesToGet)]
+		[Authorize(ApplicationPermissions.MoviesToGet.Add)]
 		public async Task<IActionResult> AddMovie([FromForm] InputMovieInfoViewModel model, CancellationToken cancellationToken)
 		{
 			var movieInfo = model.ToMovieInfo();
@@ -67,7 +68,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = Roles.CanAddMoviesToSee)]
+		[Authorize(ApplicationPermissions.MoviesToGet.MoveToMoviesToSee)]
 		public async Task<IActionResult> ConfirmMovingToSee([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			var viewModel = await CreateMovieViewModel(id, cancellationToken);
@@ -75,7 +76,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
-		[Authorize(Roles = Roles.CanAddMoviesToSee)]
+		[Authorize(ApplicationPermissions.MoviesToGet.MoveToMoviesToSee)]
 		public async Task<IActionResult> MoveToMoviesToSee([FromForm] string id, CancellationToken cancellationToken)
 		{
 			var movieId = CreateMovieId(id);
@@ -87,7 +88,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = Roles.CanDeleteMoviesToGet)]
+		[Authorize(ApplicationPermissions.MoviesToGet.Delete)]
 		public async Task<IActionResult> ConfirmMovieDeletion([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			var viewModel = await CreateMovieViewModel(id, cancellationToken);
@@ -95,7 +96,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
-		[Authorize(Roles = Roles.CanDeleteMoviesToGet)]
+		[Authorize(ApplicationPermissions.MoviesToGet.Delete)]
 		public async Task<IActionResult> DeleteMovie([FromForm] string id, CancellationToken cancellationToken)
 		{
 			var movieId = CreateMovieId(id);

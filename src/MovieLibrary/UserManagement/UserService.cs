@@ -6,29 +6,27 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using MovieLibrary.Exceptions;
-using MovieLibrary.Logic.Exceptions;
 using MovieLibrary.Logic.Interfaces;
+using MovieLibrary.UserManagement.Interfaces;
 using MovieLibrary.UserManagement.Models;
 
 namespace MovieLibrary.UserManagement
 {
 	internal class UserService<TUser, TRole, TKey> : IUserService
-		where TUser : IdentityUser<TKey>, new()
+		where TUser : IdentityUser<TKey>
 		where TRole : IdentityRole<TKey>
 		where TKey : IEquatable<TKey>
 	{
 		private readonly IUserManager<TUser, TKey> userManager;
-		private readonly IRoleManager<TRole, TKey> roleManager;
 
-		private readonly IUserStore<TUser> userStore;
+		private readonly IIdentityUserFactory<TUser> identityUserFactory;
 
 		private readonly IIdGenerator<TKey> idGenerator;
 
-		public UserService(IUserManager<TUser, TKey> userManager, IRoleManager<TRole, TKey> roleManager, IUserStore<TUser> userStore, IIdGenerator<TKey> idGenerator)
+		public UserService(IUserManager<TUser, TKey> userManager, IIdentityUserFactory<TUser> identityUserFactory, IIdGenerator<TKey> idGenerator)
 		{
 			this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-			this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-			this.userStore = userStore ?? throw new ArgumentNullException(nameof(userStore));
+			this.identityUserFactory = identityUserFactory ?? throw new ArgumentNullException(nameof(identityUserFactory));
 			this.idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
 		}
 
@@ -36,18 +34,14 @@ namespace MovieLibrary.UserManagement
 		{
 			var userEmail = user.Email;
 
-			var newUser = new TUser
-			{
-				Id = idGenerator.GenerateId(),
-				Email = userEmail,
-			};
-
-			await userStore.SetUserNameAsync(newUser, userEmail, cancellationToken);
+			var newUser = identityUserFactory.CreateUser(userEmail);
+			newUser.Id = idGenerator.GenerateId();
+			newUser.Email = userEmail;
 
 			var result = await userManager.CreateAsync(newUser, user.Password);
 			if (!result.Succeeded)
 			{
-				throw new UserUpdateFailedException($"Failed to create the user. {result}");
+				throw new UserManagementException($"Failed to create the user. {result}");
 			}
 
 			return newUser.Id.ToString();
@@ -65,29 +59,31 @@ namespace MovieLibrary.UserManagement
 			}
 		}
 
-		public async Task<UserDetailsModel> GetUser(string userId, CancellationToken cancellationToken)
+		public async Task<UserModel> GetUser(string userId, CancellationToken cancellationToken)
 		{
 			var user = await FindUser(userId);
 
-			var roles = await userManager.GetRolesAsync(user);
-			var allRoles = await roleManager.Roles.ToAsyncEnumerable().ToListAsync(cancellationToken);
-
-			return new UserDetailsModel
+			return new UserModel
 			{
 				Id = userId,
 				UserName = user.UserName,
-				UserPermissions = roles?.ToList() ?? new List<string>(),
-				AllPermissions = allRoles.Select(r => r.Name).ToList(),
 			};
 		}
 
-		public async Task AssignUserPermissions(string userId, IEnumerable<string> permissions, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<string>> GetUserRoles(string userId, CancellationToken cancellationToken)
+		{
+			var user = await FindUser(userId);
+
+			return (await userManager.GetRolesAsync(user)).ToList();
+		}
+
+		public async Task AssignUserRoles(string userId, IEnumerable<string> roles, CancellationToken cancellationToken)
 		{
 			var user = await FindUser(userId);
 
 			var currentRoles = await userManager.GetRolesAsync(user);
 
-			var rolesSet = permissions.ToHashSet();
+			var rolesSet = roles.ToHashSet();
 			var rolesToAdd = rolesSet.Where(r => !currentRoles.Contains(r)).ToList();
 			var rolesToRemove = currentRoles.Where(r => !rolesSet.Contains(r)).ToList();
 
@@ -102,7 +98,7 @@ namespace MovieLibrary.UserManagement
 			var result = await userManager.DeleteAsync(user);
 			if (!result.Succeeded)
 			{
-				throw new UserUpdateFailedException($"Failed to delete the user. {result}");
+				throw new UserManagementException($"Failed to delete the user. {result}");
 			}
 		}
 
@@ -111,7 +107,7 @@ namespace MovieLibrary.UserManagement
 			var user = await userManager.FindByIdAsync(userId);
 			if (user == null)
 			{
-				throw new NotFoundException($"The user with id {userId} was not found");
+				throw new UserManagementException($"The user with id {userId} was not found");
 			}
 
 			return user;
@@ -127,7 +123,7 @@ namespace MovieLibrary.UserManagement
 			var result = await userManager.AddToRolesAsync(user, rolesToAdd);
 			if (!result.Succeeded)
 			{
-				throw new UserUpdateFailedException($"Failed to add roles for the user. {result}");
+				throw new UserManagementException($"Failed to add roles for the user. {result}");
 			}
 		}
 
@@ -141,7 +137,7 @@ namespace MovieLibrary.UserManagement
 			var result = await userManager.RemoveFromRolesAsync(user, rolesToRemove);
 			if (!result.Succeeded)
 			{
-				throw new UserUpdateFailedException($"Failed to remove roles for the user. {result}");
+				throw new UserManagementException($"Failed to remove roles for the user. {result}");
 			}
 		}
 	}

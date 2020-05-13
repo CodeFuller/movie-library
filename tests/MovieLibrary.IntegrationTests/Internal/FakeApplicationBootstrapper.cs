@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Microsoft.AspNetCore.Builder;
 using MovieLibrary.Internal;
 
@@ -6,23 +6,16 @@ namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal class FakeApplicationBootstrapper : IApplicationBootstrapper
 	{
-		private readonly IEnumerable<string> userRoles;
+		private readonly ApplicationUser authenticatedUser;
 
-		public FakeApplicationBootstrapper(IEnumerable<string> userRoles)
+		public FakeApplicationBootstrapper(ApplicationUser authenticatedUser)
 		{
-			this.userRoles = userRoles;
+			this.authenticatedUser = authenticatedUser ?? throw new ArgumentNullException(nameof(authenticatedUser));
 		}
 
 		public void AddAuthenticationMiddleware(IApplicationBuilder appBuilder)
 		{
-			if (userRoles != null)
-			{
-				appBuilder.UseMiddleware<FakeAuthenticationMiddleware>(userRoles);
-			}
-			else
-			{
-				appBuilder.UseMiddleware<FakeAuthenticationMiddleware>();
-			}
+			appBuilder.UseMiddleware<FakeAuthenticationMiddleware>(authenticatedUser);
 		}
 	}
 }

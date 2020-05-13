@@ -11,6 +11,7 @@ using Moq;
 using Moq.AutoMock;
 using MovieLibrary.Exceptions;
 using MovieLibrary.UserManagement;
+using MovieLibrary.UserManagement.Interfaces;
 
 namespace MovieLibrary.Tests.UserManagement
 {
@@ -18,7 +19,7 @@ namespace MovieLibrary.Tests.UserManagement
 	public class UserServiceTests
 	{
 		[TestMethod]
-		public async Task AssignUserPermissions_SomeRolesAdded_AddsRolesCorrectly()
+		public async Task AssignUserRoles_SomeRolesAdded_AddsRolesCorrectly()
 		{
 			// Arrange
 
@@ -50,7 +51,7 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Act
 
-			await target.AssignUserPermissions("SomeUserId", newRoles, CancellationToken.None);
+			await target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 
@@ -63,7 +64,7 @@ namespace MovieLibrary.Tests.UserManagement
 		}
 
 		[TestMethod]
-		public async Task AssignUserPermissions_AddingOfRolesFails_ThrowsUserUpdateFailedException()
+		public async Task AssignUserRoles_AddingOfRolesFails_ThrowsUserManagementException()
 		{
 			// Arrange
 
@@ -95,15 +96,15 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Act
 
-			Task Call() => target.AssignUserPermissions("SomeUserId", newRoles, CancellationToken.None);
+			Task Call() => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserUpdateFailedException>(Call);
+			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
 		}
 
 		[TestMethod]
-		public async Task AssignUserPermissions_NoRolesAdded_DoesNotAddAnyRoles()
+		public async Task AssignUserRoles_NoRolesAdded_DoesNotAddAnyRoles()
 		{
 			// Arrange
 
@@ -132,7 +133,7 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Act
 
-			await target.AssignUserPermissions("SomeUserId", newRoles, CancellationToken.None);
+			await target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 
@@ -140,7 +141,7 @@ namespace MovieLibrary.Tests.UserManagement
 		}
 
 		[TestMethod]
-		public async Task AssignUserPermissions_SomeRolesRemoved_RemovesRolesCorrectly()
+		public async Task AssignUserRoles_SomeRolesRemoved_RemovesRolesCorrectly()
 		{
 			// Arrange
 
@@ -172,7 +173,7 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Act
 
-			await target.AssignUserPermissions("SomeUserId", newRoles, CancellationToken.None);
+			await target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 
@@ -185,7 +186,7 @@ namespace MovieLibrary.Tests.UserManagement
 		}
 
 		[TestMethod]
-		public async Task AssignUserPermissions_RemovingOfRolesFails_ThrowsUserUpdateFailedException()
+		public async Task AssignUserRoles_RemovingOfRolesFails_ThrowsUserManagementException()
 		{
 			// Arrange
 
@@ -217,15 +218,15 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Act
 
-			Task Call() => target.AssignUserPermissions("SomeUserId", newRoles, CancellationToken.None);
+			Task Call() => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserUpdateFailedException>(Call);
+			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
 		}
 
 		[TestMethod]
-		public async Task AssignUserPermissions_NoRolesRemoved_DoesNotRemoveAnyRoles()
+		public async Task AssignUserRoles_NoRolesRemoved_DoesNotRemoveAnyRoles()
 		{
 			// Arrange
 
@@ -254,7 +255,7 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Act
 
-			await target.AssignUserPermissions("SomeUserId", newRoles, CancellationToken.None);
+			await target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 

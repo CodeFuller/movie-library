@@ -12,11 +12,27 @@ namespace MovieLibrary.IntegrationTests
 	public class IdentityTests
 	{
 		[TestMethod]
-		public async Task Get_ForIdentityAccountRegister_RedirectsToLoginPage()
+		public async Task Get_ForIdentityAccountRegisterAndUnauthenticatedUser_RedirectsToLoginPage()
 		{
 			// Arrange
 
-			using var client = CreateHttpClient();
+			using var client = CreateHttpClient(authenticatedUser: null);
+
+			// Act
+
+			using var response = await client.GetAsync(new Uri("https://localhost:5001/Identity/Account/Register"), CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/Login?ReturnUrl=%2FIdentity%2FAccount%2FRegister"));
+		}
+
+		[TestMethod]
+		public async Task Get_ForIdentityAccountRegisterAndAuthenticatedUser_RedirectsToLoginPage()
+		{
+			// Arrange
+
+			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
 
 			// Act
 
@@ -28,11 +44,29 @@ namespace MovieLibrary.IntegrationTests
 		}
 
 		[TestMethod]
-		public async Task Post_ToIdentityAccountRegister_RedirectsToLoginPage()
+		public async Task Post_ToIdentityAccountRegisterAndUnauthenticatedUser_RedirectsToLoginPage()
 		{
 			// Arrange
 
-			using var client = CreateHttpClient();
+			using var client = CreateHttpClient(authenticatedUser: null);
+
+			using var content = new StringContent(String.Empty);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/Identity/Account/Register"), content, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/Login?ReturnUrl=%2FIdentity%2FAccount%2FRegister"));
+		}
+
+		[TestMethod]
+		public async Task Post_ToIdentityAccountRegisterAndAuthenticatedUser_RedirectsToLoginPage()
+		{
+			// Arrange
+
+			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
 
 			using var content = new StringContent(String.Empty);
 
@@ -50,7 +84,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(userRoles: null);
+			using var client = CreateHttpClient(authenticatedUser: null);
 
 			// Act
 
@@ -59,6 +93,22 @@ namespace MovieLibrary.IntegrationTests
 			// Assert
 
 			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
+		public async Task Get_ToInternalPageForUnauthenticatedUser_RedirectsToLoginPage()
+		{
+			// Arrange
+
+			using var client = CreateHttpClient(authenticatedUser: null);
+
+			// Act
+
+			using var response = await client.GetAsync(new Uri("https://localhost:5001/MoviesToSee"), CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/Login?ReturnUrl=%2FMoviesToSee"));
 		}
 	}
 }

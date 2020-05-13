@@ -2,14 +2,14 @@
     ViewData["Title"] = "Confirm User Deletion";
 }
 
-@model MovieLibrary.UserManagement.ViewModels.UserDetailsViewModel;
+@model MovieLibrary.UserManagement.ViewModels.UserViewModel;
 
 <div class="alert alert-warning" role="alert">
     Are you sure you want to delete the user '@Model.UserName'?
 </div>
 
 <form method="post" asp-action="DeleteUser">
-    <input type="hidden" id="id" name="id" value="@Model.UserId" />
+    <input type="hidden" id="id" name="id" value="@Model.Id" />
     <button class="btn btn-danger" type="submit">Delete</button>
     <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>

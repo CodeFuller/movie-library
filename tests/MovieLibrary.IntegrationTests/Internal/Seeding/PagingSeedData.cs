@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MovieLibrary.Logic.Models;
 
-namespace MovieLibrary.IntegrationTests.Internal
+namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
 	internal class PagingSeedData : ISeedData
 	{
@@ -43,6 +43,8 @@ namespace MovieLibrary.IntegrationTests.Internal
 				}
 			}
 		}
+
+		public IEnumerable<RoleSeedData> Roles => Enumerable.Empty<RoleSeedData>();
 
 		public IEnumerable<UserSeedData> Users => Enumerable.Empty<UserSeedData>();
 	}

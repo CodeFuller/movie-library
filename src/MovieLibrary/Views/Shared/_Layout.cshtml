@@ -1,5 +1,4 @@
 ﻿@using MovieLibrary.Extensions
-@using MovieLibrary.Internal
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +51,7 @@
                                 await ProduceNavItem("MoviesToSee", "Index", "Movies to See");
                             }
 
-                            if (User.IsInRole(Roles.Administrator))
+                            if (User.CanManagerUsers())
                             {
                                 await ProduceNavItem("Users", "Index", "Manage Users");
                             }

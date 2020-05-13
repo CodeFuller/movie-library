@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,34 +11,27 @@ namespace MovieLibrary.IntegrationTests.Internal
 	{
 		private readonly RequestDelegate next;
 
-		private readonly IReadOnlyCollection<string> userRoles;
+		private readonly ApplicationUser authenticatedUser;
 
-		public FakeAuthenticationMiddleware(RequestDelegate next)
+		public FakeAuthenticationMiddleware(RequestDelegate next, ApplicationUser authenticatedUser)
 		{
 			this.next = next ?? throw new ArgumentNullException(nameof(next));
-			this.userRoles = new List<string>();
-		}
-
-		public FakeAuthenticationMiddleware(RequestDelegate next, IEnumerable<string> userRoles)
-		{
-			this.next = next ?? throw new ArgumentNullException(nameof(next));
-			this.userRoles = userRoles?.ToList() ?? throw new ArgumentNullException(nameof(userRoles));
+			this.authenticatedUser = authenticatedUser ?? throw new ArgumentNullException(nameof(authenticatedUser));
 		}
 
 		public async Task Invoke(HttpContext context)
 		{
-			if (userRoles.Any())
-			{
-				var claims = new[]
-					{
-						new Claim(ClaimTypes.Name, "Fake User"),
-					}
-					.Concat(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+			// TBD: Load user via UserService for more realism.
+			var claims = new[]
+				{
+					new Claim(ClaimTypes.Name, "Fake User"),
+				}
+				.Concat(authenticatedUser.Roles.Select(role => new Claim(ClaimTypes.Role, role)))
+				.Concat(authenticatedUser.Permissions.Select(permission => new Claim("permission", permission)));
 
-				// Using Identity authentication type, so that SignInManager.IsSignedIn(User) returns true.
-				var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
-				context.User = new ClaimsPrincipal(identity);
-			}
+			// Using Identity authentication type, so that SignInManager.IsSignedIn(User) returns true.
+			var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+			context.User = new ClaimsPrincipal(identity);
 
 			await next(context);
 		}

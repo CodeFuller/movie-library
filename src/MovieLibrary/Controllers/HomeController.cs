@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Extensions;
-using MovieLibrary.Internal;
 using MovieLibrary.Models;
 
 namespace MovieLibrary.Controllers
@@ -20,7 +19,7 @@ namespace MovieLibrary.Controllers
 				return RedirectToAction("Index", "MoviesToGet");
 			}
 
-			if (User.IsInRole(Roles.Administrator))
+			if (User.CanManagerUsers())
 			{
 				return RedirectToAction("Index", "Users");
 			}
