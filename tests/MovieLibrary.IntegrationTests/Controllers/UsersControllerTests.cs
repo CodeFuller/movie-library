@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -166,27 +167,15 @@ namespace MovieLibrary.IntegrationTests.Controllers
 
 			var formContent = new FormUrlEncodedContent(new[]
 			{
-				// Here we delete permission CanAddMoviesToGet and add permission CanAddMoviesToSee.
-				new KeyValuePair<string, string>("Permissions[0].PermissionName", "Administrator"),
-				new KeyValuePair<string, string>("Permissions[1].PermissionName", "CanAddMoviesToGet"),
-				new KeyValuePair<string, string>("Permissions[2].Assigned", "true"),
-				new KeyValuePair<string, string>("Permissions[2].PermissionName", "CanReadMoviesToGet"),
-				new KeyValuePair<string, string>("Permissions[3].PermissionName", "CanDeleteMoviesToGet"),
-				new KeyValuePair<string, string>("Permissions[4].Assigned", "true"),
-				new KeyValuePair<string, string>("Permissions[4].PermissionName", "CanAddMoviesToSee"),
-				new KeyValuePair<string, string>("Permissions[5].Assigned", "true"),
-				new KeyValuePair<string, string>("Permissions[5].PermissionName", "CanReadMoviesToSee"),
-				new KeyValuePair<string, string>("Permissions[6].PermissionName", "CanMarkMoviesAsSeen"),
-				new KeyValuePair<string, string>("Permissions[7].PermissionName", "CanDeleteMoviesToSee"),
+				// Here we delete role "Limited User" and add role "Privileged User".
+				new KeyValuePair<string, string>("Roles[0].RoleName", "Administrator"),
+				new KeyValuePair<string, string>("Roles[1].Assigned", "true"),
+				new KeyValuePair<string, string>("Roles[1].RoleName", "Privileged User"),
+				new KeyValuePair<string, string>("Roles[2].RoleName", "Limited User"),
 				new KeyValuePair<string, string>("UserId", "5eb7eb9f1fdada19f4eb59b1"),
-				new KeyValuePair<string, string>("Permissions[0].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[1].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[2].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[3].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[4].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[5].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[6].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[7].Assigned", "false"),
+				new KeyValuePair<string, string>("Roles[0].Assigned", "false"),
+				new KeyValuePair<string, string>("Roles[1].Assigned", "false"),
+				new KeyValuePair<string, string>("Roles[2].Assigned", "false"),
 			});
 
 			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
@@ -205,10 +194,9 @@ namespace MovieLibrary.IntegrationTests.Controllers
 
 			using var scopeServiceProvider = webApplicationFactory.Services.CreateScope();
 			var userService = scopeServiceProvider.ServiceProvider.GetRequiredService<IUserService>();
-			var updatedUser = await userService.GetUser("5eb7eb9f1fdada19f4eb59b1", CancellationToken.None);
+			var newUserRoles = await userService.GetUserRoles("5eb7eb9f1fdada19f4eb59b1", CancellationToken.None);
 
-			// TBD: Change test for update of user roles
-			// CollectionAssert.AreEqual(new[] { "CanReadMoviesToGet", "CanReadMoviesToSee", "CanAddMoviesToSee", }, updatedUser.UserPermissions.ToList());
+			CollectionAssert.AreEqual(new[] { "Privileged User", }, newUserRoles.ToList());
 		}
 
 		[TestMethod]
@@ -218,26 +206,14 @@ namespace MovieLibrary.IntegrationTests.Controllers
 
 			var formContent = new FormUrlEncodedContent(new[]
 			{
-				new KeyValuePair<string, string>("Permissions[0].PermissionName", "Administrator"),
-				new KeyValuePair<string, string>("Permissions[1].PermissionName", "CanAddMoviesToGet"),
-				new KeyValuePair<string, string>("Permissions[2].Assigned", "true"),
-				new KeyValuePair<string, string>("Permissions[2].PermissionName", "CanReadMoviesToGet"),
-				new KeyValuePair<string, string>("Permissions[3].PermissionName", "CanDeleteMoviesToGet"),
-				new KeyValuePair<string, string>("Permissions[4].Assigned", "true"),
-				new KeyValuePair<string, string>("Permissions[4].PermissionName", "CanAddMoviesToSee"),
-				new KeyValuePair<string, string>("Permissions[5].Assigned", "true"),
-				new KeyValuePair<string, string>("Permissions[5].PermissionName", "CanReadMoviesToSee"),
-				new KeyValuePair<string, string>("Permissions[6].PermissionName", "CanMarkMoviesAsSeen"),
-				new KeyValuePair<string, string>("Permissions[7].PermissionName", "CanDeleteMoviesToSee"),
+				new KeyValuePair<string, string>("Roles[0].RoleName", "Administrator"),
+				new KeyValuePair<string, string>("Roles[1].Assigned", "true"),
+				new KeyValuePair<string, string>("Roles[1].RoleName", "Privileged User"),
+				new KeyValuePair<string, string>("Roles[2].RoleName", "Limited User"),
 				new KeyValuePair<string, string>("UserId", "5eb7eb9f1fdada19f4eb59b1"),
-				new KeyValuePair<string, string>("Permissions[0].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[1].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[2].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[3].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[4].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[5].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[6].Assigned", "false"),
-				new KeyValuePair<string, string>("Permissions[7].Assigned", "false"),
+				new KeyValuePair<string, string>("Roles[0].Assigned", "false"),
+				new KeyValuePair<string, string>("Roles[1].Assigned", "false"),
+				new KeyValuePair<string, string>("Roles[2].Assigned", "false"),
 			});
 
 			using var client = CreateHttpClient(ApplicationUser.LimitedUser);

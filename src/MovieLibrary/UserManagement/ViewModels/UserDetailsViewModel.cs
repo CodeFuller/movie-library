@@ -10,14 +10,24 @@ namespace MovieLibrary.UserManagement.ViewModels
 
 		public string UserName { get; set; }
 
+		public IReadOnlyList<UserRoleViewModel> Roles { get; set; }
+
 		public UserDetailsViewModel()
 		{
 		}
 
-		public UserDetailsViewModel(UserModel model)
+		public UserDetailsViewModel(UserModel model, IEnumerable<string> userRoles, IEnumerable<string> allRoles)
 		{
 			UserId = model.Id;
 			UserName = model.UserName;
+
+			Roles = allRoles
+				.Select(role => new UserRoleViewModel
+				{
+					RoleName = role,
+					Assigned = userRoles.Contains(role),
+				})
+				.ToList();
 		}
 	}
 }

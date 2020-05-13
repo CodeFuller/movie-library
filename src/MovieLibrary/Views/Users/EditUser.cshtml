@@ -5,15 +5,24 @@
 @model MovieLibrary.UserManagement.ViewModels.UserDetailsViewModel;
 
 <form method="post" asp-action="UpdateUser">
-    <table class="table table-hover table-responsive table-sm">
+    <table class="table table-hover table-responsive">
         <thead>
         <tr>
-            <th scope="col">Permission</th>
+            <th scope="col">Role</th>
             <th class="text-center" scope="col">Assigned</th>
         </tr>
         </thead>
         <tbody>
-        @* TBD: Add permissions checkboxes *@
+        @for (var i = 0; i < Model.Roles.Count; ++i)
+        {
+            <tr>
+                <td>@Model.Roles[i].RoleName</td>
+                <td class="text-center">
+                    <input type="checkbox" asp-for="Roles[i].Assigned"/>
+                    <input type="hidden" asp-for="Roles[i].RoleName"/>
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 

@@ -1,8 +1,8 @@
 ﻿namespace MovieLibrary.UserManagement.ViewModels
 {
-	public class UserPermissionViewModel
+	public class UserRoleViewModel
 	{
-		public string PermissionName { get; set; }
+		public string RoleName { get; set; }
 
 		public bool Assigned { get; set; }
 	}

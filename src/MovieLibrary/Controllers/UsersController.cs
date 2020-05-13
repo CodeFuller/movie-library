@@ -21,9 +21,12 @@ namespace MovieLibrary.Controllers
 
 		private readonly IUserService userService;
 
-		public UsersController(IUserService userService)
+		private readonly IRoleService roleService;
+
+		public UsersController(IUserService userService, IRoleService roleService)
 		{
 			this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+			this.roleService = roleService ?? throw new ArgumentNullException(nameof(roleService));
 		}
 
 		[HttpGet]
@@ -82,7 +85,12 @@ namespace MovieLibrary.Controllers
 				return await EditUserView(model.UserId, cancellationToken);
 			}
 
-			// TBD: Implement update of user permissions
+			var assignedRoles = model.Roles
+				.Where(p => p.Assigned)
+				.Select(p => p.RoleName);
+
+			await userService.AssignUserRoles(model.UserId, assignedRoles, cancellationToken);
+
 			TempData[TempDataUpdatedUser] = true;
 
 			return RedirectToAction("Index");
@@ -115,8 +123,13 @@ namespace MovieLibrary.Controllers
 		{
 			_ = userId ?? throw new ArgumentNullException(nameof(userId));
 
-			var userDetails = await userService.GetUser(userId, cancellationToken);
-			var viewModel = new UserDetailsViewModel(userDetails);
+			var userModel = await userService.GetUser(userId, cancellationToken);
+			var userRoles = await userService.GetUserRoles(userModel.Id, cancellationToken);
+			var allRoles = await roleService.GetAllRoles(cancellationToken)
+				.Select(role => role.RoleName)
+				.ToListAsync(cancellationToken);
+
+			var viewModel = new UserDetailsViewModel(userModel, userRoles, allRoles);
 
 			return View("EditUser", viewModel);
 		}

@@ -51,10 +51,10 @@
             
 
 <form method="post" action="/Users/UpdateUser">
-    <table class="table table-hover table-responsive table-sm">
+    <table class="table table-hover table-responsive">
         <thead>
         <tr>
-            <th scope="col">Permission</th>
+            <th scope="col">Role</th>
             <th class="text-center" scope="col">Assigned</th>
         </tr>
         </thead>
@@ -62,57 +62,22 @@
             <tr>
                 <td>Administrator</td>
                 <td class="text-center">
-                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_0__Assigned" name="Permissions[0].Assigned" value="true" />
-                    <input type="hidden" id="Permissions_0__PermissionName" name="Permissions[0].PermissionName" value="Administrator" />
+                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Roles_0__Assigned" name="Roles[0].Assigned" value="true" />
+                    <input type="hidden" id="Roles_0__RoleName" name="Roles[0].RoleName" value="Administrator" />
                 </td>
             </tr>
             <tr>
-                <td>CanAddMoviesToGet</td>
+                <td>Privileged User</td>
                 <td class="text-center">
-                    <input type="checkbox" checked="checked" data-val="true" data-val-required="The Assigned field is required." id="Permissions_1__Assigned" name="Permissions[1].Assigned" value="true" />
-                    <input type="hidden" id="Permissions_1__PermissionName" name="Permissions[1].PermissionName" value="CanAddMoviesToGet" />
+                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Roles_1__Assigned" name="Roles[1].Assigned" value="true" />
+                    <input type="hidden" id="Roles_1__RoleName" name="Roles[1].RoleName" value="Privileged User" />
                 </td>
             </tr>
             <tr>
-                <td>CanReadMoviesToGet</td>
+                <td>Limited User</td>
                 <td class="text-center">
-                    <input type="checkbox" checked="checked" data-val="true" data-val-required="The Assigned field is required." id="Permissions_2__Assigned" name="Permissions[2].Assigned" value="true" />
-                    <input type="hidden" id="Permissions_2__PermissionName" name="Permissions[2].PermissionName" value="CanReadMoviesToGet" />
-                </td>
-            </tr>
-            <tr>
-                <td>CanDeleteMoviesToGet</td>
-                <td class="text-center">
-                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_3__Assigned" name="Permissions[3].Assigned" value="true" />
-                    <input type="hidden" id="Permissions_3__PermissionName" name="Permissions[3].PermissionName" value="CanDeleteMoviesToGet" />
-                </td>
-            </tr>
-            <tr>
-                <td>CanAddMoviesToSee</td>
-                <td class="text-center">
-                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_4__Assigned" name="Permissions[4].Assigned" value="true" />
-                    <input type="hidden" id="Permissions_4__PermissionName" name="Permissions[4].PermissionName" value="CanAddMoviesToSee" />
-                </td>
-            </tr>
-            <tr>
-                <td>CanReadMoviesToSee</td>
-                <td class="text-center">
-                    <input type="checkbox" checked="checked" data-val="true" data-val-required="The Assigned field is required." id="Permissions_5__Assigned" name="Permissions[5].Assigned" value="true" />
-                    <input type="hidden" id="Permissions_5__PermissionName" name="Permissions[5].PermissionName" value="CanReadMoviesToSee" />
-                </td>
-            </tr>
-            <tr>
-                <td>CanMarkMoviesAsSeen</td>
-                <td class="text-center">
-                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_6__Assigned" name="Permissions[6].Assigned" value="true" />
-                    <input type="hidden" id="Permissions_6__PermissionName" name="Permissions[6].PermissionName" value="CanMarkMoviesAsSeen" />
-                </td>
-            </tr>
-            <tr>
-                <td>CanDeleteMoviesToSee</td>
-                <td class="text-center">
-                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Permissions_7__Assigned" name="Permissions[7].Assigned" value="true" />
-                    <input type="hidden" id="Permissions_7__PermissionName" name="Permissions[7].PermissionName" value="CanDeleteMoviesToSee" />
+                    <input type="checkbox" checked="checked" data-val="true" data-val-required="The Assigned field is required." id="Roles_2__Assigned" name="Roles[2].Assigned" value="true" />
+                    <input type="hidden" id="Roles_2__RoleName" name="Roles[2].RoleName" value="Limited User" />
                 </td>
             </tr>
         </tbody>
@@ -122,7 +87,7 @@
 
     <button class="btn btn-primary" type="submit">Update</button>
     <a class="btn btn-secondary" href="/Users">Cancel</a>
-<input name="__RequestVerificationToken" type="hidden" value="Some AFT Value" /><input name="Permissions[0].Assigned" type="hidden" value="false" /><input name="Permissions[1].Assigned" type="hidden" value="false" /><input name="Permissions[2].Assigned" type="hidden" value="false" /><input name="Permissions[3].Assigned" type="hidden" value="false" /><input name="Permissions[4].Assigned" type="hidden" value="false" /><input name="Permissions[5].Assigned" type="hidden" value="false" /><input name="Permissions[6].Assigned" type="hidden" value="false" /><input name="Permissions[7].Assigned" type="hidden" value="false" /></form>
+<input name="__RequestVerificationToken" type="hidden" value="Some AFT Value" /><input name="Roles[0].Assigned" type="hidden" value="false" /><input name="Roles[1].Assigned" type="hidden" value="false" /><input name="Roles[2].Assigned" type="hidden" value="false" /></form>
 
         </main>
     </div>
