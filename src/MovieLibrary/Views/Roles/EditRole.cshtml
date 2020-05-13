@@ -4,30 +4,9 @@
 
 @model MovieLibrary.UserManagement.ViewModels.Roles.RoleDetailsViewModel;
 
-<form method="post" asp-action="UpdateRole">
-    <table class="table table-hover table-responsive">
-        <thead>
-        <tr>
-            <th scope="col">Permission</th>
-            <th class="text-center" scope="col">Assigned</th>
-        </tr>
-        </thead>
-        <tbody>
-        @for (var i = 0; i < Model.Permissions.Count; ++i)
-        {
-            <tr>
-                <td>@Model.Permissions[i].PermissionName</td>
-                <td class="text-center">
-                    <input type="checkbox" asp-for="Permissions[i].Assigned"/>
-                    <input type="hidden" asp-for="Permissions[i].PermissionName"/>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-
+<form class="col-md-6" method="post" asp-action="UpdateRole">
+    @await Html.PartialAsync("_PermissionsTablePartial", Model.Permissions)
     <input type="hidden" asp-for="RoleId"/>
-
     <button class="btn btn-primary" type="submit">Update</button>
     <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>
