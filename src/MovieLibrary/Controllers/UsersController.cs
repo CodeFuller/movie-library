@@ -9,6 +9,8 @@ using MovieLibrary.Internal;
 using MovieLibrary.UserManagement.Interfaces;
 using MovieLibrary.UserManagement.Models;
 using MovieLibrary.UserManagement.ViewModels;
+using MovieLibrary.UserManagement.ViewModels.Roles;
+using MovieLibrary.UserManagement.ViewModels.Users;
 
 namespace MovieLibrary.Controllers
 {
@@ -34,7 +36,7 @@ namespace MovieLibrary.Controllers
 		{
 			var users = await userService.GetAllUsers(cancellationToken).ToListAsync(cancellationToken);
 
-			var viewModel = new UserListViewModel(users)
+			var viewModel = new UsersListViewModel(users)
 			{
 				AddedUser = TempData.GetBooleanValue(TempDataAddedUser),
 				UpdatedUser = TempData.GetBooleanValue(TempDataUpdatedUser),

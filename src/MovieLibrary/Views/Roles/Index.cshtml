@@ -1,46 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Manage Users";
+    ViewData["Title"] = "Manage Roles";
 }
 
-@model MovieLibrary.UserManagement.ViewModels.Users.UsersListViewModel;
+@model MovieLibrary.UserManagement.ViewModels.Roles.RolesListViewModel;
 
-@if (Model.AddedUser)
+@if (Model.AddedRole)
 {
     <div class="alert alert-success" role="alert">
-        The user was added successfully.
+        The role was added successfully.
     </div>
 }
 
-@if (Model.UpdatedUser)
+@if (Model.UpdatedRole)
 {
     <div class="alert alert-success" role="alert">
-        The user was updated successfully.
+        The role was updated successfully.
     </div>
 }
 
-@if (Model.DeletedUser)
+@if (Model.DeletedRole)
 {
     <div class="alert alert-success" role="alert">
-        The user was deleted successfully.
+        The role was deleted successfully.
     </div>
 }
 
 <ul class="list-group">
-    @foreach (var user in Model.Users)
+    @foreach (var role in Model.Roles)
     {
         <li class="list-group-item">
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        @user.UserName
+                        @role.RoleName
                     </div>
                     <div class="col-auto container">
                         <div class="row">
                             <div class="col">
-                                <a asp-action="EditUser" asp-route-id="@user.Id">Edit</a>
+                                <a asp-action="EditRole" asp-route-id="@role.Id">Edit</a>
                             </div>
                             <div class="col">
-                                <a asp-action="ConfirmUserDeletion" asp-route-id="@user.Id">Delete</a>
+                                <a asp-action="ConfirmRoleDeletion" asp-route-id="@role.Id">Delete</a>
                             </div>
                         </div>
                     </div>
@@ -50,4 +50,4 @@
     }
 </ul>
 
-<a class="btn btn-primary mt-3" asp-action="RegisterUser">Add User</a>
+<a class="btn btn-primary mt-3" asp-action="CreateRole">Add Role</a>

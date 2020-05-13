@@ -50,33 +50,47 @@ namespace MovieLibrary.UserManagement
 		{
 			await foreach (var role in roleManager.Roles.ToAsyncEnumerable().WithCancellation(cancellationToken))
 			{
-				var claims = await roleManager.GetClaimsAsync(role);
-
 				yield return new RoleModel
 				{
 					Id = role.Id.ToString(),
 					RoleName = role.Name,
-					Permissions = claims
-						.Where(c => c.IsPermissionClaim())
-						.Select(c => c.Value)
-						.ToList(),
 				};
 			}
+		}
+
+		public async Task<RoleModel> GetRole(string roleId, CancellationToken cancellationToken)
+		{
+			var role = await FindRole(roleId);
+
+			return new RoleModel
+			{
+				Id = roleId,
+				RoleName = role.Name,
+			};
+		}
+
+		public async Task<IReadOnlyCollection<string>> GetRolePermissions(string roleId, CancellationToken cancellationToken)
+		{
+			var role = await FindRole(roleId);
+			var claims = await roleManager.GetClaimsAsync(role);
+
+			return ExtractPermissions(claims)
+				.ToList();
 		}
 
 		public async Task AssignRolePermissions(string roleId, IEnumerable<string> permissions, CancellationToken cancellationToken)
 		{
 			var role = await FindRole(roleId);
 
-			// TBD: Apply the same Add/Remove logic as for user roles.
-			foreach (var permission in permissions)
-			{
-				var result = await roleManager.AddClaimAsync(role, new Claim(SecurityConstants.PermissionClaimType, permission));
-				if (!result.Succeeded)
-				{
-					throw new UserManagementException($"Failed to add claim permission {permission} for role {role.Name}. {result}");
-				}
-			}
+			var roleClaims = await roleManager.GetClaimsAsync(role);
+			var currentPermissions = ExtractPermissions(roleClaims);
+
+			var permissionsSet = permissions.ToHashSet();
+			var permissionsToAdd = permissionsSet.Where(r => !currentPermissions.Contains(r)).ToList();
+			var permissionsToRemove = currentPermissions.Where(r => !permissionsSet.Contains(r)).ToList();
+
+			await AddRolePermissions(role, permissionsToAdd);
+			await RemoveRolePermissions(role, permissionsToRemove);
 		}
 
 		public async Task DeleteRole(string roleId, CancellationToken cancellationToken)
@@ -100,6 +114,41 @@ namespace MovieLibrary.UserManagement
 			}
 
 			return role;
+		}
+
+		private static IEnumerable<string> ExtractPermissions(IEnumerable<Claim> claims)
+		{
+			return claims
+				.Where(c => c.IsPermissionClaim())
+				.Select(c => c.Value);
+		}
+
+		private async Task AddRolePermissions(TRole role, IEnumerable<string> permissionsToAdd)
+		{
+			foreach (var permission in permissionsToAdd)
+			{
+				var claim = new Claim(SecurityConstants.PermissionClaimType, permission);
+
+				var result = await roleManager.AddClaimAsync(role, claim);
+				if (!result.Succeeded)
+				{
+					throw new UserManagementException($"Failed to add permission claim {permission} for role {role.Name}. {result}");
+				}
+			}
+		}
+
+		private async Task RemoveRolePermissions(TRole role, IEnumerable<string> permissionsToRemove)
+		{
+			foreach (var permission in permissionsToRemove)
+			{
+				var claim = new Claim(SecurityConstants.PermissionClaimType, permission);
+
+				var result = await roleManager.RemoveClaimAsync(role, claim);
+				if (!result.Succeeded)
+				{
+					throw new UserManagementException($"Failed to remove permission claim {permission} for role {role.Name}. {result}");
+				}
+			}
 		}
 	}
 }

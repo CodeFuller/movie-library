@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MovieLibrary.UserManagement.ViewModels
+namespace MovieLibrary.UserManagement.ViewModels.Users
 {
 	public class NewUserViewModel
 	{

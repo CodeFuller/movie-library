@@ -7,7 +7,5 @@ namespace MovieLibrary.UserManagement.Models
 		public string Id { get; set; }
 
 		public string RoleName { get; set; }
-
-		public IReadOnlyCollection<string> Permissions { get; set; }
 	}
 }

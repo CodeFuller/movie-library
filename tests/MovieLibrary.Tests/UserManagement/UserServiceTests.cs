@@ -47,7 +47,7 @@ namespace MovieLibrary.Tests.UserManagement
 			userManagerMock.Setup(x => x.AddToRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
 
 			// Act
 
@@ -92,7 +92,7 @@ namespace MovieLibrary.Tests.UserManagement
 			userManagerMock.Setup(x => x.AddToRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Failed());
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
 
 			// Act
 
@@ -129,7 +129,7 @@ namespace MovieLibrary.Tests.UserManagement
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(oldRoles);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
 
 			// Act
 
@@ -137,7 +137,7 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Assert
 
-			userManagerMock.Verify(x => x.AddToRolesAsync(user, It.IsAny<IEnumerable<string>>()), Times.Never);
+			userManagerMock.Verify(x => x.AddToRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -169,7 +169,7 @@ namespace MovieLibrary.Tests.UserManagement
 			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
 
 			// Act
 
@@ -214,7 +214,7 @@ namespace MovieLibrary.Tests.UserManagement
 			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Failed());
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
 
 			// Act
 
@@ -251,7 +251,7 @@ namespace MovieLibrary.Tests.UserManagement
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(oldRoles);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
 
 			// Act
 

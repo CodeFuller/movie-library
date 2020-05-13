@@ -17,10 +17,12 @@ namespace MovieLibrary.UserManagement.Interfaces
 
 		Task<TRole> FindByIdAsync(string roleId);
 
+		Task<IdentityResult> DeleteAsync(TRole role);
+
 		Task<IdentityResult> AddClaimAsync(TRole role, Claim claim);
 
 		Task<IList<Claim>> GetClaimsAsync(TRole role);
 
-		Task<IdentityResult> DeleteAsync(TRole role);
+		Task<IdentityResult> RemoveClaimAsync(TRole role, Claim claim);
 	}
 }

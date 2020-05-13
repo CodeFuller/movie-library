@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using MovieLibrary.UserManagement.Models;
 
-namespace MovieLibrary.UserManagement.ViewModels
+namespace MovieLibrary.UserManagement.ViewModels.Users
 {
-	public class UserListViewModel
+	public class UsersListViewModel
 	{
 		public IReadOnlyCollection<UserViewModel> Users { get; }
 
@@ -15,7 +15,7 @@ namespace MovieLibrary.UserManagement.ViewModels
 
 		public bool DeletedUser { get; set; }
 
-		public UserListViewModel(IEnumerable<UserModel> users)
+		public UsersListViewModel(IEnumerable<UserModel> users)
 		{
 			Users = users?.Select(u => new UserViewModel(u)).ToList() ?? throw new ArgumentNullException(nameof(users));
 		}

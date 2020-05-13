@@ -2,7 +2,7 @@
 using System.Linq;
 using MovieLibrary.UserManagement.Models;
 
-namespace MovieLibrary.UserManagement.ViewModels
+namespace MovieLibrary.UserManagement.ViewModels.Users
 {
 	public class UserDetailsViewModel
 	{

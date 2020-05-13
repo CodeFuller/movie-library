@@ -1,14 +1,14 @@
 ﻿@{
-    ViewData["Title"] = "Confirm User Deletion";
+    ViewData["Title"] = "Confirm Role Deletion";
 }
 
-@model MovieLibrary.UserManagement.ViewModels.Users.UserViewModel;
+@model MovieLibrary.UserManagement.ViewModels.Roles.RoleViewModel;
 
 <div class="alert alert-warning" role="alert">
-    Are you sure you want to delete the user '@Model.UserName'?
+    Are you sure you want to delete the role '@Model.RoleName'?
 </div>
 
-<form method="post" asp-action="DeleteUser">
+<form method="post" asp-action="DeleteRole">
     <input type="hidden" id="id" name="id" value="@Model.Id" />
     <button class="btn btn-danger" type="submit">Delete</button>
     <a class="btn btn-secondary" asp-action="Index">Cancel</a>

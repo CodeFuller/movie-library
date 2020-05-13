@@ -29,6 +29,22 @@ namespace MovieLibrary.Authorization
 			public const string AddOrRead = "Permissions.MoviesToSee.Add, Permissions.MoviesToSee.Read";
 		}
 
+		public static IEnumerable<string> All
+		{
+			get
+			{
+				yield return MoviesToGet.Add;
+				yield return MoviesToGet.Read;
+				yield return MoviesToGet.MoveToMoviesToSee;
+				yield return MoviesToGet.Delete;
+
+				yield return MoviesToSee.Add;
+				yield return MoviesToSee.Read;
+				yield return MoviesToSee.MarkAsSeen;
+				yield return MoviesToSee.Delete;
+			}
+		}
+
 		public static bool TryParseApplicationPermissions(this string policyName, out IEnumerable<string> permissions)
 		{
 			if (String.Equals(policyName, MoviesToGet.AddOrRead, StringComparison.Ordinal))
