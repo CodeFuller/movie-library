@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using MovieLibrary.Authorization;
 using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.IntegrationTests.Internal.Seeding
@@ -70,53 +68,8 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 			}
 		}
 
-		public IEnumerable<RoleSeedData> Roles
-		{
-			get
-			{
-				yield return new RoleSeedData
-				{
-					Id = "5eb995ec4083c272a80ca306",
-					RoleName = SecurityConstants.AdministratorRole,
-					Permissions = Enumerable.Empty<string>(),
-				};
+		public IEnumerable<RoleSeedData> Roles => SharedSeedData.ApplicationRoles;
 
-				yield return new RoleSeedData
-				{
-					Id = "5eb995ec4083c272a80ca307",
-					RoleName = UserRoles.PrivilegedUserRole,
-					Permissions = UserRoles.PrivilegedUserPermissions,
-				};
-
-				yield return new RoleSeedData
-				{
-					Id = "5eb995ef4083c272a80ca308",
-					RoleName = UserRoles.LimitedUserRole,
-					Permissions = UserRoles.LimitedUserPermissions,
-				};
-			}
-		}
-
-		public IEnumerable<UserSeedData> Users
-		{
-			get
-			{
-				yield return new UserSeedData
-				{
-					Id = "5eb7eb9e1fdada19f4eb59b0",
-					Email = "SomeAdministrator@test.com",
-					Password = "Qwerty123!",
-					Roles = new[] { UserRoles.AdministratorRole, UserRoles.PrivilegedUserRole },
-				};
-
-				yield return new UserSeedData
-				{
-					Id = "5eb7eb9f1fdada19f4eb59b1",
-					Email = "SomeLimitedUser@test.com",
-					Password = "Qwerty321!",
-					Roles = new[] { UserRoles.LimitedUserRole },
-				};
-			}
-		}
+		public IEnumerable<UserSeedData> Users => SharedSeedData.ApplicationUsers;
 	}
 }

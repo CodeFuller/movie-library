@@ -50,7 +50,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser, seedData: new EmptySeedData());
+			using var client = CreateHttpClient(ApplicationUser.LimitedUser, seedData: new NoMoviesSeedData());
 
 			// Act
 

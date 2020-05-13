@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using AspNetCore.Identity.Mongo.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -52,7 +53,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 			{
 				if (authenticatedUser != null)
 				{
-					services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper(authenticatedUser));
+					services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper<MongoUser>(authenticatedUser));
 				}
 
 				// We insert DatabaseSeeder as first service, so that it is executed before UsersInitializer.

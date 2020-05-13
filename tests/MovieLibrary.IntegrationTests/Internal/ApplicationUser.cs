@@ -1,32 +1,18 @@
-﻿using System.Collections.Generic;
-using MovieLibrary.IntegrationTests.Internal.Seeding;
+﻿using MovieLibrary.IntegrationTests.Internal.Seeding;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal class ApplicationUser
 	{
-		public string Name { get; private set; }
+		public string Name { get; }
 
-		public IEnumerable<string> Roles { get; private set; }
+		public static ApplicationUser PrivilegedUser => new ApplicationUser(SharedSeedData.PrivilegedUserName);
 
-		public IEnumerable<string> Permissions { get; private set; }
+		public static ApplicationUser LimitedUser => new ApplicationUser(SharedSeedData.LimitedUserName);
 
-		public static ApplicationUser PrivilegedUser => new ApplicationUser
+		private ApplicationUser(string userName)
 		{
-			Name = "Fake User",
-			Roles = new[] { UserRoles.AdministratorRole, UserRoles.PrivilegedUserRole },
-			Permissions = UserRoles.PrivilegedUserPermissions,
-		};
-
-		public static ApplicationUser LimitedUser => new ApplicationUser
-		{
-			Name = "Fake User",
-			Roles = new[] { UserRoles.LimitedUserRole },
-			Permissions = UserRoles.LimitedUserPermissions,
-		};
-
-		private ApplicationUser()
-		{
+			Name = userName;
 		}
 	}
 }

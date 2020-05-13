@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.IntegrationTests.Internal.Seeding
@@ -44,8 +43,8 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 			}
 		}
 
-		public IEnumerable<RoleSeedData> Roles => Enumerable.Empty<RoleSeedData>();
+		public IEnumerable<RoleSeedData> Roles => SharedSeedData.ApplicationRoles;
 
-		public IEnumerable<UserSeedData> Users => Enumerable.Empty<UserSeedData>();
+		public IEnumerable<UserSeedData> Users => SharedSeedData.ApplicationUsers;
 	}
 }

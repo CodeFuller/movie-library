@@ -1,37 +1,40 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal class FakeAuthenticationMiddleware
+	internal class FakeAuthenticationMiddleware<TUser>
+		where TUser : class
 	{
 		private readonly RequestDelegate next;
 
-		private readonly ApplicationUser authenticatedUser;
+		private readonly ApplicationUser applicationUser;
 
-		public FakeAuthenticationMiddleware(RequestDelegate next, ApplicationUser authenticatedUser)
+		public FakeAuthenticationMiddleware(RequestDelegate next, ApplicationUser applicationUser)
 		{
 			this.next = next ?? throw new ArgumentNullException(nameof(next));
-			this.authenticatedUser = authenticatedUser ?? throw new ArgumentNullException(nameof(authenticatedUser));
+			this.applicationUser = applicationUser ?? throw new ArgumentNullException(nameof(applicationUser));
 		}
 
-		public async Task Invoke(HttpContext context)
+		public async Task Invoke(HttpContext context, SignInManager<TUser> signInManager)
 		{
-			// TBD: Load user via UserService for more realism.
-			var claims = new[]
-				{
-					new Claim(ClaimTypes.Name, "Fake User"),
-				}
-				.Concat(authenticatedUser.Roles.Select(role => new Claim(ClaimTypes.Role, role)))
-				.Concat(authenticatedUser.Permissions.Select(permission => new Claim("permission", permission)));
+			if (signInManager.IsSignedIn(context.User))
+			{
+				// User is already authenticated.
+				return;
+			}
 
-			// Using Identity authentication type, so that SignInManager.IsSignedIn(User) returns true.
-			var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
-			context.User = new ClaimsPrincipal(identity);
+			// We can create fake ClaimsPrincipal and fill required permission claims.
+			// But instead we do it via Identity layer, for more realism.
+			var user = await signInManager.UserManager.FindByNameAsync(applicationUser.Name);
+			if (user == null)
+			{
+				throw new InvalidOperationException($"The user {applicationUser.Name} is not registered");
+			}
+
+			context.User = await signInManager.CreateUserPrincipalAsync(user);
 
 			await next(context);
 		}

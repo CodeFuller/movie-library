@@ -9,7 +9,7 @@ namespace MovieLibrary.UserManagement
 	{
 		public static IServiceCollection AddUserManagement(this IServiceCollection services)
 		{
-			services.AddTransient<IUserService, UserService<MongoUser, MongoRole, ObjectId>>();
+			services.AddTransient<IUserService, UserService<MongoUser, ObjectId>>();
 			services.AddTransient<IRoleService, RoleService<MongoRole, ObjectId>>();
 			services.AddTransient(typeof(IUserManager<,>), typeof(UserManagerWrapper<,>));
 			services.AddTransient(typeof(IRoleManager<,>), typeof(RoleManagerWrapper<,>));

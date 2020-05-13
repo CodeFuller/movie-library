@@ -4,7 +4,8 @@ using MovieLibrary.Internal;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal class FakeApplicationBootstrapper : IApplicationBootstrapper
+	internal class FakeApplicationBootstrapper<TUser> : IApplicationBootstrapper
+		where TUser : class
 	{
 		private readonly ApplicationUser authenticatedUser;
 
@@ -15,7 +16,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 		public void AddAuthenticationMiddleware(IApplicationBuilder appBuilder)
 		{
-			appBuilder.UseMiddleware<FakeAuthenticationMiddleware>(authenticatedUser);
+			appBuilder.UseMiddleware<FakeAuthenticationMiddleware<TUser>>(authenticatedUser);
 		}
 	}
 }

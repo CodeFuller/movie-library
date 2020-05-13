@@ -12,9 +12,8 @@ using MovieLibrary.UserManagement.Models;
 
 namespace MovieLibrary.UserManagement
 {
-	internal class UserService<TUser, TRole, TKey> : IUserService
+	internal class UserService<TUser, TKey> : IUserService
 		where TUser : IdentityUser<TKey>
-		where TRole : IdentityRole<TKey>
 		where TKey : IEquatable<TKey>
 	{
 		private readonly IUserManager<TUser, TKey> userManager;
