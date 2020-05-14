@@ -40,7 +40,7 @@
                                 <a class="btn-link@(user.CanBeEdited ? String.Empty : " disabled")" asp-action="EditUser" asp-route-id="@user.Id">Edit</a>
                             </div>
                             <div class="col">
-                                <a class="btn-link" asp-action="ConfirmUserDeletion" asp-route-id="@user.Id">Delete</a>
+                                <a class="btn-link@(user.CanBeDeleted ? String.Empty : " disabled")" asp-action="ConfirmUserDeletion" asp-route-id="@user.Id">Delete</a>
                             </div>
                         </div>
                     </div>

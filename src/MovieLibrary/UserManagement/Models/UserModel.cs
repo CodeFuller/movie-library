@@ -7,5 +7,7 @@
 		public string UserName { get; set; }
 
 		public bool CanBeEdited { get; set; }
+
+		public bool CanBeDeleted { get; set; }
 	}
 }

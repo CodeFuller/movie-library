@@ -18,6 +18,8 @@ namespace MovieLibrary.UserManagement.Interfaces
 
 		Task<IList<string>> GetRolesAsync(TUser user);
 
+		Task<IList<TUser>> GetUsersInRoleAsync(string roleName);
+
 		Task<IdentityResult> AddToRolesAsync(TUser user, IEnumerable<string> roles);
 
 		Task<IdentityResult> RemoveFromRolesAsync(TUser user, IEnumerable<string> roles);

@@ -83,11 +83,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 
 		private async Task SeedRoles(CancellationToken cancellationToken)
 		{
-			var prevRoles = await roleService.GetAllRoles(cancellationToken).ToListAsync(cancellationToken);
-			foreach (var prevRole in prevRoles)
-			{
-				await roleService.DeleteAnyRole(prevRole.Id, cancellationToken);
-			}
+			await roleService.Clear(cancellationToken);
 
 			foreach (var newRole in seedData.Roles)
 			{
@@ -103,11 +99,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 
 		private async Task SeedUsers(CancellationToken cancellationToken)
 		{
-			var prevUsers = await userService.GetAllUsers(cancellationToken).ToListAsync(cancellationToken);
-			foreach (var prevUser in prevUsers)
-			{
-				await userService.DeleteUser(prevUser.Id, cancellationToken);
-			}
+			await userService.Clear(cancellationToken);
 
 			foreach (var newUser in seedData.Users)
 			{

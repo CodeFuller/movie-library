@@ -62,27 +62,20 @@ namespace MovieLibrary.UserManagement
 
 		public async IAsyncEnumerable<UserModel> GetAllUsers([EnumeratorCancellation] CancellationToken cancellationToken)
 		{
+			var adminUsers = await GetAdminUsers();
+
 			await foreach (var user in userManager.Users.ToAsyncEnumerable().WithCancellation(cancellationToken))
 			{
-				yield return new UserModel
-				{
-					Id = user.Id.ToString(),
-					UserName = user.UserName,
-					CanBeEdited = UserCanBeEdited(user),
-				};
+				yield return CreateUserModel(user, adminUsers);
 			}
 		}
 
 		public async Task<UserModel> GetUser(string userId, CancellationToken cancellationToken)
 		{
 			var user = await FindUser(userId);
+			var adminUsers = await GetAdminUsers();
 
-			return new UserModel
-			{
-				Id = userId,
-				UserName = user.UserName,
-				CanBeEdited = UserCanBeEdited(user),
-			};
+			return CreateUserModel(user, adminUsers);
 		}
 
 		public async Task<IReadOnlyCollection<string>> GetUserRoles(string userId, CancellationToken cancellationToken)
@@ -119,7 +112,26 @@ namespace MovieLibrary.UserManagement
 		public async Task DeleteUser(string userId, CancellationToken cancellationToken)
 		{
 			var user = await FindUser(userId);
+			var adminUsers = await GetAdminUsers();
 
+			if (!UserCanBeDeleted(user, adminUsers))
+			{
+				throw new UserManagementException($"The user {user.UserName} can not be deleted");
+			}
+
+			await DeleteUser(user);
+		}
+
+		public async Task Clear(CancellationToken cancellationToken)
+		{
+			foreach (var role in userManager.Users.ToList())
+			{
+				await DeleteUser(role);
+			}
+		}
+
+		private async Task DeleteUser(TUser user)
+		{
 			var result = await userManager.DeleteAsync(user);
 			if (!result.Succeeded)
 			{
@@ -141,6 +153,29 @@ namespace MovieLibrary.UserManagement
 		private static bool UserCanBeEdited(TUser user)
 		{
 			return !String.Equals(user.UserName, SecurityConstants.DefaultAdministratorEmail, StringComparison.Ordinal);
+		}
+
+		private static bool UserCanBeDeleted(TUser user, HashSet<TKey> adminUsers)
+		{
+			return adminUsers.Count > 1 || !adminUsers.Contains(user.Id);
+		}
+
+		private async Task<HashSet<TKey>> GetAdminUsers()
+		{
+			return (await userManager.GetUsersInRoleAsync(SecurityConstants.AdministratorRole))
+				.Select(u => u.Id)
+				.ToHashSet();
+		}
+
+		private static UserModel CreateUserModel(TUser user, HashSet<TKey> adminUsers)
+		{
+			return new UserModel
+			{
+				Id = user.Id.ToString(),
+				UserName = user.UserName,
+				CanBeEdited = UserCanBeEdited(user),
+				CanBeDeleted = UserCanBeDeleted(user, adminUsers),
+			};
 		}
 
 		private async Task AddUserRoles(TUser user, IReadOnlyCollection<string> rolesToAdd)

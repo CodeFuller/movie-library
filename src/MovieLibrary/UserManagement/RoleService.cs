@@ -105,25 +105,28 @@ namespace MovieLibrary.UserManagement
 			await RemoveRolePermissions(role, permissionsToRemove);
 		}
 
-		public Task DeleteCustomRole(string roleId, CancellationToken cancellationToken)
-		{
-			return DeleteRole(roleId, checkIfCanBeDeleted: true);
-		}
-
-		public Task DeleteAnyRole(string roleId, CancellationToken cancellationToken)
-		{
-			return DeleteRole(roleId, checkIfCanBeDeleted: false);
-		}
-
-		private async Task DeleteRole(string roleId, bool checkIfCanBeDeleted)
+		public async Task DeleteRole(string roleId, CancellationToken cancellationToken)
 		{
 			var role = await FindRole(roleId);
 
-			if (checkIfCanBeDeleted && RoleIsReadOnly(role))
+			if (RoleIsReadOnly(role))
 			{
 				throw new UserManagementException($"The role {role.Name} can not be deleted");
 			}
 
+			await DeleteRole(role);
+		}
+
+		public async Task Clear(CancellationToken cancellationToken)
+		{
+			foreach (var role in roleManager.Roles.ToList())
+			{
+				await DeleteRole(role);
+			}
+		}
+
+		private async Task DeleteRole(TRole role)
+		{
 			var result = await roleManager.DeleteAsync(role);
 			if (!result.Succeeded)
 			{

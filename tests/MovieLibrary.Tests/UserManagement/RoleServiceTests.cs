@@ -296,7 +296,7 @@ namespace MovieLibrary.Tests.UserManagement
 		}
 
 		[TestMethod]
-		public async Task DeleteCustomRole_ForBuiltInRole_ThrowsUserManagementException()
+		public async Task DeleteRole_ForBuiltInRole_ThrowsUserManagementException()
 		{
 			// Arrange
 
@@ -313,7 +313,7 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Act
 
-			Task Call() => target.DeleteCustomRole("SomeRoleId", CancellationToken.None);
+			Task Call() => target.DeleteRole("SomeRoleId", CancellationToken.None);
 
 			// Assert
 

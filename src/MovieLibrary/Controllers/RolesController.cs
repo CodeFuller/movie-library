@@ -117,7 +117,7 @@ namespace MovieLibrary.Controllers
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 
-			await roleService.DeleteCustomRole(id, cancellationToken);
+			await roleService.DeleteRole(id, cancellationToken);
 
 			TempData[TempDataDeletedRole] = true;
 
