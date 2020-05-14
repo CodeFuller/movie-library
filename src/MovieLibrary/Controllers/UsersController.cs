@@ -8,8 +8,6 @@ using MovieLibrary.Authorization;
 using MovieLibrary.Internal;
 using MovieLibrary.UserManagement.Interfaces;
 using MovieLibrary.UserManagement.Models;
-using MovieLibrary.UserManagement.ViewModels;
-using MovieLibrary.UserManagement.ViewModels.Roles;
 using MovieLibrary.UserManagement.ViewModels.Users;
 
 namespace MovieLibrary.Controllers

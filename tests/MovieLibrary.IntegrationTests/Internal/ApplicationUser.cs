@@ -1,4 +1,5 @@
-﻿using MovieLibrary.IntegrationTests.Internal.Seeding;
+﻿using MovieLibrary.Authorization;
+using MovieLibrary.IntegrationTests.Internal.Seeding;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
@@ -9,6 +10,8 @@ namespace MovieLibrary.IntegrationTests.Internal
 		public static ApplicationUser PrivilegedUser => new ApplicationUser(SharedSeedData.PrivilegedUserName);
 
 		public static ApplicationUser LimitedUser => new ApplicationUser(SharedSeedData.LimitedUserName);
+
+		public static ApplicationUser DefaultAdministrator => new ApplicationUser(SecurityConstants.DefaultAdministratorEmail);
 
 		private ApplicationUser(string userName)
 		{

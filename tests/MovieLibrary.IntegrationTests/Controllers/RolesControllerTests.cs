@@ -201,7 +201,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 
 			var formContent = new FormUrlEncodedContent(new[]
 			{
-				// Here we delete permission "Permissions.MoviesToGet.Add" and add role "Permissions.MoviesToSee.Add".
+				// Here we delete permission "Permissions.MoviesToGet.Add" and add permission "Permissions.MoviesToSee.Add".
 				new KeyValuePair<string, string>("Permissions[0].PermissionName", "Permissions.MoviesToGet.Add"),
 				new KeyValuePair<string, string>("Permissions[1].Assigned", "true"),
 				new KeyValuePair<string, string>("Permissions[1].PermissionName", "Permissions.MoviesToGet.Read"),

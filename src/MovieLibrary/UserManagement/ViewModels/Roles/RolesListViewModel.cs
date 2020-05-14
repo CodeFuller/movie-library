@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using MovieLibrary.UserManagement.Models;
-using MovieLibrary.UserManagement.ViewModels.Users;
 
 namespace MovieLibrary.UserManagement.ViewModels.Roles
 {

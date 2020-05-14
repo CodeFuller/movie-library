@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace MovieLibrary.UserManagement.Models
+﻿namespace MovieLibrary.UserManagement.Models
 {
 	public class RoleModel
 	{

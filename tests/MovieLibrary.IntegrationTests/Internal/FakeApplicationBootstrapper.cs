@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using MovieLibrary.Internal;
 
 namespace MovieLibrary.IntegrationTests.Internal
@@ -9,14 +8,25 @@ namespace MovieLibrary.IntegrationTests.Internal
 	{
 		private readonly ApplicationUser authenticatedUser;
 
-		public FakeApplicationBootstrapper(ApplicationUser authenticatedUser)
+		private readonly string remoteIpAddress;
+
+		public FakeApplicationBootstrapper(ApplicationUser authenticatedUser, string remoteIpAddress)
 		{
-			this.authenticatedUser = authenticatedUser ?? throw new ArgumentNullException(nameof(authenticatedUser));
+			this.authenticatedUser = authenticatedUser;
+			this.remoteIpAddress = remoteIpAddress;
 		}
 
 		public void AddAuthenticationMiddleware(IApplicationBuilder appBuilder)
 		{
-			appBuilder.UseMiddleware<FakeAuthenticationMiddleware<TUser>>(authenticatedUser);
+			if (remoteIpAddress != null)
+			{
+				appBuilder.UseMiddleware<FakeRemoteAddressMiddleware>(remoteIpAddress);
+			}
+
+			if (authenticatedUser != null)
+			{
+				appBuilder.UseMiddleware<FakeAuthenticationMiddleware<TUser>>(authenticatedUser);
+			}
 		}
 	}
 }

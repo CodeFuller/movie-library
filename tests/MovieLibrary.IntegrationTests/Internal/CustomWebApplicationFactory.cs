@@ -27,12 +27,16 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 		private readonly Func<IMovieInfoProvider> fakeMovieInfoProviderFactory;
 
-		public CustomWebApplicationFactory(ApplicationUser authenticatedUser = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
+		private readonly string remoteIpAddress;
+
+		public CustomWebApplicationFactory(ApplicationUser authenticatedUser = null, ISeedData seedData = null,
+			int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null, string remoteIpAddress = null)
 		{
 			this.authenticatedUser = authenticatedUser;
 			this.seedData = seedData ?? new DefaultSeedData();
 			this.moviesPageSize = moviesPageSize;
 			this.fakeMovieInfoProviderFactory = movieInfoProvider ?? FakeMovieInfoProvider.StubFailingProvider;
+			this.remoteIpAddress = remoteIpAddress;
 		}
 
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -51,10 +55,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 			builder.ConfigureServices(services =>
 			{
-				if (authenticatedUser != null)
-				{
-					services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper<MongoUser>(authenticatedUser));
-				}
+				services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper<MongoUser>(authenticatedUser, remoteIpAddress));
 
 				// We insert DatabaseSeeder as first service, so that it is executed before UsersInitializer.
 				services.Insert(0, ServiceDescriptor.Scoped<IApplicationInitializer, DatabaseSeeder>());
@@ -78,9 +79,10 @@ namespace MovieLibrary.IntegrationTests.Internal
 			});
 		}
 
-		public static HttpClient CreateHttpClient(ApplicationUser authenticatedUser = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
+		public static HttpClient CreateHttpClient(ApplicationUser authenticatedUser = null, ISeedData seedData = null,
+			int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null, string remoteIpAddress = null)
 		{
-			var factory = new CustomWebApplicationFactory(authenticatedUser, seedData, moviesPageSize, movieInfoProvider);
+			var factory = new CustomWebApplicationFactory(authenticatedUser, seedData, moviesPageSize, movieInfoProvider, remoteIpAddress);
 			return factory.CreateDefaultHttpClient();
 		}
 

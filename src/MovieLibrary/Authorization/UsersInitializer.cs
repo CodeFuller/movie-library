@@ -10,7 +10,7 @@ using MovieLibrary.UserManagement.Models;
 namespace MovieLibrary.Authorization
 {
 	// TBD: Cover with IT
-	public class UsersInitializer : IApplicationInitializer
+	internal class UsersInitializer : IApplicationInitializer
 	{
 		private readonly IUserService userService;
 		private readonly IRoleService roleService;

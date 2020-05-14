@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MovieLibrary.UserManagement.Models;
-using MovieLibrary.UserManagement.ViewModels.Users;
 
 namespace MovieLibrary.UserManagement.ViewModels.Roles
 {

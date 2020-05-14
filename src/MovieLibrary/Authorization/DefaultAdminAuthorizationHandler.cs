@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace MovieLibrary.Authorization
 {
-	// TBD: Cover with UT
 	internal class DefaultAdminAuthorizationHandler : IAuthorizationHandler
 	{
 		private readonly IHttpContextAccessor httpContextAccessor;
@@ -33,9 +32,17 @@ namespace MovieLibrary.Authorization
 				return Task.CompletedTask;
 			}
 
-			var remoteIpAddress = httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress;
+			var httpContext = httpContextAccessor.HttpContext;
+
+			var remoteIpAddress = httpContext?.Connection?.RemoteIpAddress;
 			if (remoteIpAddress != null && !IPAddress.IsLoopback(remoteIpAddress))
 			{
+				// Preventing infinite redirects.
+				if (httpContext.Request.Path == "/Identity/Account/AccessDenied")
+				{
+					return Task.CompletedTask;
+				}
+
 				logger.LogError("An attempt of unauthorized access via default administrator from address {RemoteIpAddress}", remoteIpAddress.ToString());
 				context.Fail();
 			}
