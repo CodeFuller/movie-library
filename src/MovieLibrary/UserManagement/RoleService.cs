@@ -54,8 +54,14 @@ namespace MovieLibrary.UserManagement
 				{
 					Id = role.Id.ToString(),
 					RoleName = role.Name,
+					ReadOnly = RoleIsReadOnly(role),
 				};
 			}
+		}
+
+		private static bool RoleIsReadOnly(TRole role)
+		{
+			return String.Equals(role.Name, SecurityConstants.AdministratorRole, StringComparison.Ordinal);
 		}
 
 		public async Task<RoleModel> GetRole(string roleId, CancellationToken cancellationToken)
@@ -66,6 +72,7 @@ namespace MovieLibrary.UserManagement
 			{
 				Id = roleId,
 				RoleName = role.Name,
+				ReadOnly = RoleIsReadOnly(role),
 			};
 		}
 
@@ -82,6 +89,11 @@ namespace MovieLibrary.UserManagement
 		{
 			var role = await FindRole(roleId);
 
+			if (RoleIsReadOnly(role))
+			{
+				throw new UserManagementException($"The role {role.Name} can not be modified");
+			}
+
 			var roleClaims = await roleManager.GetClaimsAsync(role);
 			var currentPermissions = ExtractPermissions(roleClaims);
 
@@ -93,10 +105,24 @@ namespace MovieLibrary.UserManagement
 			await RemoveRolePermissions(role, permissionsToRemove);
 		}
 
-		public async Task DeleteRole(string roleId, CancellationToken cancellationToken)
+		public Task DeleteCustomRole(string roleId, CancellationToken cancellationToken)
 		{
-			// TBD: We should not allow deletion of built-in role.
+			return DeleteRole(roleId, checkIfCanBeDeleted: true);
+		}
+
+		public Task DeleteAnyRole(string roleId, CancellationToken cancellationToken)
+		{
+			return DeleteRole(roleId, checkIfCanBeDeleted: false);
+		}
+
+		private async Task DeleteRole(string roleId, bool checkIfCanBeDeleted)
+		{
 			var role = await FindRole(roleId);
+
+			if (checkIfCanBeDeleted && RoleIsReadOnly(role))
+			{
+				throw new UserManagementException($"The role {role.Name} can not be deleted");
+			}
 
 			var result = await roleManager.DeleteAsync(role);
 			if (!result.Succeeded)

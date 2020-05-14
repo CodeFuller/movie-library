@@ -17,6 +17,8 @@ namespace MovieLibrary.UserManagement.Interfaces
 
 		Task AssignRolePermissions(string roleId, IEnumerable<string> permissions, CancellationToken cancellationToken);
 
-		Task DeleteRole(string roleId, CancellationToken cancellationToken);
+		Task DeleteCustomRole(string roleId, CancellationToken cancellationToken);
+
+		Task DeleteAnyRole(string roleId, CancellationToken cancellationToken);
 	}
 }

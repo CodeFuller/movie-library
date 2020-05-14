@@ -37,10 +37,10 @@
                     <div class="col-auto container">
                         <div class="row">
                             <div class="col">
-                                <a asp-action="EditRole" asp-route-id="@role.Id">Edit</a>
+                                <a class="btn-link@(role.ReadOnly ? " disabled" : String.Empty)" asp-action="EditRole" asp-route-id="@role.Id">Edit</a>
                             </div>
                             <div class="col">
-                                <a asp-action="ConfirmRoleDeletion" asp-route-id="@role.Id">Delete</a>
+                                <a class="btn-link@(role.ReadOnly ? " disabled" : String.Empty)" asp-action="ConfirmRoleDeletion" asp-route-id="@role.Id">Delete</a>
                             </div>
                         </div>
                     </div>

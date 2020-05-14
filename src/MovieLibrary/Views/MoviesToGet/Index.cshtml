@@ -53,13 +53,13 @@
                         @if (User.HasPermission(ApplicationPermissions.MoviesToGet.MoveToMoviesToSee))
                         {
                             <div>
-                                <a asp-action="ConfirmMovingToSee" asp-route-id="@movie.Id.Value">To see</a>
+                                <a class="btn-link" asp-action="ConfirmMovingToSee" asp-route-id="@movie.Id.Value">To see</a>
                             </div>
                         }
                         @if (User.HasPermission(ApplicationPermissions.MoviesToGet.Delete))
                         {
                             <div>
-                                <a asp-action="ConfirmMovieDeletion" asp-route-id="@movie.Id.Value">Delete</a>
+                                <a class="btn-link" asp-action="ConfirmMovieDeletion" asp-route-id="@movie.Id.Value">Delete</a>
                             </div>
                         }
                     </div>

@@ -5,5 +5,7 @@
 		public string Id { get; set; }
 
 		public string RoleName { get; set; }
+
+		public bool ReadOnly { get; set; }
 	}
 }

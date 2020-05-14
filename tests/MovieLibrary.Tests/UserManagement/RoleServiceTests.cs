@@ -257,6 +257,69 @@ namespace MovieLibrary.Tests.UserManagement
 			roleManagerMock.Verify(x => x.RemoveClaimAsync(It.IsAny<MongoRole>(), It.IsAny<Claim>()), Times.Never);
 		}
 
+		[TestMethod]
+		public async Task AssignRolePermissions_ForBuiltInRole_ThrowsUserManagementException()
+		{
+			// Arrange
+
+			var oldPermissions = new[]
+			{
+				"Permission #1",
+				"Permission #2",
+			};
+
+			var newPermissions = new[]
+			{
+				"Permission #1",
+				"Permission #2",
+			};
+
+			var role = new MongoRole(SecurityConstants.AdministratorRole);
+
+			var mocker = new AutoMocker();
+
+			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
+			roleManagerMock.Setup(x => x.GetClaimsAsync(role)).ReturnsAsync(ToClaims(oldPermissions));
+			roleManagerMock.Setup(x => x.AddClaimAsync(It.IsAny<MongoRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Success);
+			mocker.Use(roleManagerMock);
+
+			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+
+			// Act
+
+			Task Call() => target.AssignRolePermissions("SomeRoleId", newPermissions, CancellationToken.None);
+
+			// Assert
+
+			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+		}
+
+		[TestMethod]
+		public async Task DeleteCustomRole_ForBuiltInRole_ThrowsUserManagementException()
+		{
+			// Arrange
+
+			var role = new MongoRole(SecurityConstants.AdministratorRole);
+
+			var mocker = new AutoMocker();
+
+			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
+			roleManagerMock.Setup(x => x.DeleteAsync(It.IsAny<MongoRole>())).ReturnsAsync(IdentityResult.Success);
+			mocker.Use(roleManagerMock);
+
+			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+
+			// Act
+
+			Task Call() => target.DeleteCustomRole("SomeRoleId", CancellationToken.None);
+
+			// Assert
+
+			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+		}
+
 		private static IList<Claim> ToClaims(IEnumerable<string> permissions)
 		{
 			return permissions.Select(p => new Claim(SecurityConstants.PermissionClaimType, p))

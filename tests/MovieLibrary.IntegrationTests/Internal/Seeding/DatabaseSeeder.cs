@@ -86,14 +86,18 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 			var prevRoles = await roleService.GetAllRoles(cancellationToken).ToListAsync(cancellationToken);
 			foreach (var prevRole in prevRoles)
 			{
-				await roleService.DeleteRole(prevRole.Id, cancellationToken);
+				await roleService.DeleteAnyRole(prevRole.Id, cancellationToken);
 			}
 
 			foreach (var newRole in seedData.Roles)
 			{
 				idGeneratorQueue.EnqueueId(newRole.Id);
 				var roleId = await roleService.CreateRole(newRole.RoleName, cancellationToken);
-				await roleService.AssignRolePermissions(roleId, newRole.Permissions, cancellationToken);
+
+				if (newRole.Permissions.Any())
+				{
+					await roleService.AssignRolePermissions(roleId, newRole.Permissions, cancellationToken);
+				}
 			}
 		}
 
