@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using MovieLibrary.Authorization;
 using MovieLibrary.Exceptions;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.UserManagement.Interfaces;
@@ -46,6 +47,19 @@ namespace MovieLibrary.UserManagement
 			return newUser.Id.ToString();
 		}
 
+		public async Task CreateDefaultAdministrator(CancellationToken cancellationToken)
+		{
+			var newUser = new NewUserModel
+			{
+				Email = SecurityConstants.DefaultAdministratorEmail,
+				Password = SecurityConstants.DefaultAdministratorPassword,
+			};
+
+			var userId = await CreateUser(newUser, cancellationToken);
+
+			await AssignUserRoles(userId, new[] { SecurityConstants.AdministratorRole }, checkIfCanBeEdited: false);
+		}
+
 		public async IAsyncEnumerable<UserModel> GetAllUsers([EnumeratorCancellation] CancellationToken cancellationToken)
 		{
 			await foreach (var user in userManager.Users.ToAsyncEnumerable().WithCancellation(cancellationToken))
@@ -54,6 +68,7 @@ namespace MovieLibrary.UserManagement
 				{
 					Id = user.Id.ToString(),
 					UserName = user.UserName,
+					CanBeEdited = UserCanBeEdited(user),
 				};
 			}
 		}
@@ -66,6 +81,7 @@ namespace MovieLibrary.UserManagement
 			{
 				Id = userId,
 				UserName = user.UserName,
+				CanBeEdited = UserCanBeEdited(user),
 			};
 		}
 
@@ -76,9 +92,19 @@ namespace MovieLibrary.UserManagement
 			return (await userManager.GetRolesAsync(user)).ToList();
 		}
 
-		public async Task AssignUserRoles(string userId, IEnumerable<string> roles, CancellationToken cancellationToken)
+		public Task AssignUserRoles(string userId, IEnumerable<string> roles, CancellationToken cancellationToken)
+		{
+			return AssignUserRoles(userId, roles, checkIfCanBeEdited: true);
+		}
+
+		public async Task AssignUserRoles(string userId, IEnumerable<string> roles, bool checkIfCanBeEdited)
 		{
 			var user = await FindUser(userId);
+
+			if (checkIfCanBeEdited && !UserCanBeEdited(user))
+			{
+				throw new UserManagementException($"The user {user.UserName} can not be modified");
+			}
 
 			var currentRoles = await userManager.GetRolesAsync(user);
 
@@ -110,6 +136,11 @@ namespace MovieLibrary.UserManagement
 			}
 
 			return user;
+		}
+
+		private static bool UserCanBeEdited(TUser user)
+		{
+			return !String.Equals(user.UserName, SecurityConstants.DefaultAdministratorEmail, StringComparison.Ordinal);
 		}
 
 		private async Task AddUserRoles(TUser user, IReadOnlyCollection<string> rolesToAdd)

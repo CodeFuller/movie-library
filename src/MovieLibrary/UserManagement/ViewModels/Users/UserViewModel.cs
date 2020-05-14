@@ -8,10 +8,13 @@ namespace MovieLibrary.UserManagement.ViewModels.Users
 
 		public string UserName { get; }
 
+		public bool CanBeEdited { get; }
+
 		public UserViewModel(UserModel model)
 		{
 			Id = model.Id;
 			UserName = model.UserName;
+			CanBeEdited = model.CanBeEdited;
 		}
 	}
 }

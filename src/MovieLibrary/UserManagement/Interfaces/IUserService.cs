@@ -9,6 +9,8 @@ namespace MovieLibrary.UserManagement.Interfaces
 	{
 		Task<string> CreateUser(NewUserModel user, CancellationToken cancellationToken);
 
+		Task CreateDefaultAdministrator(CancellationToken cancellationToken);
+
 		IAsyncEnumerable<UserModel> GetAllUsers(CancellationToken cancellationToken);
 
 		Task<UserModel> GetUser(string userId, CancellationToken cancellationToken);

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MovieLibrary.Internal;
 using MovieLibrary.UserManagement.Interfaces;
-using MovieLibrary.UserManagement.Models;
 
 namespace MovieLibrary.Authorization
 {
@@ -60,16 +59,8 @@ namespace MovieLibrary.Authorization
 				}
 			}
 
-			logger.LogWarning("No user with role {RoleName} exists. Creating {UserName} ...", SecurityConstants.AdministratorRole, SecurityConstants.DefaultAdministratorEmail);
-
-			var newUser = new NewUserModel
-			{
-				Email = SecurityConstants.DefaultAdministratorEmail,
-				Password = SecurityConstants.DefaultAdministratorPassword,
-			};
-
-			var userId = await userService.CreateUser(newUser, cancellationToken);
-			await userService.AssignUserRoles(userId, new[] { SecurityConstants.AdministratorRole }, cancellationToken);
+			logger.LogWarning("No user with role {RoleName} exists. Creating default administrator ...", SecurityConstants.AdministratorRole);
+			await userService.CreateDefaultAdministrator(cancellationToken);
 		}
 	}
 }

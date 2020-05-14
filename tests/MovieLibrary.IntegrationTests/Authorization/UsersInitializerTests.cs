@@ -39,6 +39,7 @@ namespace MovieLibrary.IntegrationTests.Authorization
 			Assert.AreEqual(1, users.Count);
 			var user = users.Single();
 			Assert.AreEqual(SecurityConstants.DefaultAdministratorEmail, user.UserName);
+			Assert.IsFalse(user.CanBeEdited);
 
 			var roles = await userService.GetUserRoles(user.Id, CancellationToken.None);
 			CollectionAssert.AreEqual(new[] { SecurityConstants.AdministratorRole }, roles.ToList());
