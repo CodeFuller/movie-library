@@ -4,7 +4,7 @@ using MovieLibrary.UserManagement.Models;
 
 namespace MovieLibrary.UserManagement.ViewModels.Roles
 {
-	public class RoleDetailsViewModel
+	public class RoleDetailsViewModel : IPermissionsHolder
 	{
 		public string RoleId { get; set; }
 

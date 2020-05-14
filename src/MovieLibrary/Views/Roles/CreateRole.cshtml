@@ -10,7 +10,7 @@
         <div><span asp-validation-for="Name" class="text-danger"></span></div>
         <input asp-for="Name" class="form-control" />
     </div>
-    @await Html.PartialAsync("_PermissionsTablePartial", Model.Permissions)
+    @await Html.PartialAsync("_PermissionsTablePartial", Model)
     <button class="btn btn-primary" type="submit">Create</button>
     <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>

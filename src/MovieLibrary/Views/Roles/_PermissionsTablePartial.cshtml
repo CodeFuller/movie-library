@@ -1,4 +1,4 @@
-﻿@model IReadOnlyList<MovieLibrary.UserManagement.ViewModels.Roles.RolePermissionViewModel>
+﻿@model MovieLibrary.UserManagement.ViewModels.Roles.IPermissionsHolder
 
 <table class="table table-hover">
     <thead>
@@ -8,13 +8,13 @@
     </tr>
     </thead>
     <tbody>
-    @for (var i = 0; i < Model.Count; ++i)
+    @for (var i = 0; i < Model.Permissions.Count; ++i)
     {
         <tr>
-            <td>@Model[i].PermissionName</td>
+            <td>@Model.Permissions[i].PermissionName</td>
             <td class="text-center">
-                <input type="checkbox" asp-for="@Model[i].Assigned"/>
-                <input type="hidden" asp-for="@Model[i].PermissionName"/>
+                <input type="checkbox" asp-for="Permissions[i].Assigned"/>
+                <input type="hidden" asp-for="Permissions[i].PermissionName"/>
             </td>
         </tr>
     }
