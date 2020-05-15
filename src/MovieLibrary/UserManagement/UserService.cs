@@ -78,11 +78,19 @@ namespace MovieLibrary.UserManagement
 			return CreateUserModel(user, adminUsers);
 		}
 
-		public async Task<IReadOnlyCollection<string>> GetUserRoles(string userId, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<UserRoleModel>> GetUserRoles(string userId, CancellationToken cancellationToken)
 		{
 			var user = await FindUser(userId);
+			var roles = await userManager.GetRolesAsync(user);
 
-			return (await userManager.GetRolesAsync(user)).ToList();
+			var adminRoleIsReadOnly = roles.Contains(SecurityConstants.AdministratorRole) && (await GetAdminUsers()).Count == 1;
+
+			return roles.Select(role => new UserRoleModel
+				{
+					RoleName = role,
+					ReadOnly = String.Equals(role, SecurityConstants.AdministratorRole, StringComparison.Ordinal) && adminRoleIsReadOnly,
+				})
+				.ToList();
 		}
 
 		public Task AssignUserRoles(string userId, IEnumerable<string> roles, CancellationToken cancellationToken)
@@ -104,6 +112,11 @@ namespace MovieLibrary.UserManagement
 			var rolesSet = roles.ToHashSet();
 			var rolesToAdd = rolesSet.Where(r => !currentRoles.Contains(r)).ToList();
 			var rolesToRemove = currentRoles.Where(r => !rolesSet.Contains(r)).ToList();
+
+			if (rolesToRemove.Contains(SecurityConstants.AdministratorRole) && (await GetAdminUsers()).Count == 1)
+			{
+				throw new UserManagementException("The administrator role can not be unassigned from the last administrator");
+			}
 
 			await AddUserRoles(user, rolesToAdd);
 			await RemoveUserRoles(user, rolesToRemove);

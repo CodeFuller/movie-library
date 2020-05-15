@@ -129,7 +129,23 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task EditUser_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task EditUser_OfLastAdministratorUnderAdministratorAccount_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+
+			// Act
+
+			using var response = await client.GetAsync(new Uri("https://localhost:5001/Users/EditUser/5eb7eb9e1fdada19f4eb59b0"), CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
+		public async Task EditUser_OfNonAdministratorUnderAdministratorAccount_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -196,7 +212,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 			var userService = scopeServiceProvider.ServiceProvider.GetRequiredService<IUserService>();
 			var newUserRoles = await userService.GetUserRoles("5eb7eb9f1fdada19f4eb59b1", CancellationToken.None);
 
-			CollectionAssert.AreEqual(new[] { "Privileged User", }, newUserRoles.ToList());
+			CollectionAssert.AreEqual(new[] { "Privileged User", }, newUserRoles.Select(r => r.RoleName).ToList());
 		}
 
 		[TestMethod]

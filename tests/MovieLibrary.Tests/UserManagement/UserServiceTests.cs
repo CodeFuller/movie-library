@@ -96,7 +96,7 @@ namespace MovieLibrary.Tests.UserManagement
 			Assert.IsTrue(users[0].CanBeEdited);
 		}
 
-		[DataTestMethod]
+		[TestMethod]
 		public async Task GetAllUsers_SingleDefaultAdmin_SetsCanBeDeletedToFalse()
 		{
 			// Arrange
@@ -135,7 +135,7 @@ namespace MovieLibrary.Tests.UserManagement
 			Assert.IsTrue(users[1].CanBeDeleted);
 		}
 
-		[DataTestMethod]
+		[TestMethod]
 		public async Task GetAllUsers_SingleCustomAdmin_SetsCanBeDeletedToFalse()
 		{
 			// Arrange
@@ -174,7 +174,7 @@ namespace MovieLibrary.Tests.UserManagement
 			Assert.IsTrue(users[1].CanBeDeleted);
 		}
 
-		[DataTestMethod]
+		[TestMethod]
 		public async Task GetAllUsers_MultipleAdmins_SetsCanBeDeletedToTrue()
 		{
 			// Arrange
@@ -208,6 +208,162 @@ namespace MovieLibrary.Tests.UserManagement
 
 			Assert.IsTrue(users[0].CanBeDeleted);
 			Assert.IsTrue(users[1].CanBeDeleted);
+		}
+
+		[TestMethod]
+		public async Task GetUserRoles_SingleDefaultAdmin_SetsReadOnlyToTrue()
+		{
+			// Arrange
+
+			var singleAdmin = new MongoUser
+			{
+				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				UserName = SecurityConstants.DefaultAdministratorEmail,
+			};
+
+			var mocker = new AutoMocker();
+
+			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("5eb69e3e3233d47930edf61b")).ReturnsAsync(singleAdmin);
+			userManagerMock.Setup(x => x.GetRolesAsync(singleAdmin)).ReturnsAsync(new[] { SecurityConstants.AdministratorRole, "Another Role" });
+			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { singleAdmin });
+			mocker.Use(userManagerMock);
+
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+
+			// Act
+
+			var roles = (await target.GetUserRoles("5eb69e3e3233d47930edf61b", CancellationToken.None)).ToList();
+
+			// Assert
+
+			Assert.AreEqual(2, roles.Count);
+
+			Assert.AreEqual(SecurityConstants.AdministratorRole, roles[0].RoleName);
+			Assert.IsTrue(roles[0].ReadOnly);
+
+			Assert.AreEqual("Another Role", roles[1].RoleName);
+			Assert.IsFalse(roles[1].ReadOnly);
+		}
+
+		[TestMethod]
+		public async Task GetUserRoles_SingleCustomAdmin_SetsReadOnlyToTrue()
+		{
+			// Arrange
+
+			var singleAdmin = new MongoUser
+			{
+				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				UserName = "Custom Admin",
+			};
+
+			var mocker = new AutoMocker();
+
+			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("5eb69e3e3233d47930edf61b")).ReturnsAsync(singleAdmin);
+			userManagerMock.Setup(x => x.GetRolesAsync(singleAdmin)).ReturnsAsync(new[] { SecurityConstants.AdministratorRole, "Another Role" });
+			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { singleAdmin });
+			mocker.Use(userManagerMock);
+
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+
+			// Act
+
+			var roles = (await target.GetUserRoles("5eb69e3e3233d47930edf61b", CancellationToken.None)).ToList();
+
+			// Assert
+
+			Assert.AreEqual(2, roles.Count);
+
+			Assert.AreEqual(SecurityConstants.AdministratorRole, roles[0].RoleName);
+			Assert.IsTrue(roles[0].ReadOnly);
+
+			Assert.AreEqual("Another Role", roles[1].RoleName);
+			Assert.IsFalse(roles[1].ReadOnly);
+		}
+
+		[TestMethod]
+		public async Task GetUserRoles_MultipleAdmins_SetsReadOnlyToFalse()
+		{
+			// Arrange
+
+			var defaultAdmin = new MongoUser
+			{
+				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				UserName = SecurityConstants.DefaultAdministratorEmail,
+			};
+
+			var customAdmin = new MongoUser
+			{
+				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				UserName = "Custom Admin",
+			};
+
+			var mocker = new AutoMocker();
+
+			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("5eb69e3e3233d47930edf61b")).ReturnsAsync(customAdmin);
+			userManagerMock.Setup(x => x.GetRolesAsync(customAdmin)).ReturnsAsync(new[] { SecurityConstants.AdministratorRole, "Another Role" });
+			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { defaultAdmin, customAdmin });
+			mocker.Use(userManagerMock);
+
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+
+			// Act
+
+			var roles = (await target.GetUserRoles("5eb69e3e3233d47930edf61b", CancellationToken.None)).ToList();
+
+			// Assert
+
+			Assert.AreEqual(2, roles.Count);
+
+			Assert.AreEqual(SecurityConstants.AdministratorRole, roles[0].RoleName);
+			Assert.IsFalse(roles[0].ReadOnly);
+
+			Assert.AreEqual("Another Role", roles[1].RoleName);
+			Assert.IsFalse(roles[1].ReadOnly);
+		}
+
+		[TestMethod]
+		public async Task GetUserRoles_ForNonAdministrator_SetsReadOnlyToFalse()
+		{
+			// Arrange
+
+			var customAdmin = new MongoUser
+			{
+				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				UserName = "Custom Admin",
+			};
+
+			var user = new MongoUser
+			{
+				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				UserName = "Limited User",
+			};
+
+			var mocker = new AutoMocker();
+
+			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("5eb705a69c615e5ca0f29a8b")).ReturnsAsync(user);
+			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(new[] { "Role #1", "Role #2" });
+			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { customAdmin });
+			mocker.Use(userManagerMock);
+
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+
+			// Act
+
+			var roles = (await target.GetUserRoles("5eb705a69c615e5ca0f29a8b", CancellationToken.None)).ToList();
+
+			// Assert
+
+			Assert.AreEqual(2, roles.Count);
+
+			Assert.AreEqual("Role #1", roles[0].RoleName);
+			Assert.IsFalse(roles[0].ReadOnly);
+
+			Assert.AreEqual("Role #2", roles[1].RoleName);
+			Assert.IsFalse(roles[1].ReadOnly);
 		}
 
 		[TestMethod]
@@ -489,6 +645,134 @@ namespace MovieLibrary.Tests.UserManagement
 			// Assert
 
 			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+		}
+
+		[TestMethod]
+		public async Task AssignUserRoles_AdministratorRoleRemovedFromLastAdministrator_ThrowsUserManagementException()
+		{
+			// Arrange
+
+			var oldRoles = new[]
+			{
+				SecurityConstants.AdministratorRole,
+				"Custom Role",
+			};
+
+			var newRoles = new[]
+			{
+				"Custom Role",
+			};
+
+			var admin = new MongoUser("Custom Admin");
+
+			var mocker = new AutoMocker();
+
+			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(admin);
+			userManagerMock.Setup(x => x.GetRolesAsync(admin)).ReturnsAsync(oldRoles);
+			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { admin });
+			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
+			mocker.Use(userManagerMock);
+
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+
+			// Act
+
+			Task Call() => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
+
+			// Assert
+
+			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+		}
+
+		[TestMethod]
+		public async Task AssignUserRoles_NonAdministratorRoleRemovedFromLastAdministrator_RemovesRoleCorrectly()
+		{
+			// Arrange
+
+			var oldRoles = new[]
+			{
+				SecurityConstants.AdministratorRole,
+				"Custom Role",
+			};
+
+			var newRoles = new[]
+			{
+				SecurityConstants.AdministratorRole,
+			};
+
+			var admin = new MongoUser
+			{
+				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				UserName = "Custom Admin",
+			};
+
+			var mocker = new AutoMocker();
+
+			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(admin);
+			userManagerMock.Setup(x => x.GetRolesAsync(admin)).ReturnsAsync(oldRoles);
+			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { admin });
+			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
+			mocker.Use(userManagerMock);
+
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+
+			// Act
+
+			await target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
+
+			// Assert
+
+			userManagerMock.Verify(x => x.RemoveFromRolesAsync(admin, new[] { "Custom Role" }), Times.Once);
+		}
+
+		[TestMethod]
+		public async Task AssignUserRoles_AdministratorRoleRemovedFromNonLastAdministrator_RemovesRoleCorrectly()
+		{
+			// Arrange
+
+			var oldRoles = new[]
+			{
+				SecurityConstants.AdministratorRole,
+				"Custom Role",
+			};
+
+			var newRoles = new[]
+			{
+				"Custom Role",
+			};
+
+			var admin = new MongoUser
+			{
+				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				UserName = "Custom Admin",
+			};
+
+			var anotherAdmin = new MongoUser
+			{
+				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				UserName = "Another Admin",
+			};
+
+			var mocker = new AutoMocker();
+
+			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(admin);
+			userManagerMock.Setup(x => x.GetRolesAsync(admin)).ReturnsAsync(oldRoles);
+			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { admin, anotherAdmin });
+			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
+			mocker.Use(userManagerMock);
+
+			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+
+			// Act
+
+			await target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
+
+			// Assert
+
+			userManagerMock.Verify(x => x.RemoveFromRolesAsync(admin, new[] { SecurityConstants.AdministratorRole }), Times.Once);
 		}
 
 		[TestMethod]

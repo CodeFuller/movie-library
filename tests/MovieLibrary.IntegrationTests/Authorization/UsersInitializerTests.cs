@@ -43,7 +43,7 @@ namespace MovieLibrary.IntegrationTests.Authorization
 			Assert.IsFalse(user.CanBeDeleted);
 
 			var roles = await userService.GetUserRoles(user.Id, CancellationToken.None);
-			CollectionAssert.AreEqual(new[] { SecurityConstants.AdministratorRole }, roles.ToList());
+			CollectionAssert.AreEqual(new[] { SecurityConstants.AdministratorRole }, roles.Select(r => r.RoleName).ToList());
 		}
 
 		[TestMethod]

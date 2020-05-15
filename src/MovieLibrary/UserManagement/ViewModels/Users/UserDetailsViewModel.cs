@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MovieLibrary.UserManagement.Models;
 
@@ -16,18 +17,28 @@ namespace MovieLibrary.UserManagement.ViewModels.Users
 		{
 		}
 
-		public UserDetailsViewModel(UserModel model, IEnumerable<string> userRoles, IEnumerable<string> allRoles)
+		public UserDetailsViewModel(UserModel model, IEnumerable<UserRoleModel> userRoles, IEnumerable<string> allRoles)
 		{
 			UserId = model.Id;
 			UserName = model.UserName;
 
+			var userRolesSet = userRoles.ToHashSet();
+
 			Roles = allRoles
-				.Select(role => new UserRoleViewModel
-				{
-					RoleName = role,
-					Assigned = userRoles.Contains(role),
-				})
+				.Select(role => CreateUserRoleViewModel(role, userRolesSet))
 				.ToList();
+		}
+
+		private static UserRoleViewModel CreateUserRoleViewModel(string role, HashSet<UserRoleModel> userRoles)
+		{
+			var userRole = userRoles.FirstOrDefault(r => String.Equals(r.RoleName, role, StringComparison.Ordinal));
+
+			return new UserRoleViewModel
+			{
+				RoleName = role,
+				Assigned = userRole != null,
+				ReadOnly = userRole?.ReadOnly ?? false,
+			};
 		}
 	}
 }

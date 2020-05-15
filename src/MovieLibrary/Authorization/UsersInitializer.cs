@@ -53,7 +53,7 @@ namespace MovieLibrary.Authorization
 			{
 				var userRoles = await userService.GetUserRoles(user.Id, cancellationToken);
 
-				if (userRoles.Any(role => String.Equals(role, SecurityConstants.AdministratorRole, StringComparison.Ordinal)))
+				if (userRoles.Any(role => String.Equals(role.RoleName, SecurityConstants.AdministratorRole, StringComparison.Ordinal)))
 				{
 					return;
 				}

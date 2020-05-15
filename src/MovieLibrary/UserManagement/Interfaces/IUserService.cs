@@ -15,7 +15,7 @@ namespace MovieLibrary.UserManagement.Interfaces
 
 		Task<UserModel> GetUser(string userId, CancellationToken cancellationToken);
 
-		Task<IReadOnlyCollection<string>> GetUserRoles(string userId, CancellationToken cancellationToken);
+		Task<IReadOnlyCollection<UserRoleModel>> GetUserRoles(string userId, CancellationToken cancellationToken);
 
 		Task AssignUserRoles(string userId, IEnumerable<string> roles, CancellationToken cancellationToken);
 

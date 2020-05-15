@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit User SomeLimitedUser@test.com - Movie Library</title>
+    <title>Manage Users - Movie Library</title>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/site.css" />
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -39,7 +39,7 @@
             <a class="nav-link text-dark" href="/MoviesToSee">Movies to See</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" href="/Users">Manage Users</a>
+            <a class="nav-link text-dark active" href="/Users">Manage Users</a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" href="/Roles">Manage Roles</a>
@@ -53,44 +53,54 @@
         <main role="main" class="pb-3">
             
 
-<form method="post" action="/Users/UpdateUser">
-    <table class="table table-hover table-responsive">
-        <thead>
-        <tr>
-            <th scope="col">Role</th>
-            <th class="text-center" scope="col">Assigned</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Administrator</td>
-                <td class="text-center">
-                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Roles_0__Assigned" name="Roles[0].Assigned" value="true" />
-                    <input type="hidden" id="Roles_0__RoleName" name="Roles[0].RoleName" value="Administrator" />
-                </td>
-            </tr>
-            <tr>
-                <td>Privileged User</td>
-                <td class="text-center">
-                    <input type="checkbox" data-val="true" data-val-required="The Assigned field is required." id="Roles_1__Assigned" name="Roles[1].Assigned" value="true" />
-                    <input type="hidden" id="Roles_1__RoleName" name="Roles[1].RoleName" value="Privileged User" />
-                </td>
-            </tr>
-            <tr>
-                <td>Limited User</td>
-                <td class="text-center">
-                    <input type="checkbox" checked="checked" data-val="true" data-val-required="The Assigned field is required." id="Roles_2__Assigned" name="Roles[2].Assigned" value="true" />
-                    <input type="hidden" id="Roles_2__RoleName" name="Roles[2].RoleName" value="Limited User" />
-                </td>
-            </tr>
-        </tbody>
-    </table>
 
-    <input type="hidden" id="UserId" name="UserId" value="5eb7eb9f1fdada19f4eb59b1" />
+    <div class="alert alert-success" role="alert">
+        The user was updated successfully.
+    </div>
 
-    <button class="btn btn-primary" type="submit">Update</button>
-    <a class="btn btn-secondary" href="/Users">Cancel</a>
-<input name="__RequestVerificationToken" type="hidden" value="Some AFT Value" /><input name="Roles[0].Assigned" type="hidden" value="false" /><input name="Roles[1].Assigned" type="hidden" value="false" /><input name="Roles[2].Assigned" type="hidden" value="false" /></form>
+
+<ul class="list-group">
+        <li class="list-group-item">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        SomeAdministrator@test.com
+                    </div>
+                    <div class="col-auto container">
+                        <div class="row">
+                            <div class="col">
+                                <a class="btn-link" href="/Users/EditUser/5eb7eb9e1fdada19f4eb59b0">Edit</a>
+                            </div>
+                            <div class="col">
+                                <a class="btn-link disabled" href="/Users/ConfirmUserDeletion/5eb7eb9e1fdada19f4eb59b0">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        SomeLimitedUser@test.com
+                    </div>
+                    <div class="col-auto container">
+                        <div class="row">
+                            <div class="col">
+                                <a class="btn-link" href="/Users/EditUser/5eb7eb9f1fdada19f4eb59b1">Edit</a>
+                            </div>
+                            <div class="col">
+                                <a class="btn-link" href="/Users/ConfirmUserDeletion/5eb7eb9f1fdada19f4eb59b1">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+</ul>
+
+<a class="btn btn-primary mt-3" href="/Users/RegisterUser">Add User</a>
 
         </main>
     </div>
