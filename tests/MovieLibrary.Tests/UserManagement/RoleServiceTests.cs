@@ -3,10 +3,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using AspNetCore.Identity.Mongo.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MongoDB.Bson;
 using Moq;
 using Moq.AutoMock;
 using MovieLibrary.Authorization;
@@ -38,17 +36,17 @@ namespace MovieLibrary.Tests.UserManagement
 				"Permission #4",
 			};
 
-			var role = new MongoRole();
+			var role = new IdentityRole();
 
 			var mocker = new AutoMocker();
 
-			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			var roleManagerMock = new Mock<IRoleManager<IdentityRole, string>>();
 			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
 			roleManagerMock.Setup(x => x.GetClaimsAsync(role)).ReturnsAsync(ToClaims(oldPermissions));
-			roleManagerMock.Setup(x => x.AddClaimAsync(It.IsAny<MongoRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Success);
+			roleManagerMock.Setup(x => x.AddClaimAsync(It.IsAny<IdentityRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(roleManagerMock);
 
-			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<RoleService<IdentityRole, string>>();
 
 			// Act
 
@@ -80,17 +78,17 @@ namespace MovieLibrary.Tests.UserManagement
 				"Permission #4",
 			};
 
-			var role = new MongoRole();
+			var role = new IdentityRole();
 
 			var mocker = new AutoMocker();
 
-			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			var roleManagerMock = new Mock<IRoleManager<IdentityRole, string>>();
 			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
 			roleManagerMock.Setup(x => x.GetClaimsAsync(role)).ReturnsAsync(ToClaims(oldPermissions));
-			roleManagerMock.Setup(x => x.AddClaimAsync(It.IsAny<MongoRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Failed());
+			roleManagerMock.Setup(x => x.AddClaimAsync(It.IsAny<IdentityRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Failed());
 			mocker.Use(roleManagerMock);
 
-			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<RoleService<IdentityRole, string>>();
 
 			// Act
 
@@ -118,16 +116,16 @@ namespace MovieLibrary.Tests.UserManagement
 				"Permission #3",
 			};
 
-			var role = new MongoRole();
+			var role = new IdentityRole();
 
 			var mocker = new AutoMocker();
 
-			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			var roleManagerMock = new Mock<IRoleManager<IdentityRole, string>>();
 			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
 			roleManagerMock.Setup(x => x.GetClaimsAsync(role)).ReturnsAsync(ToClaims(oldPermissions));
 			mocker.Use(roleManagerMock);
 
-			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<RoleService<IdentityRole, string>>();
 
 			// Act
 
@@ -135,7 +133,7 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Assert
 
-			roleManagerMock.Verify(x => x.AddClaimAsync(It.IsAny<MongoRole>(), It.IsAny<Claim>()), Times.Never);
+			roleManagerMock.Verify(x => x.AddClaimAsync(It.IsAny<IdentityRole>(), It.IsAny<Claim>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -157,17 +155,17 @@ namespace MovieLibrary.Tests.UserManagement
 				"Permission #3",
 			};
 
-			var role = new MongoRole();
+			var role = new IdentityRole();
 
 			var mocker = new AutoMocker();
 
-			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			var roleManagerMock = new Mock<IRoleManager<IdentityRole, string>>();
 			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
 			roleManagerMock.Setup(x => x.GetClaimsAsync(role)).ReturnsAsync(ToClaims(oldPermissions));
-			roleManagerMock.Setup(x => x.RemoveClaimAsync(It.IsAny<MongoRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Success);
+			roleManagerMock.Setup(x => x.RemoveClaimAsync(It.IsAny<IdentityRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(roleManagerMock);
 
-			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<RoleService<IdentityRole, string>>();
 
 			// Act
 
@@ -199,17 +197,17 @@ namespace MovieLibrary.Tests.UserManagement
 				"Permission #3",
 			};
 
-			var role = new MongoRole();
+			var role = new IdentityRole();
 
 			var mocker = new AutoMocker();
 
-			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			var roleManagerMock = new Mock<IRoleManager<IdentityRole, string>>();
 			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
 			roleManagerMock.Setup(x => x.GetClaimsAsync(role)).ReturnsAsync(ToClaims(oldPermissions));
-			roleManagerMock.Setup(x => x.RemoveClaimAsync(It.IsAny<MongoRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Failed());
+			roleManagerMock.Setup(x => x.RemoveClaimAsync(It.IsAny<IdentityRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Failed());
 			mocker.Use(roleManagerMock);
 
-			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<RoleService<IdentityRole, string>>();
 
 			// Act
 
@@ -237,16 +235,16 @@ namespace MovieLibrary.Tests.UserManagement
 				"Permission #3",
 			};
 
-			var role = new MongoRole();
+			var role = new IdentityRole();
 
 			var mocker = new AutoMocker();
 
-			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			var roleManagerMock = new Mock<IRoleManager<IdentityRole, string>>();
 			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
 			roleManagerMock.Setup(x => x.GetClaimsAsync(role)).ReturnsAsync(ToClaims(oldPermissions));
 			mocker.Use(roleManagerMock);
 
-			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<RoleService<IdentityRole, string>>();
 
 			// Act
 
@@ -254,7 +252,7 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Assert
 
-			roleManagerMock.Verify(x => x.RemoveClaimAsync(It.IsAny<MongoRole>(), It.IsAny<Claim>()), Times.Never);
+			roleManagerMock.Verify(x => x.RemoveClaimAsync(It.IsAny<IdentityRole>(), It.IsAny<Claim>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -274,17 +272,17 @@ namespace MovieLibrary.Tests.UserManagement
 				"Permission #2",
 			};
 
-			var role = new MongoRole(SecurityConstants.AdministratorRole);
+			var role = new IdentityRole(SecurityConstants.AdministratorRole);
 
 			var mocker = new AutoMocker();
 
-			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			var roleManagerMock = new Mock<IRoleManager<IdentityRole, string>>();
 			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
 			roleManagerMock.Setup(x => x.GetClaimsAsync(role)).ReturnsAsync(ToClaims(oldPermissions));
-			roleManagerMock.Setup(x => x.AddClaimAsync(It.IsAny<MongoRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Success);
+			roleManagerMock.Setup(x => x.AddClaimAsync(It.IsAny<IdentityRole>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(roleManagerMock);
 
-			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<RoleService<IdentityRole, string>>();
 
 			// Act
 
@@ -300,16 +298,16 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var role = new MongoRole(SecurityConstants.AdministratorRole);
+			var role = new IdentityRole(SecurityConstants.AdministratorRole);
 
 			var mocker = new AutoMocker();
 
-			var roleManagerMock = new Mock<IRoleManager<MongoRole, ObjectId>>();
+			var roleManagerMock = new Mock<IRoleManager<IdentityRole, string>>();
 			roleManagerMock.Setup(x => x.FindByIdAsync("SomeRoleId")).ReturnsAsync(role);
-			roleManagerMock.Setup(x => x.DeleteAsync(It.IsAny<MongoRole>())).ReturnsAsync(IdentityResult.Success);
+			roleManagerMock.Setup(x => x.DeleteAsync(It.IsAny<IdentityRole>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(roleManagerMock);
 
-			var target = mocker.CreateInstance<RoleService<MongoRole, ObjectId>>();
+			var target = mocker.CreateInstance<RoleService<IdentityRole, string>>();
 
 			// Act
 

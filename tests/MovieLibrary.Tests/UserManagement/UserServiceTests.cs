@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AspNetCore.Identity.Mongo.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MongoDB.Bson;
 using Moq;
 using Moq.AutoMock;
 using MovieLibrary.Authorization;
@@ -24,32 +22,32 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var defaultAdmin = new MongoUser
+			var defaultAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "Id1",
 				UserName = SecurityConstants.DefaultAdministratorEmail,
 			};
 
-			var customAdmin = new MongoUser
+			var customAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb7022731bed923601da956"),
+				Id = "Id2",
 				UserName = "Custom Admin",
 			};
 
-			var limitedUser = new MongoUser
+			var limitedUser = new IdentityUser
 			{
-				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				Id = "Id3",
 				UserName = "Limited User",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.Users).Returns(new[] { defaultAdmin, customAdmin, limitedUser }.AsQueryable());
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { defaultAdmin, customAdmin });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -66,26 +64,26 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var customAdmin = new MongoUser
+			var customAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb7022731bed923601da956"),
+				Id = "Id1",
 				UserName = "Custom Admin",
 			};
 
-			var limitedUser = new MongoUser
+			var limitedUser = new IdentityUser
 			{
-				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				Id = "Id2",
 				UserName = "Limited User",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.Users).Returns(new[] { customAdmin, limitedUser }.AsQueryable());
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { customAdmin });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -101,26 +99,26 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var singleAdmin = new MongoUser
+			var singleAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "Id1",
 				UserName = SecurityConstants.DefaultAdministratorEmail,
 			};
 
-			var limitedUser = new MongoUser
+			var limitedUser = new IdentityUser
 			{
-				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				Id = "Id2",
 				UserName = "Limited User",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.Users).Returns(new[] { singleAdmin, limitedUser }.AsQueryable());
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { singleAdmin });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -140,26 +138,26 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var singleAdmin = new MongoUser
+			var singleAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "Id1",
 				UserName = "Custom Admin",
 			};
 
-			var limitedUser = new MongoUser
+			var limitedUser = new IdentityUser
 			{
-				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				Id = "Id2",
 				UserName = "Limited User",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.Users).Returns(new[] { singleAdmin, limitedUser }.AsQueryable());
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { singleAdmin });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -179,26 +177,26 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var defaultAdmin = new MongoUser
+			var defaultAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				Id = "Id1",
 				UserName = SecurityConstants.DefaultAdministratorEmail,
 			};
 
-			var customAdmin = new MongoUser
+			var customAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "Id2",
 				UserName = "Custom Admin",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.Users).Returns(new[] { defaultAdmin, customAdmin }.AsQueryable());
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { defaultAdmin, customAdmin });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -215,25 +213,25 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var singleAdmin = new MongoUser
+			var singleAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "SomeId",
 				UserName = SecurityConstants.DefaultAdministratorEmail,
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
-			userManagerMock.Setup(x => x.FindByIdAsync("5eb69e3e3233d47930edf61b")).ReturnsAsync(singleAdmin);
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("SomeId")).ReturnsAsync(singleAdmin);
 			userManagerMock.Setup(x => x.GetRolesAsync(singleAdmin)).ReturnsAsync(new[] { SecurityConstants.AdministratorRole, "Another Role" });
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { singleAdmin });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
-			var roles = (await target.GetUserRoles("5eb69e3e3233d47930edf61b", CancellationToken.None)).ToList();
+			var roles = (await target.GetUserRoles("SomeId", CancellationToken.None)).ToList();
 
 			// Assert
 
@@ -251,25 +249,25 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var singleAdmin = new MongoUser
+			var singleAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "SomeId",
 				UserName = "Custom Admin",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
-			userManagerMock.Setup(x => x.FindByIdAsync("5eb69e3e3233d47930edf61b")).ReturnsAsync(singleAdmin);
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("SomeId")).ReturnsAsync(singleAdmin);
 			userManagerMock.Setup(x => x.GetRolesAsync(singleAdmin)).ReturnsAsync(new[] { SecurityConstants.AdministratorRole, "Another Role" });
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { singleAdmin });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
-			var roles = (await target.GetUserRoles("5eb69e3e3233d47930edf61b", CancellationToken.None)).ToList();
+			var roles = (await target.GetUserRoles("SomeId", CancellationToken.None)).ToList();
 
 			// Assert
 
@@ -287,31 +285,31 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var defaultAdmin = new MongoUser
+			var defaultAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				Id = "Id1",
 				UserName = SecurityConstants.DefaultAdministratorEmail,
 			};
 
-			var customAdmin = new MongoUser
+			var customAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "Id2",
 				UserName = "Custom Admin",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
-			userManagerMock.Setup(x => x.FindByIdAsync("5eb69e3e3233d47930edf61b")).ReturnsAsync(customAdmin);
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("Id2")).ReturnsAsync(customAdmin);
 			userManagerMock.Setup(x => x.GetRolesAsync(customAdmin)).ReturnsAsync(new[] { SecurityConstants.AdministratorRole, "Another Role" });
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { defaultAdmin, customAdmin });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
-			var roles = (await target.GetUserRoles("5eb69e3e3233d47930edf61b", CancellationToken.None)).ToList();
+			var roles = (await target.GetUserRoles("Id2", CancellationToken.None)).ToList();
 
 			// Assert
 
@@ -329,31 +327,31 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var customAdmin = new MongoUser
+			var customAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "Id1",
 				UserName = "Custom Admin",
 			};
 
-			var user = new MongoUser
+			var user = new IdentityUser
 			{
-				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				Id = "Id2",
 				UserName = "Limited User",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
-			userManagerMock.Setup(x => x.FindByIdAsync("5eb705a69c615e5ca0f29a8b")).ReturnsAsync(user);
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("Id2")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(new[] { "Role #1", "Role #2" });
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { customAdmin });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
-			var roles = (await target.GetUserRoles("5eb705a69c615e5ca0f29a8b", CancellationToken.None)).ToList();
+			var roles = (await target.GetUserRoles("Id2", CancellationToken.None)).ToList();
 
 			// Assert
 
@@ -385,17 +383,17 @@ namespace MovieLibrary.Tests.UserManagement
 				"Role #4",
 			};
 
-			var user = new MongoUser();
+			var user = new IdentityUser();
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(oldRoles);
-			userManagerMock.Setup(x => x.AddToRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
+			userManagerMock.Setup(x => x.AddToRolesAsync(It.IsAny<IdentityUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -430,17 +428,17 @@ namespace MovieLibrary.Tests.UserManagement
 				"Role #4",
 			};
 
-			var user = new MongoUser();
+			var user = new IdentityUser();
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(oldRoles);
-			userManagerMock.Setup(x => x.AddToRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Failed());
+			userManagerMock.Setup(x => x.AddToRolesAsync(It.IsAny<IdentityUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Failed());
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -468,16 +466,16 @@ namespace MovieLibrary.Tests.UserManagement
 				"Role #3",
 			};
 
-			var user = new MongoUser();
+			var user = new IdentityUser();
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(oldRoles);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -485,7 +483,7 @@ namespace MovieLibrary.Tests.UserManagement
 
 			// Assert
 
-			userManagerMock.Verify(x => x.AddToRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>()), Times.Never);
+			userManagerMock.Verify(x => x.AddToRolesAsync(It.IsAny<IdentityUser>(), It.IsAny<IEnumerable<string>>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -507,17 +505,17 @@ namespace MovieLibrary.Tests.UserManagement
 				"Role #3",
 			};
 
-			var user = new MongoUser();
+			var user = new IdentityUser();
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(oldRoles);
-			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
+			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<IdentityUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -552,17 +550,17 @@ namespace MovieLibrary.Tests.UserManagement
 				"Role #3",
 			};
 
-			var user = new MongoUser();
+			var user = new IdentityUser();
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(oldRoles);
-			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Failed());
+			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<IdentityUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Failed());
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -590,16 +588,16 @@ namespace MovieLibrary.Tests.UserManagement
 				"Role #3",
 			};
 
-			var user = new MongoUser();
+			var user = new IdentityUser();
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(oldRoles);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -627,16 +625,16 @@ namespace MovieLibrary.Tests.UserManagement
 				"Role #3",
 			};
 
-			var user = new MongoUser(SecurityConstants.DefaultAdministratorEmail);
+			var user = new IdentityUser(SecurityConstants.DefaultAdministratorEmail);
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(oldRoles);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -663,18 +661,18 @@ namespace MovieLibrary.Tests.UserManagement
 				"Custom Role",
 			};
 
-			var admin = new MongoUser("Custom Admin");
+			var admin = new IdentityUser("Custom Admin");
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(admin);
 			userManagerMock.Setup(x => x.GetRolesAsync(admin)).ReturnsAsync(oldRoles);
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { admin });
-			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
+			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<IdentityUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -701,22 +699,22 @@ namespace MovieLibrary.Tests.UserManagement
 				SecurityConstants.AdministratorRole,
 			};
 
-			var admin = new MongoUser
+			var admin = new IdentityUser
 			{
-				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				Id = "SomeUserId",
 				UserName = "Custom Admin",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
 			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(admin);
 			userManagerMock.Setup(x => x.GetRolesAsync(admin)).ReturnsAsync(oldRoles);
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { admin });
-			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
+			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<IdentityUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
@@ -743,32 +741,32 @@ namespace MovieLibrary.Tests.UserManagement
 				"Custom Role",
 			};
 
-			var admin = new MongoUser
+			var admin = new IdentityUser
 			{
-				Id = new ObjectId("5eb705a69c615e5ca0f29a8b"),
+				Id = "Id1",
 				UserName = "Custom Admin",
 			};
 
-			var anotherAdmin = new MongoUser
+			var anotherAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "Id2",
 				UserName = "Another Admin",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
-			userManagerMock.Setup(x => x.FindByIdAsync("SomeUserId")).ReturnsAsync(admin);
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("Id1")).ReturnsAsync(admin);
 			userManagerMock.Setup(x => x.GetRolesAsync(admin)).ReturnsAsync(oldRoles);
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { admin, anotherAdmin });
-			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<MongoUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
+			userManagerMock.Setup(x => x.RemoveFromRolesAsync(It.IsAny<IdentityUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
-			await target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
+			await target.AssignUserRoles("Id1", newRoles, CancellationToken.None);
 
 			// Assert
 
@@ -780,24 +778,24 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var user = new MongoUser
+			var user = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
+				Id = "SomeId",
 				UserName = "Some Admin",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
-			userManagerMock.Setup(x => x.FindByIdAsync("5eb69e3e3233d47930edf61b")).ReturnsAsync(user);
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("SomeId")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { user });
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
-			Task Call() => target.DeleteUser("5eb69e3e3233d47930edf61b",  CancellationToken.None);
+			Task Call() => target.DeleteUser("SomeId",  CancellationToken.None);
 
 			// Assert
 
@@ -809,35 +807,35 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var user = new MongoUser
+			var admin1 = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
-				UserName = "Some Admin",
+				Id = "Id1",
+				UserName = "Admin #1",
 			};
 
-			var anotherAdmin = new MongoUser
+			var admin2 = new IdentityUser
 			{
-				Id = new ObjectId("5eb7022731bed923601da956"),
-				UserName = "Another Admin",
+				Id = "Id2",
+				UserName = "Admin #2",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
-			userManagerMock.Setup(x => x.FindByIdAsync("5eb69e3e3233d47930edf61b")).ReturnsAsync(user);
-			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { user, anotherAdmin });
-			userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<MongoUser>())).ReturnsAsync(IdentityResult.Success);
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("Id1")).ReturnsAsync(admin1);
+			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { admin1, admin2 });
+			userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<IdentityUser>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
-			await target.DeleteUser("5eb69e3e3233d47930edf61b", CancellationToken.None);
+			await target.DeleteUser("Id1", CancellationToken.None);
 
 			// Assert
 
-			userManagerMock.Verify(x => x.DeleteAsync(user), Times.Once);
+			userManagerMock.Verify(x => x.DeleteAsync(admin1), Times.Once);
 		}
 
 		[TestMethod]
@@ -845,31 +843,31 @@ namespace MovieLibrary.Tests.UserManagement
 		{
 			// Arrange
 
-			var user = new MongoUser
+			var user = new IdentityUser
 			{
-				Id = new ObjectId("5eb69e3e3233d47930edf61b"),
-				UserName = "Some Admin",
+				Id = "Id1",
+				UserName = "Some User",
 			};
 
-			var singleAdmin = new MongoUser
+			var singleAdmin = new IdentityUser
 			{
-				Id = new ObjectId("5eb7022731bed923601da956"),
+				Id = "Id2",
 				UserName = "Single Admin",
 			};
 
 			var mocker = new AutoMocker();
 
-			var userManagerMock = new Mock<IUserManager<MongoUser, ObjectId>>();
-			userManagerMock.Setup(x => x.FindByIdAsync("5eb69e3e3233d47930edf61b")).ReturnsAsync(user);
+			var userManagerMock = new Mock<IUserManager<IdentityUser, string>>();
+			userManagerMock.Setup(x => x.FindByIdAsync("Id1")).ReturnsAsync(user);
 			userManagerMock.Setup(x => x.GetUsersInRoleAsync(SecurityConstants.AdministratorRole)).ReturnsAsync(new[] { singleAdmin });
-			userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<MongoUser>())).ReturnsAsync(IdentityResult.Success);
+			userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<IdentityUser>())).ReturnsAsync(IdentityResult.Success);
 			mocker.Use(userManagerMock);
 
-			var target = mocker.CreateInstance<UserService<MongoUser, ObjectId>>();
+			var target = mocker.CreateInstance<UserService<IdentityUser, string>>();
 
 			// Act
 
-			await target.DeleteUser("5eb69e3e3233d47930edf61b", CancellationToken.None);
+			await target.DeleteUser("Id1", CancellationToken.None);
 
 			// Assert
 
