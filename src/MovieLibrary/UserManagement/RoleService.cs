@@ -61,7 +61,7 @@ namespace MovieLibrary.UserManagement
 
 		private static bool RoleIsReadOnly(TRole role)
 		{
-			return String.Equals(role.Name, SecurityConstants.AdministratorRole, StringComparison.Ordinal);
+			return SecurityConstants.IsAdministratorRole(role.Name);
 		}
 
 		public async Task<RoleModel> GetRole(string roleId, CancellationToken cancellationToken)

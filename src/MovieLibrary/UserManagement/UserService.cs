@@ -88,7 +88,7 @@ namespace MovieLibrary.UserManagement
 			return roles.Select(role => new UserRoleModel
 				{
 					RoleName = role,
-					ReadOnly = String.Equals(role, SecurityConstants.AdministratorRole, StringComparison.Ordinal) && adminRoleIsReadOnly,
+					ReadOnly = SecurityConstants.IsAdministratorRole(role) && adminRoleIsReadOnly,
 				})
 				.ToList();
 		}
@@ -165,7 +165,7 @@ namespace MovieLibrary.UserManagement
 
 		private static bool UserCanBeEdited(TUser user)
 		{
-			return !String.Equals(user.UserName, SecurityConstants.DefaultAdministratorEmail, StringComparison.Ordinal);
+			return !SecurityConstants.IsDefaultAdministrator(user.UserName);
 		}
 
 		private static bool UserCanBeDeleted(TUser user, HashSet<TKey> adminUsers)

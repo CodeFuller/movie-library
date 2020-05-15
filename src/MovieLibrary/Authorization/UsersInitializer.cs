@@ -34,7 +34,7 @@ namespace MovieLibrary.Authorization
 		private async Task EnsureAdministratorRole(CancellationToken cancellationToken)
 		{
 			var administratorRole = await roleService.GetAllRoles(cancellationToken)
-				.Where(r => String.Equals(r.RoleName, SecurityConstants.AdministratorRole, StringComparison.Ordinal))
+				.Where(r => SecurityConstants.IsAdministratorRole(r.RoleName))
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (administratorRole != null)
@@ -53,7 +53,7 @@ namespace MovieLibrary.Authorization
 			{
 				var userRoles = await userService.GetUserRoles(user.Id, cancellationToken);
 
-				if (userRoles.Any(role => String.Equals(role.RoleName, SecurityConstants.AdministratorRole, StringComparison.Ordinal)))
+				if (userRoles.Any(role => SecurityConstants.IsAdministratorRole(role.RoleName)))
 				{
 					return;
 				}

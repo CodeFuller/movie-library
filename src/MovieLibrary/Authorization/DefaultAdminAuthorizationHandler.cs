@@ -27,7 +27,7 @@ namespace MovieLibrary.Authorization
 				return Task.CompletedTask;
 			}
 
-			if (!String.Equals(user.Identity.Name, SecurityConstants.DefaultAdministratorEmail, StringComparison.Ordinal))
+			if (!SecurityConstants.IsDefaultAdministrator(user.Identity.Name))
 			{
 				return Task.CompletedTask;
 			}
