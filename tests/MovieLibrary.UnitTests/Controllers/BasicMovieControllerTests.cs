@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.Controllers;
 
-namespace MovieLibrary.Tests.Controllers
+namespace MovieLibrary.UnitTests.Controllers
 {
 	[TestClass]
 	public class BasicMovieControllerTests

@@ -12,7 +12,7 @@ using MovieLibrary.Exceptions;
 using MovieLibrary.UserManagement;
 using MovieLibrary.UserManagement.Interfaces;
 
-namespace MovieLibrary.Tests.UserManagement
+namespace MovieLibrary.UnitTests.UserManagement
 {
 	[TestClass]
 	public class UserServiceTests

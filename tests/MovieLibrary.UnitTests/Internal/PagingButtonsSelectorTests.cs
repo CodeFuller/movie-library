@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.Internal;
 
-namespace MovieLibrary.Tests.Internal
+namespace MovieLibrary.UnitTests.Internal
 {
 	[TestClass]
 	public class PagingButtonsSelectorTests
