@@ -16,7 +16,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 	public class RolesControllerTests
 	{
 		[TestMethod]
-		public async Task Index_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task Index_ForPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -32,7 +32,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task Index_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task Index_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -48,7 +48,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task GetCreateRole_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task GetCreateRole_ForPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -64,7 +64,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task GetCreateRole_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task GetCreateRole_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -80,7 +80,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task PostCreateRole_ForAdministratorAccount_CreatesRoleCorrectly()
+		public async Task PostCreateRole_ForPrivilegedUser_CreatesRoleCorrectly()
 		{
 			// Arrange
 
@@ -123,7 +123,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task PostCreateRole_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task PostCreateRole_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -163,7 +163,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task EditRole_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task EditRole_ForPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -179,7 +179,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task EditRole_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task EditRole_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -195,7 +195,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task UpdateRole_ForAdministratorAccount_UpdatesRoleCorrectly()
+		public async Task UpdateRole_ForPrivilegedUser_UpdatesRoleCorrectly()
 		{
 			// Arrange
 
@@ -247,7 +247,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task UpdateRole_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task UpdateRole_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -287,7 +287,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task ConfirmRoleDeletion_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task ConfirmRoleDeletion_ForPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -303,7 +303,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task ConfirmRoleDeletion_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task ConfirmRoleDeletion_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -319,7 +319,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task DeleteRole_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task DeleteRole_ForPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -343,7 +343,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task DeleteRole_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task DeleteRole_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 

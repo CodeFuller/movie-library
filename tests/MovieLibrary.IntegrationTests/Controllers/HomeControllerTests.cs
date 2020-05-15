@@ -27,7 +27,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task Index_ForAdministratorAccount_RedirectsToPageWithMoviesToSee()
+		public async Task Index_ForPrivilegedUser_RedirectsToPageWithMoviesToSee()
 		{
 			// Arrange
 
@@ -43,7 +43,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task Index_ForUserAccount_RedirectsToPageWithMoviesToSee()
+		public async Task Index_ForLimitedUser_RedirectsToPageWithMoviesToSee()
 		{
 			// Arrange
 

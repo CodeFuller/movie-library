@@ -16,7 +16,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 	public class UsersControllerTests
 	{
 		[TestMethod]
-		public async Task Index_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task Index_ForPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -32,7 +32,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task Index_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task Index_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -48,7 +48,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task GetRegisterUser_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task GetRegisterUser_ForPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -64,7 +64,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task GetRegisterUser_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task GetRegisterUser_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -80,7 +80,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task PostRegisterUser_ForAdministratorAccount_RegistersUserCorrectly()
+		public async Task PostRegisterUser_ForPrivilegedUser_RegistersUserCorrectly()
 		{
 			// Arrange
 
@@ -106,7 +106,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task PostRegisterUser_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task PostRegisterUser_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -129,7 +129,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task EditUser_OfLastAdministratorUnderAdministratorAccount_ReturnsCorrectPage()
+		public async Task EditUser_OfLastAdministratorUnderPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -145,7 +145,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task EditUser_OfNonAdministratorUnderAdministratorAccount_ReturnsCorrectPage()
+		public async Task EditUser_OfNonAdministratorUnderPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -161,7 +161,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task EditUser_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task EditUser_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -177,7 +177,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task UpdateUser_ForAdministratorAccount_UpdatesUserCorrectly()
+		public async Task UpdateUser_ForPrivilegedUser_UpdatesUserCorrectly()
 		{
 			// Arrange
 
@@ -216,7 +216,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task UpdateUser_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task UpdateUser_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -244,7 +244,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task ConfirmUserDeletion_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task ConfirmUserDeletion_ForPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -260,7 +260,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task ConfirmUserDeletion_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task ConfirmUserDeletion_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
@@ -276,7 +276,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task DeleteUser_ForAdministratorAccount_ReturnsCorrectPage()
+		public async Task DeleteUser_ForPrivilegedUser_ReturnsCorrectPage()
 		{
 			// Arrange
 
@@ -300,7 +300,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
-		public async Task DeleteUser_ForUserAccount_RedirectsToAccessDeniedPage()
+		public async Task DeleteUser_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
 
