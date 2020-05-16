@@ -24,14 +24,16 @@
 @if (User.HasPermission(ApplicationPermissions.MoviesToSee.Add))
 {
     <form method="post" asp-action="ConfirmMovieAdding">
-        <div asp-validation-summary="All"></div>
-        <div class="input-group">
-            <div class="input-group-append">
-                <input type="hidden" asp-for="Paging.CurrentPageNumber" />
-                <input class="form-control" asp-for="NewMovieToSee.MovieUri" placeholder="Movie URL" aria-label="Movie URL" size="40" />
-                <button class="btn btn-primary" type="submit">Add</button>
+        <div class="form-group">
+            <div><span asp-validation-for="NewMovieToSee.MovieUri" class="text-danger"></span></div>
+            <div class="input-group">
+                <div class="input-group-append">
+                    <input class="form-control" asp-for="NewMovieToSee.MovieUri" placeholder="Movie URL" aria-label="Movie URL" size="40" />
+                    <button class="btn btn-primary" type="submit">Add</button>
+                </div>
             </div>
         </div>
+        <input type="hidden" asp-for="Paging.CurrentPageNumber" />
     </form>
 }
 
