@@ -125,6 +125,27 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
+		public async Task ConfirmMovieAdding_ForInvalidModel_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", String.Empty),
+			});
+
+			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToGet/ConfirmMovieAdding"), formContent, CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
 		public async Task AddMovie_ForPrivilegedUserAndMovieWithAllInfoFilled_AddsMovieCorrectly()
 		{
 			// Arrange

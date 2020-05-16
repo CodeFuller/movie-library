@@ -123,6 +123,46 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
+		public async Task PostCreateRole_ForInvalidModel_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("Name", String.Empty),
+				new KeyValuePair<string, string>("Permissions[0].Assigned", "true"),
+				new KeyValuePair<string, string>("Permissions[0].PermissionName", "Permissions.MoviesToGet.Add"),
+				new KeyValuePair<string, string>("Permissions[1].Assigned", "true"),
+				new KeyValuePair<string, string>("Permissions[1].PermissionName", "Permissions.MoviesToGet.Read"),
+				new KeyValuePair<string, string>("Permissions[2].PermissionName", "Permissions.MoviesToGet.MoveToMoviesToSee"),
+				new KeyValuePair<string, string>("Permissions[3].PermissionName", "Permissions.MoviesToGet.Delete"),
+				new KeyValuePair<string, string>("Permissions[4].PermissionName", "Permissions.MoviesToSee.Add"),
+				new KeyValuePair<string, string>("Permissions[5].Assigned", "true"),
+				new KeyValuePair<string, string>("Permissions[5].PermissionName", "Permissions.MoviesToSee.Read"),
+				new KeyValuePair<string, string>("Permissions[6].PermissionName", "Permissions.MoviesToSee.MarkAsSeen"),
+				new KeyValuePair<string, string>("Permissions[7].PermissionName", "Permissions.MoviesToSee.Delete"),
+				new KeyValuePair<string, string>("Permissions[0].Assigned", "false"),
+				new KeyValuePair<string, string>("Permissions[1].Assigned", "false"),
+				new KeyValuePair<string, string>("Permissions[2].Assigned", "false"),
+				new KeyValuePair<string, string>("Permissions[3].Assigned", "false"),
+				new KeyValuePair<string, string>("Permissions[4].Assigned", "false"),
+				new KeyValuePair<string, string>("Permissions[5].Assigned", "false"),
+				new KeyValuePair<string, string>("Permissions[6].Assigned", "false"),
+				new KeyValuePair<string, string>("Permissions[7].Assigned", "false"),
+			});
+
+			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/Roles/CreateRole"), formContent, CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
 		public async Task PostCreateRole_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange

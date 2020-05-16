@@ -106,6 +106,29 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
+		public async Task PostRegisterUser_ForInvalidModel_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("Email", String.Empty),
+				new KeyValuePair<string, string>("Password", "Some Password"),
+				new KeyValuePair<string, string>("ConfirmPassword", "Another Password"),
+			});
+
+			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/Users/RegisterUser"), formContent, CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
 		public async Task PostRegisterUser_ForLimitedUser_RedirectsToAccessDeniedPage()
 		{
 			// Arrange
