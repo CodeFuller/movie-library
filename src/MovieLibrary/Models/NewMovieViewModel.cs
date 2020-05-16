@@ -5,7 +5,7 @@ namespace MovieLibrary.Models
 {
 	public class NewMovieViewModel
 	{
-		[Required]
+		[Required(ErrorMessage = "Please enter movie URL")]
 		public Uri MovieUri { get; set; }
 	}
 }
