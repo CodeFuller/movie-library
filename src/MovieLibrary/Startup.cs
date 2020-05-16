@@ -107,25 +107,17 @@ namespace MovieLibrary
 
 		private static void ConfigureRoutes(IEndpointRouteBuilder endpoints)
 		{
-			endpoints.MapControllerRoute(
-				name: "MoviesToGet",
-				pattern: "MoviesToGet",
-				defaults: new { controller = "MoviesToGet", action = "Index", pageNumber = 1, });
+			const string moviesControllerSegment = "{controller:regex(^MoviesToGet|MoviesToSee$)}";
 
 			endpoints.MapControllerRoute(
-				name: "MoviesToGetWithPage",
-				pattern: "MoviesToGet/page-{pageNumber:int}",
-				defaults: new { controller = "MoviesToGet", action = "Index", });
+				name: "MoviesFirstPage",
+				pattern: moviesControllerSegment,
+				defaults: new { action = "Index", pageNumber = 1, });
 
 			endpoints.MapControllerRoute(
-				name: "MoviesToSee",
-				pattern: "MoviesToSee",
-				defaults: new { controller = "MoviesToSee", action = "Index", pageNumber = 1, });
-
-			endpoints.MapControllerRoute(
-				name: "MoviesToSeeWithPage",
-				pattern: "MoviesToSee/page-{pageNumber:int}",
-				defaults: new { controller = "MoviesToSee", action = "Index", });
+				name: "MoviesSpecificPage",
+				pattern: $"{moviesControllerSegment}/page-{{pageNumber:int}}",
+				defaults: new { action = "Index", });
 
 			endpoints.MapControllerRoute(
 				name: "default",
