@@ -51,7 +51,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> RegisterUser(NewUserViewModel model, CancellationToken cancellationToken)
+		public async Task<IActionResult> RegisterUser([FromForm] NewUserViewModel model, CancellationToken cancellationToken)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -72,7 +72,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> EditUser(string id, CancellationToken cancellationToken)
+		public async Task<IActionResult> EditUser([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			return await EditUserView(id, cancellationToken);
 		}
@@ -97,7 +97,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> ConfirmUserDeletion(string id, CancellationToken cancellationToken)
+		public async Task<IActionResult> ConfirmUserDeletion([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 
@@ -108,7 +108,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> DeleteUser(string id, CancellationToken cancellationToken)
+		public async Task<IActionResult> DeleteUser([FromForm] string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 
