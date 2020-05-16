@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MongoDB.Bson;
 using MovieLibrary.IntegrationTests.Internal.Seeding;
 using MovieLibrary.Internal;
@@ -42,6 +43,9 @@ namespace MovieLibrary.IntegrationTests.Internal
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
 		{
 			base.ConfigureWebHost(builder);
+
+			// This is required for testing of error pages.
+			builder.UseEnvironment(Environments.Production);
 
 			builder.ConfigureAppConfiguration((context, configBuilder) =>
 			{

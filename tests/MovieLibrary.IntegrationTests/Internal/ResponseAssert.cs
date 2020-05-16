@@ -14,9 +14,10 @@ namespace MovieLibrary.IntegrationTests.Internal
 {
 	internal static class ResponseAssert
 	{
-		public static async Task VerifyPageLoaded(HttpResponseMessage response, [CallerFilePath] string callerFilePath = null, [CallerMemberName] string snapshotName = null)
+		public static async Task VerifyPageLoaded(HttpResponseMessage response, HttpStatusCode expectedStatusCode = HttpStatusCode.OK,
+			[CallerFilePath] string callerFilePath = null, [CallerMemberName] string snapshotName = null)
 		{
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.AreEqual(expectedStatusCode, response.StatusCode);
 
 			var content = await response.Content.ReadAsStringAsync();
 			content = UnifyPageContent(content);
@@ -25,7 +26,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 			if (File.Exists(snapshotFileName))
 			{
-				var snapshotContent = File.ReadAllText(snapshotFileName);
+				var snapshotContent = await File.ReadAllTextAsync(snapshotFileName);
 				ComparePageContent(content, snapshotContent);
 			}
 			else
