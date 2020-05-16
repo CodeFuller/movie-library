@@ -5,7 +5,7 @@ using MovieLibrary.UserManagement.Interfaces;
 
 namespace MovieLibrary.UserManagement
 {
-	internal static class ServiceCollectionExtensions
+	internal static class UserManagementServiceCollectionExtensions
 	{
 		public static IServiceCollection AddUserManagement(this IServiceCollection services)
 		{

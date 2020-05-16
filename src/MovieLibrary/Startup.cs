@@ -48,26 +48,15 @@ namespace MovieLibrary
 
 			services.AddBusinessLogic();
 
-			var connectionString = Configuration.GetConnectionString("movieLibraryDatabase");
-			if (String.IsNullOrEmpty(connectionString))
-			{
-				throw new InvalidOperationException("Connection string 'movieLibraryDatabase' is not set");
-			}
-
+			var connectionString = GetConnectionString();
 			services.AddMongoDbDal(connectionString);
+			services.AddIdentityMongoDbProvider<MongoUser>(mongoIdentityOptions => mongoIdentityOptions.ConnectionString = connectionString).AddDefaultUI();
 
-			services.AddIdentityMongoDbProvider<MongoUser>(mongoIdentityOptions => mongoIdentityOptions.ConnectionString = connectionString)
-				.AddDefaultUI();
-
-			services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
-			services.AddScoped<IAuthorizationHandler, DefaultAdminAuthorizationHandler>();
-			services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+			services.AddPermissionBasedAuthorization();
+			services.AddUserManagement();
 
 			services.AddSingleton<IApplicationBootstrapper, ApplicationBootstrapper>();
-			services.AddScoped<IApplicationInitializer, UsersInitializer>();
 			services.AddScoped<ICompositeApplicationInitializer, CompositeApplicationInitializer>();
-
-			services.AddUserManagement();
 
 			services.AddHsts(options =>
 			{
@@ -103,6 +92,17 @@ namespace MovieLibrary
 			app.UseAuthorization();
 
 			app.UseEndpoints(ConfigureRoutes);
+		}
+
+		private string GetConnectionString()
+		{
+			var connectionString = Configuration.GetConnectionString("movieLibraryDatabase");
+			if (String.IsNullOrEmpty(connectionString))
+			{
+				throw new InvalidOperationException("Connection string 'movieLibraryDatabase' is not set");
+			}
+
+			return connectionString;
 		}
 
 		private static void ConfigureRoutes(IEndpointRouteBuilder endpoints)
