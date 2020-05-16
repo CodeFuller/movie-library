@@ -30,7 +30,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Index(CancellationToken cancellationToken)
+		public async Task<ViewResult> Index(CancellationToken cancellationToken)
 		{
 			var users = await userService.GetAllUsers(cancellationToken).ToListAsync(cancellationToken);
 
@@ -45,7 +45,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult RegisterUser()
+		public ViewResult RegisterUser()
 		{
 			return View();
 		}
@@ -72,9 +72,9 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> EditUser([FromRoute] string id, CancellationToken cancellationToken)
+		public Task<ViewResult> EditUser([FromRoute] string id, CancellationToken cancellationToken)
 		{
-			return await EditUserView(id, cancellationToken);
+			return EditUserView(id, cancellationToken);
 		}
 
 		[HttpPost]
@@ -97,7 +97,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> ConfirmUserDeletion([FromRoute] string id, CancellationToken cancellationToken)
+		public async Task<ViewResult> ConfirmUserDeletion([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 
@@ -108,7 +108,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> DeleteUser([FromForm] string id, CancellationToken cancellationToken)
+		public async Task<RedirectToActionResult> DeleteUser([FromForm] string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 
@@ -119,7 +119,7 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
-		private async Task<IActionResult> EditUserView(string userId, CancellationToken cancellationToken)
+		private async Task<ViewResult> EditUserView(string userId, CancellationToken cancellationToken)
 		{
 			_ = userId ?? throw new ArgumentNullException(nameof(userId));
 

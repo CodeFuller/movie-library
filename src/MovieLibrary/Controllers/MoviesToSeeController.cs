@@ -57,7 +57,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(ApplicationPermissions.MoviesToSee.Add)]
-		public async Task<IActionResult> AddMovie([FromForm] InputMovieInfoViewModel model, CancellationToken cancellationToken)
+		public async Task<RedirectToActionResult> AddMovie([FromForm] InputMovieInfoViewModel model, CancellationToken cancellationToken)
 		{
 			var movieInfo = model.ToMovieInfo();
 			await moviesToSeeService.AddMovie(movieInfo, cancellationToken);
@@ -69,7 +69,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpGet]
 		[Authorize(ApplicationPermissions.MoviesToSee.MarkAsSeen)]
-		public async Task<IActionResult> ConfirmMarkingAsSeen([FromRoute] string id, CancellationToken cancellationToken)
+		public async Task<ViewResult> ConfirmMarkingAsSeen([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			var viewModel = await CreateMovieViewModel(id, cancellationToken);
 			return View(viewModel);
@@ -77,7 +77,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(ApplicationPermissions.MoviesToSee.MarkAsSeen)]
-		public async Task<IActionResult> MarkMovieAsSeen([FromForm] string id, CancellationToken cancellationToken)
+		public async Task<RedirectToActionResult> MarkMovieAsSeen([FromForm] string id, CancellationToken cancellationToken)
 		{
 			var movieId = CreateMovieId(id);
 			await moviesToSeeService.MarkMovieAsSeen(movieId, cancellationToken);
@@ -89,7 +89,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpGet]
 		[Authorize(ApplicationPermissions.MoviesToSee.Delete)]
-		public async Task<IActionResult> ConfirmMovieDeletion([FromRoute] string id, CancellationToken cancellationToken)
+		public async Task<ViewResult> ConfirmMovieDeletion([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			var viewModel = await CreateMovieViewModel(id, cancellationToken);
 			return View(viewModel);
@@ -97,7 +97,7 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(ApplicationPermissions.MoviesToSee.Delete)]
-		public async Task<IActionResult> DeleteMovie([FromForm] string id, CancellationToken cancellationToken)
+		public async Task<RedirectToActionResult> DeleteMovie([FromForm] string id, CancellationToken cancellationToken)
 		{
 			var movieId = CreateMovieId(id);
 			await moviesToSeeService.DeleteMovie(movieId, cancellationToken);

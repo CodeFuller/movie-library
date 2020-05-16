@@ -26,7 +26,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Index(CancellationToken cancellationToken)
+		public async Task<ViewResult> Index(CancellationToken cancellationToken)
 		{
 			var roles = await roleService.GetAllRoles(cancellationToken).ToListAsync(cancellationToken);
 
@@ -41,7 +41,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult CreateRole()
+		public ViewResult CreateRole()
 		{
 			var viewModel = new NewRoleViewModel
 			{
@@ -77,9 +77,9 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> EditRole([FromRoute] string id, CancellationToken cancellationToken)
+		public Task<ViewResult> EditRole([FromRoute] string id, CancellationToken cancellationToken)
 		{
-			return await EditRoleView(id, cancellationToken);
+			return EditRoleView(id, cancellationToken);
 		}
 
 		[HttpPost]
@@ -102,7 +102,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> ConfirmRoleDeletion([FromRoute] string id, CancellationToken cancellationToken)
+		public async Task<ViewResult> ConfirmRoleDeletion([FromRoute] string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 
@@ -113,7 +113,7 @@ namespace MovieLibrary.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> DeleteRole([FromForm] string id, CancellationToken cancellationToken)
+		public async Task<RedirectToActionResult> DeleteRole([FromForm] string id, CancellationToken cancellationToken)
 		{
 			_ = id ?? throw new ArgumentNullException(nameof(id));
 
@@ -124,7 +124,7 @@ namespace MovieLibrary.Controllers
 			return RedirectToAction("Index");
 		}
 
-		private async Task<IActionResult> EditRoleView(string roleId, CancellationToken cancellationToken)
+		private async Task<ViewResult> EditRoleView(string roleId, CancellationToken cancellationToken)
 		{
 			_ = roleId ?? throw new ArgumentNullException(nameof(roleId));
 
