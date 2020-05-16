@@ -8,23 +8,17 @@
 
 @if (Model.AddedMovie)
 {
-    <div class="alert alert-success" role="alert">
-        The movie was added successfully.
-    </div>
+    @await Html.PartialAsync("_AlertSuccessPartial", "The movie was added successfully.")
 }
 
 @if (Model.MovedMovie)
 {
-    <div class="alert alert-success" role="alert">
-        The movie was moved successfully.
-    </div>
+    @await Html.PartialAsync("_AlertSuccessPartial", "The movie was moved successfully.")
 }
 
 @if (Model.DeletedMovie)
 {
-    <div class="alert alert-success" role="alert">
-        The movie was deleted successfully.
-    </div>
+    @await Html.PartialAsync("_AlertSuccessPartial", "The movie was deleted successfully.")
 }
 
 @if (User.HasPermission(ApplicationPermissions.MoviesToGet.Add))

@@ -55,9 +55,13 @@
 
 
 
-    <div class="alert alert-success" role="alert">
-        The movie was deleted successfully.
-    </div>
+
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    The movie was deleted successfully.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 
     <form method="post" action="/MoviesToSee/ConfirmMovieAdding">
         <div class="validation-summary-valid" data-valmsg-summary="true"><ul><li style="display:none"></li>

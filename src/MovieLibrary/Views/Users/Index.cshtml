@@ -6,23 +6,17 @@
 
 @if (Model.AddedUser)
 {
-    <div class="alert alert-success" role="alert">
-        The user was added successfully.
-    </div>
+    @await Html.PartialAsync("_AlertSuccessPartial", "The user was added successfully.")
 }
 
 @if (Model.UpdatedUser)
 {
-    <div class="alert alert-success" role="alert">
-        The user was updated successfully.
-    </div>
+    @await Html.PartialAsync("_AlertSuccessPartial", "The user was updated successfully.")
 }
 
 @if (Model.DeletedUser)
 {
-    <div class="alert alert-success" role="alert">
-        The user was deleted successfully.
-    </div>
+    @await Html.PartialAsync("_AlertSuccessPartial", "The user was deleted successfully.")
 }
 
 <ul class="list-group">
