@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Extensions;
-using MovieLibrary.Models;
 
 namespace MovieLibrary.Controllers
 {
@@ -25,12 +23,6 @@ namespace MovieLibrary.Controllers
 			}
 
 			return Forbid();
-		}
-
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public ViewResult Error()
-		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 	}
 }

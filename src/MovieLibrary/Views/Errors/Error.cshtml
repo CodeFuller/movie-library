@@ -1,0 +1,15 @@
+﻿@model ErrorViewModel;
+
+@{
+    ViewData["Title"] = $"Error {(int)Model.StatusCode}";
+}
+
+<div class="text-center">
+    <div class="alert alert-danger" role="alert">
+        HTTP error @(Model.StatusCode) has occurred<br />
+        <a href="/" class="alert-link">Go Home</a>
+    </div>
+    <div>
+        <img src="/img/error.jpg" width="800" height="450" alt="Error" />
+    </div>
+</div>

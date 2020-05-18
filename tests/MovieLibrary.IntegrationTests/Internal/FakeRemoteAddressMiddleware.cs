@@ -21,7 +21,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 		{
 			context.Connection.RemoteIpAddress = IPAddress.Parse(remoteIpAddress);
 
-			await this.next(context);
+			await next(context);
 		}
 	}
 }

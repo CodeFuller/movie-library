@@ -74,14 +74,13 @@ namespace MovieLibrary
 			}
 			else
 			{
-				app.UseExceptionHandler("/Home/Error");
+				app.UseExceptionHandler("/Errors/UnhandledException");
+				app.UseStatusCodePagesWithReExecute("/Errors/ErrorCode", "?statusCode={0}");
 
 				app.UseHsts();
 			}
 
 			app.UseHttpsRedirection();
-
-			app.UseStatusCodePages();
 
 			app.UseStaticFiles();
 

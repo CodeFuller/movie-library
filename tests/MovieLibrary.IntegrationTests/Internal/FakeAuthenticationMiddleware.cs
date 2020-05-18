@@ -20,21 +20,18 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 		public async Task Invoke(HttpContext context, SignInManager<TUser> signInManager)
 		{
-			if (signInManager.IsSignedIn(context.User))
+			if (!signInManager.IsSignedIn(context.User))
 			{
-				// User is already authenticated.
-				return;
-			}
+				// We can create fake ClaimsPrincipal and fill required permission claims.
+				// But instead we do it via Identity layer, for more realism.
+				var user = await signInManager.UserManager.FindByNameAsync(applicationUser.Name);
+				if (user == null)
+				{
+					throw new InvalidOperationException($"The user {applicationUser.Name} is not registered");
+				}
 
-			// We can create fake ClaimsPrincipal and fill required permission claims.
-			// But instead we do it via Identity layer, for more realism.
-			var user = await signInManager.UserManager.FindByNameAsync(applicationUser.Name);
-			if (user == null)
-			{
-				throw new InvalidOperationException($"The user {applicationUser.Name} is not registered");
+				context.User = await signInManager.CreateUserPrincipalAsync(user);
 			}
-
-			context.User = await signInManager.CreateUserPrincipalAsync(user);
 
 			await next(context);
 		}
