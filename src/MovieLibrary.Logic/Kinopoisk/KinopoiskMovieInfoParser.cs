@@ -11,17 +11,17 @@ namespace MovieLibrary.Logic.Kinopoisk
 {
 	internal class KinopoiskMovieInfoParser : IMovieInfoParser
 	{
-		private static readonly Regex TitleRegex = new Regex(@"<span class=""moviename-title-wrapper"">(.+?)</span>", RegexOptions.Compiled);
-		private static readonly Regex YearRegex = new Regex(@"<a href=""/lists/navigator/(\d+)/\?quick_filters=films"" title="""">\1</a>", RegexOptions.Compiled);
-		private static readonly Regex MovieUriRegex = new Regex(@"<link rel=""canonical"" href=""(https?://.+?)"" />", RegexOptions.Compiled);
-		private static readonly Regex PosterUriRegex = new Regex(@"<link rel=""image_src"" href=""(https?://.+?)"" />", RegexOptions.Compiled);
-		private static readonly Regex DirectorsRegex = new Regex(@"<td itemprop=""director"">\s*(?:<a href=""/name/\d+/"">(.+?)</a>(?:,\s*)?)+</td>", RegexOptions.Compiled);
-		private static readonly Regex CastRegex = new Regex(@"<li itemprop=""actors""><a href=""/name/\d+/"">(.+?)</a></li>", RegexOptions.Compiled);
-		private static readonly Regex RatingValueRegex = new Regex(@"<span class=""rating_ball"">(\d+\.\d+)</span>", RegexOptions.Compiled);
-		private static readonly Regex RatingCountRegex = new Regex(@"<meta itemprop=""ratingCount"" content=""(\d+)"" />", RegexOptions.Compiled);
-		private static readonly Regex DurationRegex = new Regex(@"<td class=""time"" id=""runtime"">(\d+) мин\.", RegexOptions.Compiled);
-		private static readonly Regex GenresRegex = new Regex(@"<span itemprop=""genre"">\s*(?:<a href=""/lists/navigator/.+?/\?quick_filters=films"">(.+?)</a>(?:,\s*)?)+</span>", RegexOptions.Compiled);
-		private static readonly Regex SummaryRegex = new Regex(@"<span class=""_reachbanner_""><div class=""brand_words film-synopsys"" itemprop=""description"">(.+?)</div></span>", RegexOptions.Compiled);
+		private static readonly Regex TitleRegex = new Regex(@"<h1 class=""styles_title_[^>]+? itemProp=""name""><span class=""styles_title_[^>]+?>([^<>]+?)</span></h1>", RegexOptions.Compiled);
+		private static readonly Regex YearRegex = new Regex(@"<a [^>]*?href=""/lists/navigator/(\d+)/\?quick_filters=films"">\1</a>", RegexOptions.Compiled);
+		private static readonly Regex MovieUriRegex = new Regex(@"<a class=""styles[^>]+?"" href=""(/film/\d+/)subscribe/"">", RegexOptions.Compiled);
+		private static readonly Regex PosterUriRegex = new Regex(@"<img class=""film-poster [^>]+? src=""(//avatars.mds.yandex.net/get-kinopoisk-image/[^>]+?)""", RegexOptions.Compiled);
+		private static readonly Regex DirectorsRegex = new Regex(@"<div class=""styles_title[^>]+?"">Режиссер</div><div[^<>]*?>(?:<a class=""styles[^>]+?"" href=""/name/\d+/""[^>]*?>([^<>]+?)</a>(?:,\s*)?)+(?:, <a href=""/film/\d+/cast/who_is/director/""[^<>]*?>\.\.\.</a>)?</div></div>", RegexOptions.Compiled);
+		private static readonly Regex CastRegex = new Regex(@"<a href=""/film/\d+/cast/"" class=""styles[^>]+?""[^>]*?>В главных ролях</a></h3><ul[^>]*?>(?:<li[^>]*?><a href=""/name/\d+/""[^>]*?itemProp=""actor"">([^<>]+?)</a></li>)+", RegexOptions.Compiled);
+		private static readonly Regex RatingValueRegex = new Regex(@"<a class=""film-rating-value[^<>]*?>(\d+\.\d+)</a></span><span[^<>]*?>\d+(?: \d+)*</span></div>", RegexOptions.Compiled);
+		private static readonly Regex RatingCountRegex = new Regex(@"<a class=""film-rating-value[^<>]*?>\d+\.\d+</a></span><span[^<>]*?>(\d+(?: \d+)*)</span></div>", RegexOptions.Compiled);
+		private static readonly Regex DurationRegex = new Regex(@"<div[^<>]*?>Время</div><div[^<>]*?><div[^<>]*?>(\d+) мин\.", RegexOptions.Compiled);
+		private static readonly Regex GenresRegex = new Regex(@"<div[^<>]*?>Жанр</div><div[^<>]*?><div[^<>]*?>(?:<a[^<>]*?href=""/lists/navigator/.+?/\?quick_filters=films""[^<>]*?>([^<>]+?)</a>(?:, )?)+", RegexOptions.Compiled);
+		private static readonly Regex SummaryRegex = new Regex(@"<div[^<>]*?><div[^<>]*?>(?:<p[^<>]*?>(.+?)</p>)+</div></div>", RegexOptions.Compiled);
 
 		private readonly ILogger<KinopoiskMovieInfoParser> logger;
 
@@ -45,7 +45,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 			string duration = null;
 			List<string> genres = null;
 
-			string summary = null;
+			List<string> summaryParagraphs = null;
 
 			foreach (var line in content.Split("\n"))
 			{
@@ -62,7 +62,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 				duration ??= ParseValue(line, DurationRegex);
 				genres ??= ParseMultipleValues(line, GenresRegex);
 
-				summary ??= ParseValue(line, SummaryRegex);
+				summaryParagraphs ??= ParseMultipleValues(line, SummaryRegex);
 			}
 
 			if (String.Equals(posterUri, "https://st.kp.yandex.net/images/movies/poster_none.png", StringComparison.Ordinal))
@@ -74,14 +74,14 @@ namespace MovieLibrary.Logic.Kinopoisk
 			{
 				Title = SanitizeText(title),
 				Year = ParseInt(yearText, "year"),
-				MovieUri = ParseUri(movieUri),
-				PosterUri = ParseUri(posterUri),
+				MovieUri = movieUri != null ? new Uri(new Uri("https://www.kinopoisk.ru"), movieUri) : null,
+				PosterUri = posterUri != null ? new Uri($"https:{posterUri}", UriKind.Absolute) : null,
 				Directors = SanitizeText(directors),
 				Cast = SanitizeText(cast),
 				Rating = ParseRating(ratingValue, ratingCount),
 				Duration = ParseDuration(duration),
 				Genres = SanitizeText(genres),
-				Summary = SanitizeText(summary),
+				Summary = summaryParagraphs != null ? String.Join("\n\n", summaryParagraphs.Select(SanitizeText)) : null,
 			};
 
 			CheckMovieInfoForRequiredData(movieInfo, sourceUri);
@@ -151,14 +151,11 @@ namespace MovieLibrary.Logic.Kinopoisk
 			return null;
 		}
 
-		private static Uri ParseUri(string uriText)
-		{
-			return uriText != null ? new Uri(uriText, UriKind.Absolute) : null;
-		}
-
 		private MovieRatingModel ParseRating(string ratingValueText, string ratingCountText)
 		{
 			var ratingValue = ParseDecimal(ratingValueText, "rating value");
+
+			ratingCountText = ratingCountText?.Replace(" ", String.Empty, StringComparison.Ordinal);
 			var ratingCount = ParseInt(ratingCountText, "rating count");
 
 			if (ratingValue == null)

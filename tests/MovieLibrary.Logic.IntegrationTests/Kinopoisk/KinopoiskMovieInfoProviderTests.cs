@@ -44,8 +44,8 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 			Assert.AreEqual("Криминальное чтиво", movieInfo.Title);
 			Assert.AreEqual(1994, movieInfo.Year);
 			Assert.AreEqual(new Uri("https://www.kinopoisk.ru/film/342/"), movieInfo.MovieUri);
-			Assert.AreEqual(new Uri("https://st.kp.yandex.net/images/film_iphone/iphone360_342.jpg"), movieInfo.PosterUri);
-			CollectionAssert.AreEqual(new[] { "Квентин Тарантино" }, movieInfo.Directors.ToList());
+			Assert.AreEqual(new Uri("https://avatars.mds.yandex.net/get-kinopoisk-image/1900788/87b5659d-a159-4224-9bff-d5a5d109a53b/300x450"), movieInfo.PosterUri);
+			CollectionAssert.AreEqual(new[] { "Квентин Тарантино" }, movieInfo.Directors?.ToList());
 
 			var expectedCast = new[]
 			{
@@ -53,22 +53,51 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 				"Харви Кейтель", "Квентин Тарантино", "Питер Грин", "Аманда Пламмер",
 			};
 
-			CollectionAssert.AreEqual(expectedCast, movieInfo.Cast.ToList());
+			CollectionAssert.AreEqual(expectedCast, movieInfo.Cast?.ToList());
 
 			// Tricky check for rating because it's subject for change.
 			var rating = movieInfo.Rating;
+			Assert.IsNotNull(rating);
 			Assert.IsTrue(rating.Value >= 8.0M && rating.Value <= 9.0M);
 			Assert.IsTrue(rating.VotesNumber > 400_000 && rating.VotesNumber < 10_000_000);
 
 			Assert.AreEqual(TimeSpan.FromMinutes(154), movieInfo.Duration);
-			CollectionAssert.AreEqual(new[] { "триллер", "комедия", "криминал", }, movieInfo.Genres.ToList());
+			CollectionAssert.AreEqual(new[] { "триллер", "комедия", "криминал", }, movieInfo.Genres?.ToList());
 
 			var expectedSummary =
-				"Двое бандитов Винсент Вега и Джулс Винфилд ведут философские беседы в перерывах между разборками и решением проблем с должниками криминального босса Марселласа Уоллеса.\n\n"
+				"Двое бандитов Винсент Вега и Джулс Винфилд ведут философские беседы в перерывах между разборками и решением проблем с должниками криминального босса Марселласа Уоллеса.\n\n"
 				+
-				"В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй рассказывается о боксёре Бутче Кулидже, купленном Уоллесом, чтобы сдать бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.";
+				"В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй рассказывается о боксёре Бутче Кулидже, купленном Уоллесом, чтобы сдать бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.";
 
 			Assert.AreEqual(expectedSummary, movieInfo.Summary);
+		}
+
+		[TestMethod]
+		public async Task GetMovieInfo_MoreThanThreeDirectors_LoadsDirectorsCorrectly()
+		{
+			// Arrange
+
+			// Act
+
+			var movieInfo = await target.GetMovieInfo(new Uri("https://www.kinopoisk.ru/film/4250/"), CancellationToken.None);
+
+			// Assert
+
+			CollectionAssert.AreEqual(new[] { "Эллисон Андерс", "Александр Рокуэлл", "Роберт Родригес" }, movieInfo.Directors?.ToList());
+		}
+
+		[TestMethod]
+		public async Task GetMovieInfo_TwoDirectors_LoadsDirectorsCorrectly()
+		{
+			// Arrange
+
+			// Act
+
+			var movieInfo = await target.GetMovieInfo(new Uri("https://www.kinopoisk.ru/film/555/"), CancellationToken.None);
+
+			// Assert
+
+			CollectionAssert.AreEqual(new[] { "Джоэл Коэн", "Итан Коэн" }, movieInfo.Directors?.ToList());
 		}
 
 		[TestMethod]
