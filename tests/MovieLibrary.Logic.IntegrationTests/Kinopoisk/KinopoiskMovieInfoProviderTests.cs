@@ -101,6 +101,20 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 		}
 
 		[TestMethod]
+		public async Task GetMovieInfo_MovieWithImaxVersion_LoadsTitleCorrectly()
+		{
+			// Arrange
+
+			// Act
+
+			var movieInfo = await target.GetMovieInfo(new Uri("https://www.kinopoisk.ru/film/768561/"), CancellationToken.None);
+
+			// Assert
+
+			Assert.AreEqual("К звёздам", movieInfo.Title);
+		}
+
+		[TestMethod]
 		public async Task GetMovieInfo_SomePropertiesMissing_LoadsMovieInfoCorrectly()
 		{
 			// Arrange
