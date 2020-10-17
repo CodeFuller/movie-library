@@ -115,6 +115,20 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 		}
 
 		[TestMethod]
+		public async Task GetMovieInfo_MovieInTVFormat_LoadsTitleCorrectly()
+		{
+			// Arrange
+
+			// Act
+
+			var movieInfo = await target.GetMovieInfo(new Uri("https://www.kinopoisk.ru/film/95636/"), CancellationToken.None);
+
+			// Assert
+
+			Assert.AreEqual("Пираты Силиконовой Долины", movieInfo.Title);
+		}
+
+		[TestMethod]
 		public async Task GetMovieInfo_SomePropertiesMissing_LoadsMovieInfoCorrectly()
 		{
 			// Arrange
