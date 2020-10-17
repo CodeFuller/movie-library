@@ -21,7 +21,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 		private static readonly Regex RatingCountRegex = new Regex(@"<a class=""film-rating-value[^<>]*?>\d+\.\d+</a></span><span[^<>]*?>(\d+(?: \d+)*)</span></div>", RegexOptions.Compiled);
 		private static readonly Regex DurationRegex = new Regex(@"<div[^<>]*?>Время</div><div[^<>]*?><div[^<>]*?>(\d+) мин\.", RegexOptions.Compiled);
 		private static readonly Regex GenresRegex = new Regex(@"<div[^<>]*?>Жанр</div><div[^<>]*?><div[^<>]*?>(?:<a[^<>]*?href=""/lists/navigator/.+?/\?quick_filters=films""[^<>]*?>([^<>]+?)</a>(?:, )?)+", RegexOptions.Compiled);
-		private static readonly Regex SummaryRegex = new Regex(@"<div[^<>]*?><div[^<>]*?>(?:<p[^<>]*?>(.+?)</p>)+</div></div>", RegexOptions.Compiled);
+		private static readonly Regex SummaryRegex = new Regex(@"<div[^<>]*?><div[^<>]*?>(?:<p class=""styles_paragraph[^<>]*?>(.+?)</p>)+</div></div>", RegexOptions.Compiled);
 
 		private readonly ILogger<KinopoiskMovieInfoParser> logger;
 
