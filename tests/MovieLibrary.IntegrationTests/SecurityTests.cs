@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using static MovieLibrary.IntegrationTests.Internal.CustomWebApplicationFactory;
+using MovieLibrary.IntegrationTests.Internal;
 
 namespace MovieLibrary.IntegrationTests
 {
@@ -15,7 +15,8 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateHttpClient();
+			using var webApplicationFactory = new CustomWebApplicationFactory();
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 

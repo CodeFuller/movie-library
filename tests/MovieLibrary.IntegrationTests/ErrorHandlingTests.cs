@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.IntegrationTests.Internal;
-using static MovieLibrary.IntegrationTests.Internal.CustomWebApplicationFactory;
 
 namespace MovieLibrary.IntegrationTests
 {
@@ -23,7 +22,8 @@ namespace MovieLibrary.IntegrationTests
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubFailingProvider);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubFailingProvider);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -39,7 +39,8 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubFailingProvider);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubFailingProvider);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 

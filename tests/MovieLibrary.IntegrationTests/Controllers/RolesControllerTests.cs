@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.IntegrationTests.Internal;
 using MovieLibrary.UserManagement.Interfaces;
-using static MovieLibrary.IntegrationTests.Internal.CustomWebApplicationFactory;
 
 namespace MovieLibrary.IntegrationTests.Controllers
 {
@@ -20,7 +19,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -36,7 +36,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -52,7 +53,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -68,7 +70,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -108,7 +111,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Permissions[7].Assigned", "false"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -151,7 +155,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Permissions[7].Assigned", "false"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -191,7 +196,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Permissions[7].Assigned", "false"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -207,7 +213,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -223,7 +230,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -315,7 +323,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Permissions[7].Assigned", "false"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -331,7 +340,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -347,7 +357,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -368,7 +379,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("id", "5eb995ef4083c272a80ca308"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -392,7 +404,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("id", "5eb995ef4083c272a80ca308"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 

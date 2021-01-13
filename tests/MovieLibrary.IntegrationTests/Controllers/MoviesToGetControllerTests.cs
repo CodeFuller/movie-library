@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.IntegrationTests.Internal;
 using MovieLibrary.IntegrationTests.Internal.Seeding;
-using static MovieLibrary.IntegrationTests.Internal.CustomWebApplicationFactory;
 
 namespace MovieLibrary.IntegrationTests.Controllers
 {
@@ -18,7 +17,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -34,7 +34,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -50,7 +51,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser, seedData: new NoMoviesSeedData());
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser, seedData: new NoMoviesSeedData());
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -71,7 +73,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -92,7 +95,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/13/"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -113,7 +117,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -134,7 +139,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", String.Empty),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -178,7 +184,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Summary", "Бэтмен поднимает ставки в войне с криминалом. С помощью лейтенанта Джима Гордона и прокурора Харви Дента он намерен очистить улицы от преступности, отравляющей город. Сотрудничество оказывается эффективным, но скоро они обнаружат себя посреди хаоса, развязанного восходящим криминальным гением, известным испуганным горожанам под именем Джокер."),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -209,7 +216,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Summary", String.Empty),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -256,7 +264,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Summary", "Бэтмен поднимает ставки в войне с криминалом. С помощью лейтенанта Джима Гордона и прокурора Харви Дента он намерен очистить улицы от преступности, отравляющей город. Сотрудничество оказывается эффективным, но скоро они обнаружат себя посреди хаоса, развязанного восходящим криминальным гением, известным испуганным горожанам под именем Джокер."),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -275,7 +284,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -291,7 +301,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -312,7 +323,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -338,7 +350,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -354,7 +367,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -370,7 +384,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -391,7 +406,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -415,7 +431,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
 			});
 
-			using var client = CreateHttpClient(ApplicationUser.LimitedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 

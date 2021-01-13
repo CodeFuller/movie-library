@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.IntegrationTests.Internal;
-using static MovieLibrary.IntegrationTests.Internal.CustomWebApplicationFactory;
 
 namespace MovieLibrary.IntegrationTests
 {
@@ -16,7 +15,8 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(authenticatedUser: null);
+			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -32,7 +32,8 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -48,7 +49,8 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(authenticatedUser: null);
+			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			using var content = new StringContent(String.Empty);
 
@@ -66,7 +68,8 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(ApplicationUser.PrivilegedUser);
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			using var content = new StringContent(String.Empty);
 
@@ -84,7 +87,8 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(authenticatedUser: null);
+			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -100,7 +104,8 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(authenticatedUser: null);
+			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 

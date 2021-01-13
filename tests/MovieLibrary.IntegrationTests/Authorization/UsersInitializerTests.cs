@@ -9,7 +9,6 @@ using MovieLibrary.Authorization;
 using MovieLibrary.IntegrationTests.Internal;
 using MovieLibrary.IntegrationTests.Internal.Seeding;
 using MovieLibrary.UserManagement.Interfaces;
-using static MovieLibrary.IntegrationTests.Internal.CustomWebApplicationFactory;
 
 namespace MovieLibrary.IntegrationTests.Authorization
 {
@@ -76,7 +75,8 @@ namespace MovieLibrary.IntegrationTests.Authorization
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(authenticatedUser: ApplicationUser.DefaultAdministrator, seedData: new EmptySeedData());
+			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: ApplicationUser.DefaultAdministrator, seedData: new EmptySeedData());
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 
@@ -92,7 +92,8 @@ namespace MovieLibrary.IntegrationTests.Authorization
 		{
 			// Arrange
 
-			using var client = CreateHttpClient(authenticatedUser: ApplicationUser.DefaultAdministrator, seedData: new EmptySeedData(), remoteIpAddress: "77.77.77.77");
+			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: ApplicationUser.DefaultAdministrator, seedData: new EmptySeedData(), remoteIpAddress: "77.77.77.77");
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
 

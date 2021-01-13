@@ -83,13 +83,6 @@ namespace MovieLibrary.IntegrationTests.Internal
 			});
 		}
 
-		public static HttpClient CreateHttpClient(ApplicationUser authenticatedUser = null, ISeedData seedData = null,
-			int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null, string remoteIpAddress = null)
-		{
-			var factory = new CustomWebApplicationFactory(authenticatedUser, seedData, moviesPageSize, movieInfoProvider, remoteIpAddress);
-			return factory.CreateDefaultHttpClient();
-		}
-
 		public HttpClient CreateDefaultHttpClient()
 		{
 			var options = new WebApplicationFactoryClientOptions
