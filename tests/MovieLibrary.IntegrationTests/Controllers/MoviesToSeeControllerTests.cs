@@ -17,7 +17,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var factory = new CustomWebApplicationFactory(authenticatedUser: ApplicationUser.PrivilegedUser, seedData: null, moviesPageSize: null, movieInfoProvider: null, remoteIpAddress: null);
+			using var factory = new CustomWebApplicationFactory(authenticatedUser: ApplicationUser.PrivilegedUser);
 			using var client = factory.CreateDefaultHttpClient();
 
 			// Act
