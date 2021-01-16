@@ -28,16 +28,12 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 		private readonly Func<IMovieInfoProvider> fakeMovieInfoProviderFactory;
 
-		private readonly string remoteIpAddress;
-
-		public CustomWebApplicationFactory(ApplicationUser authenticatedUser = null, ISeedData seedData = null,
-			int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null, string remoteIpAddress = null)
+		public CustomWebApplicationFactory(ApplicationUser authenticatedUser = null, ISeedData seedData = null, int? moviesPageSize = null, Func<IMovieInfoProvider> movieInfoProvider = null)
 		{
 			this.authenticatedUser = authenticatedUser;
 			this.seedData = seedData ?? new DefaultSeedData();
 			this.moviesPageSize = moviesPageSize;
 			this.fakeMovieInfoProviderFactory = movieInfoProvider ?? FakeMovieInfoProvider.StubFailingProvider;
-			this.remoteIpAddress = remoteIpAddress;
 		}
 
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -59,7 +55,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 			builder.ConfigureServices(services =>
 			{
-				services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper<MongoUser>(authenticatedUser, remoteIpAddress));
+				services.AddSingleton<IApplicationBootstrapper>(new FakeApplicationBootstrapper<MongoUser>(authenticatedUser));
 
 				// We insert DatabaseSeeder as first service, so that it is executed before UsersInitializer.
 				services.Insert(0, ServiceDescriptor.Scoped<IApplicationInitializer, DatabaseSeeder>());

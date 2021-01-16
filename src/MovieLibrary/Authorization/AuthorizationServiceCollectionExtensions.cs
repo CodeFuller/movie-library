@@ -9,7 +9,6 @@ namespace MovieLibrary.Authorization
 		public static IServiceCollection AddPermissionBasedAuthorization(this IServiceCollection services)
 		{
 			services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
-			services.AddScoped<IAuthorizationHandler, DefaultAdminAuthorizationHandler>();
 			services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 			services.AddScoped<IApplicationInitializer, UsersInitializer>();
 

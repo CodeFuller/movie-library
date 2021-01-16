@@ -8,21 +8,13 @@ namespace MovieLibrary.IntegrationTests.Internal
 	{
 		private readonly ApplicationUser authenticatedUser;
 
-		private readonly string remoteIpAddress;
-
-		public FakeApplicationBootstrapper(ApplicationUser authenticatedUser, string remoteIpAddress)
+		public FakeApplicationBootstrapper(ApplicationUser authenticatedUser)
 		{
 			this.authenticatedUser = authenticatedUser;
-			this.remoteIpAddress = remoteIpAddress;
 		}
 
 		public void AddAuthenticationMiddleware(IApplicationBuilder appBuilder)
 		{
-			if (remoteIpAddress != null)
-			{
-				appBuilder.UseMiddleware<FakeRemoteAddressMiddleware>(remoteIpAddress);
-			}
-
 			if (authenticatedUser != null)
 			{
 				appBuilder.UseMiddleware<FakeAuthenticationMiddleware<TUser>>(authenticatedUser);

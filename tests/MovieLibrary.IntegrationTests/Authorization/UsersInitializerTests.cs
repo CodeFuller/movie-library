@@ -71,7 +71,7 @@ namespace MovieLibrary.IntegrationTests.Authorization
 		}
 
 		[TestMethod]
-		public async Task Access_ForDefaultAdministratorFromLocalhost_IsAllowed()
+		public async Task Access_ForDefaultAdministrator_IsAllowed()
 		{
 			// Arrange
 
@@ -85,26 +85,6 @@ namespace MovieLibrary.IntegrationTests.Authorization
 			// Assert
 
 			await ResponseAssert.VerifyPageLoaded(response);
-		}
-
-		[TestMethod]
-		public async Task Access_ForDefaultAdministratorFromRemoteHost_IsDenied()
-		{
-			// Arrange
-
-			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: ApplicationUser.DefaultAdministrator, seedData: new EmptySeedData(), remoteIpAddress: "77.77.77.77");
-			using var client = webApplicationFactory.CreateDefaultHttpClient();
-
-			// Act
-
-			using var response = await client.GetAsync(new Uri("https://localhost:5001/Users"), CancellationToken.None);
-
-			// Assert
-
-			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/AccessDenied?ReturnUrl=%2FUsers"));
-
-			using var indexResponse = await client.GetAsync(new Uri("https://localhost:5001/Identity/Account/AccessDenied?ReturnUrl=%2FUsers"), CancellationToken.None);
-			await ResponseAssert.VerifyPageLoaded(indexResponse);
 		}
 	}
 }
