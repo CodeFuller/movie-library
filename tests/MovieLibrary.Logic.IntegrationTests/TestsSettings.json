@@ -1,5 +1,7 @@
 {
 	"connectionStrings": {
-		"movieLibraryTestDatabase": "mongodb://localhost:27017/MovieLibraryLogicIntegrationTests"
-	}
+		"movieLibraryDatabaseIT": "mongodb://localhost:27017/movieLibraryIntegrationTestsDB"
+	},
+
+	"connectionStringName": "movieLibraryDatabaseIT"
 }

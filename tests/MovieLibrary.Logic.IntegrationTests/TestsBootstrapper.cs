@@ -29,13 +29,14 @@ namespace MovieLibrary.Logic.IntegrationTests
 		private static async Task<IServiceProvider> PrepareServiceProvider(Action<IServiceCollection> servicesSetup, bool seedData)
 		{
 			var configuration = new ConfigurationBuilder()
-				.AddJsonFile("TestsSettings.json")
+				.AddJsonFile("TestsSettings.json", optional: false)
+				.AddEnvironmentVariables()
 				.Build();
-			var connectionString = configuration.GetConnectionString("movieLibraryTestDatabase");
 
-			var services = new ServiceCollection();
-			services.AddBusinessLogic();
-			services.AddMongoDbDal(connectionString);
+			var services = new ServiceCollection()
+				.AddBusinessLogic()
+				.AddMongoDbDal(configuration.GetMovieLibraryConnectionString());
+
 			servicesSetup(services);
 
 			var serviceProvider = services.BuildServiceProvider();

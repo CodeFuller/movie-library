@@ -48,7 +48,7 @@ namespace MovieLibrary
 
 			services.AddBusinessLogic();
 
-			var connectionString = GetConnectionString();
+			var connectionString = Configuration.GetMovieLibraryConnectionString();
 			services.AddMongoDbDal(connectionString);
 			services.AddIdentityMongoDbProvider<MongoUser>(mongoIdentityOptions => mongoIdentityOptions.ConnectionString = connectionString).AddDefaultUI();
 
@@ -91,23 +91,6 @@ namespace MovieLibrary
 			app.UseAuthorization();
 
 			app.UseEndpoints(ConfigureRoutes);
-		}
-
-		private string GetConnectionString()
-		{
-			var connectionStringName = Configuration["connectionStringName"];
-			if (String.IsNullOrEmpty(connectionStringName))
-			{
-				throw new InvalidOperationException("Connection string name is not set. Define it via setting 'connectionStringName'");
-			}
-
-			var connectionString = Configuration.GetConnectionString(connectionStringName);
-			if (String.IsNullOrEmpty(connectionString))
-			{
-				throw new InvalidOperationException($"Connection string '{connectionStringName}' is not set. Define it via setting 'connectionStrings:{connectionStringName}'");
-			}
-
-			return connectionString;
 		}
 
 		private static void ConfigureRoutes(IEndpointRouteBuilder endpoints)
