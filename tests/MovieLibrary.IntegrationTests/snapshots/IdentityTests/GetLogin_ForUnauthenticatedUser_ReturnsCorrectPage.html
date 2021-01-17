@@ -43,16 +43,15 @@
             <form id="account" method="post">
                 <h4>Use a local account to log in.</h4>
                 <hr />
-                <div class="text-danger validation-summary-valid" data-valmsg-summary="true"><ul><li style="display:none"></li>
-</ul></div>
+                
                 <div class="form-group">
                     <label for="Input_Email">Email</label>
-                    <input class="form-control" type="email" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Input_Email" name="Input.Email" value="" />
+                    <input class="form-control" autocomplete="username" type="email" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Input_Email" name="Input.Email" value="" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="Input.Email" data-valmsg-replace="true"></span>
                 </div>
                 <div class="form-group">
                     <label for="Input_Password">Password</label>
-                    <input class="form-control" type="password" data-val="true" data-val-required="The Password field is required." id="Input_Password" name="Input.Password" />
+                    <input class="form-control" autocomplete="current-password" type="password" data-val="true" data-val-required="The Password field is required." id="Input_Password" name="Input.Password" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
                 </div>
                 <div class="form-group">
@@ -73,6 +72,9 @@
                     <p>
                         <a href="/Identity/Account/Register?returnUrl=%2F">Register as a new user</a>
                     </p>
+                    <p>
+                        <a id="resend-confirmation" href="/Identity/Account/ResendEmailConfirmation">Resend email confirmation</a>
+                    </p>
                 </div>
             <input name="__RequestVerificationToken" type="hidden" value="Some AFT Value" /><input name="Input.RememberMe" type="hidden" value="false" /></form>
         </section>
@@ -83,8 +85,8 @@
             <hr />
                     <div>
                         <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
                         </p>
                     </div>
         </section>
