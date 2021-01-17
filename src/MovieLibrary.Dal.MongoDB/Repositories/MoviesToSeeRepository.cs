@@ -41,11 +41,8 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 
 		public IQueryable<MovieToSeeModel> GetAllMovies()
 		{
-			// TODO: Remove collection instantiation (ToList()) and return true IQueryable.
-			// This will be possible after Azure Cosmos DB supports $toString operator available since version 4.0 of MongoDB.
 			return collection
 				.AsQueryable()
-				.ToList()
 				.Select(d => new MovieToSeeModel
 				{
 					Id = new MovieId(d.Id.ToString()),
@@ -63,8 +60,7 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 						Summary = d.MovieInfo.Summary,
 					},
 					TimestampOfAddingToSeeList = d.TimestampOfAddingToSeeList,
-				})
-				.AsQueryable();
+				});
 		}
 
 		public async Task<MovieToSeeModel> GetMovie(MovieId movieId, CancellationToken cancellationToken)
