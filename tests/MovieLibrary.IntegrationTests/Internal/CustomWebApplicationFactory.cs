@@ -9,9 +9,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Bson;
+using MovieLibrary.IntegrationTests.Extensions;
 using MovieLibrary.IntegrationTests.Internal.Seeding;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
@@ -45,7 +48,17 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 			builder.ConfigureAppConfiguration((context, configBuilder) =>
 			{
-				configBuilder.AddJsonFile(GetTestRunSettingsPath(), optional: false);
+				var jsonConfigSource = new JsonConfigurationSource
+				{
+					Path = GetTestRunSettingsPath(),
+					Optional = false,
+				};
+
+				jsonConfigSource.ResolveFileProvider();
+
+				// We add TestsSettings.json before environment variables source,
+				// leaving a chance to override connection string via environment variables.
+				configBuilder.Sources.InsertBeforeType(jsonConfigSource, typeof(EnvironmentVariablesConfigurationSource));
 
 				if (moviesPageSize != null)
 				{

@@ -95,10 +95,16 @@ namespace MovieLibrary
 
 		private string GetConnectionString()
 		{
-			var connectionString = Configuration.GetConnectionString("movieLibraryDatabase");
+			var connectionStringName = Configuration["connectionStringName"];
+			if (String.IsNullOrEmpty(connectionStringName))
+			{
+				throw new InvalidOperationException("Connection string name is not set. Define it via setting 'connectionStringName'");
+			}
+
+			var connectionString = Configuration.GetConnectionString(connectionStringName);
 			if (String.IsNullOrEmpty(connectionString))
 			{
-				throw new InvalidOperationException("Connection string 'movieLibraryDatabase' is not set");
+				throw new InvalidOperationException($"Connection string '{connectionStringName}' is not set. Define it via setting 'connectionStrings:{connectionStringName}'");
 			}
 
 			return connectionString;
