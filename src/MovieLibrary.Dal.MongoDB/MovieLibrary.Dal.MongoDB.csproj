@@ -5,8 +5,14 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <CodeAnalysisRuleSet>..\..\MovieLibrary.src.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="all" />
     <PackageReference Include="MongoDB.Driver" Version="2.11.5" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
   </ItemGroup>
@@ -14,11 +20,5 @@
   <ItemGroup>
     <ProjectReference Include="..\MovieLibrary.Logic\MovieLibrary.Logic.csproj" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\MovieLibrary.src.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-  </PropertyGroup>
 
 </Project>

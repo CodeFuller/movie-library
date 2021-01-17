@@ -29,9 +29,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 			await ProvideCookies(cancellationToken);
 
 			using var response = await ExecuteRequest(pageUri, cancellationToken);
-			var content = await response.Content.ReadAsStringAsync();
-
-			return content;
+			return await response.Content.ReadAsStringAsync(cancellationToken);
 		}
 
 		private async Task ProvideCookies(CancellationToken cancellationToken)
@@ -44,7 +42,9 @@ namespace MovieLibrary.Logic.Kinopoisk
 			await semaphore.WaitAsync(cancellationToken);
 
 			// Checking for null again, since concurrent thread could load them while we were waiting for semaphore.
+#pragma warning disable CA1508 // Avoid dead conditional code
 			if (Cookies != null)
+#pragma warning restore CA1508 // Avoid dead conditional code
 			{
 				return;
 			}

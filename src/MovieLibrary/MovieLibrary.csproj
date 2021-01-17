@@ -6,11 +6,17 @@
     <Version>1.1.0</Version>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <CodeAnalysisRuleSet>..\..\MovieLibrary.src.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AspNetCore.Identity.Mongo" Version="6.7.2" />
     <PackageReference Include="CF.Library.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="all" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
   </ItemGroup>
@@ -19,11 +25,5 @@
     <ProjectReference Include="..\MovieLibrary.Dal.MongoDB\MovieLibrary.Dal.MongoDB.csproj" />
     <ProjectReference Include="..\MovieLibrary.Logic\MovieLibrary.Logic.csproj" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\MovieLibrary.src.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-  </PropertyGroup>
 
 </Project>

@@ -6,9 +6,15 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <CodeAnalysisRuleSet>..\..\MovieLibrary.tests.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="Moq.AutoMock" Version="2.3.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
@@ -19,11 +25,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\MovieLibrary\MovieLibrary.csproj" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\MovieLibrary.tests.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-  </PropertyGroup>
 
 </Project>

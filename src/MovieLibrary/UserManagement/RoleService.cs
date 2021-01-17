@@ -48,7 +48,9 @@ namespace MovieLibrary.UserManagement
 
 		public async IAsyncEnumerable<RoleModel> GetAllRoles([EnumeratorCancellation] CancellationToken cancellationToken)
 		{
+#pragma warning disable CA1508 // Avoid dead conditional code
 			await foreach (var role in roleManager.Roles.ToAsyncEnumerable().WithCancellation(cancellationToken))
+#pragma warning restore CA1508 // Avoid dead conditional code
 			{
 				yield return new RoleModel
 				{

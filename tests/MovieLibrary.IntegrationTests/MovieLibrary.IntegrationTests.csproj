@@ -6,9 +6,15 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <CodeAnalysisRuleSet>..\..\MovieLibrary.tests.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="Moq" Version="4.16.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
@@ -28,11 +34,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\MovieLibrary.tests.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-  </PropertyGroup>
 
 </Project>
