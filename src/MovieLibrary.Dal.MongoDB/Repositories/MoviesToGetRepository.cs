@@ -90,7 +90,7 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 
 			if (deleteResult.DeletedCount != 1)
 			{
-				throw new NotFoundException($"The movie with id {movieId} was not found among movies to get");
+				throw new NotFoundException($"The movie with id {movieId} was not found among movies to get (DeletedCount = {deleteResult.DeletedCount})");
 			}
 		}
 

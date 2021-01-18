@@ -3,6 +3,7 @@ using CF.Library.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace MovieLibrary
 {
@@ -27,8 +28,9 @@ namespace MovieLibrary
 
 					var loggingConfiguration = new LoggingConfiguration();
 					loggingConfiguration.LoadSettings(loggingSettings);
+
+					loggingBuilder.ClearProviders();
 					loggingConfiguration.AddLogging(loggingBuilder);
-				})
-		;
+				});
 	}
 }

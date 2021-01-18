@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using AspNetCore.Identity.Mongo.Model;
+using CF.Library.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MovieLibrary.IntegrationTests.Extensions;
 using MovieLibrary.IntegrationTests.Internal.Seeding;
@@ -64,6 +66,18 @@ namespace MovieLibrary.IntegrationTests.Internal
 				{
 					configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("moviesPageSize", moviesPageSize.Value.ToString(CultureInfo.InvariantCulture)) });
 				}
+			});
+
+			builder.ConfigureLogging((hostingContext, loggingBuilder) =>
+			{
+				var loggingSettings = new LoggingSettings();
+				hostingContext.Configuration.Bind("logging", loggingSettings);
+
+				var loggingConfiguration = new LoggingConfiguration();
+				loggingConfiguration.LoadSettings(loggingSettings);
+
+				loggingBuilder.ClearProviders();
+				loggingConfiguration.AddLogging(loggingBuilder);
 			});
 
 			builder.ConfigureServices(services =>

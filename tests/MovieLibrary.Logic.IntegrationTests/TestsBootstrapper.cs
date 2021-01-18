@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CF.Library.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
+using Microsoft.Extensions.Logging;
 using Moq;
 using MovieLibrary.Dal.MongoDB;
-using MovieLibrary.Dal.MongoDB.Documents;
 using MovieLibrary.Logic.Extensions;
 using MovieLibrary.Logic.Interfaces;
 
@@ -38,6 +38,8 @@ namespace MovieLibrary.Logic.IntegrationTests
 				.AddMongoDbDal(configuration.GetMovieLibraryConnectionString());
 
 			servicesSetup(services);
+			BootstrapLogging(services, configuration);
+			services.AddSingleton<DatabaseSeeder>();
 
 			var serviceProvider = services.BuildServiceProvider();
 
@@ -46,51 +48,30 @@ namespace MovieLibrary.Logic.IntegrationTests
 			return serviceProvider;
 		}
 
+		private static void BootstrapLogging(IServiceCollection services, IConfiguration configuration)
+		{
+			var loggingSettings = new LoggingSettings();
+			configuration.Bind("logging", loggingSettings);
+
+			var loggingConfiguration = new LoggingConfiguration();
+			loggingConfiguration.LoadSettings(loggingSettings);
+
+			var loggerFactory = new LoggerFactory();
+			loggingConfiguration.AddLogging(loggerFactory);
+
+			services.AddSingleton<ILoggerFactory>(loggerFactory);
+			services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+		}
+
 		private static async Task PrepareDatabaseForTest(IServiceProvider serviceProvider, bool seedData, CancellationToken cancellationToken)
 		{
-			await ClearDatabaseData(serviceProvider, cancellationToken);
+			var databaseSeeder = serviceProvider.GetRequiredService<DatabaseSeeder>();
+
+			await databaseSeeder.ClearDatabaseData(cancellationToken);
 
 			if (seedData)
 			{
-				await SeedData(serviceProvider, cancellationToken);
-			}
-		}
-
-		private static async Task ClearDatabaseData(IServiceProvider serviceProvider, CancellationToken cancellationToken)
-		{
-			await ClearCollection<MovieToGetDocument>(serviceProvider, cancellationToken);
-			await ClearCollection<MovieToSeeDocument>(serviceProvider, cancellationToken);
-		}
-
-		private static async Task ClearCollection<TDocument>(IServiceProvider serviceProvider, CancellationToken cancellationToken)
-		{
-			var collection = serviceProvider.GetRequiredService<IMongoCollection<TDocument>>();
-			await collection.DeleteManyAsync(new FilterDefinitionBuilder<TDocument>().Empty, cancellationToken);
-		}
-
-		private static async Task SeedData(IServiceProvider serviceProvider, CancellationToken cancellationToken)
-		{
-			await SeedMoviesToGet(serviceProvider, cancellationToken);
-			await SeedMoviesToSee(serviceProvider, cancellationToken);
-		}
-
-		private static async Task SeedMoviesToSee(IServiceProvider serviceProvider, CancellationToken cancellationToken)
-		{
-			var repository = serviceProvider.GetRequiredService<IMoviesToGetRepository>();
-
-			foreach (var movie in DataForSeeding.MoviesToGet)
-			{
-				await repository.AddMovie(movie, cancellationToken);
-			}
-		}
-
-		private static async Task SeedMoviesToGet(IServiceProvider serviceProvider, CancellationToken cancellationToken)
-		{
-			var repository = serviceProvider.GetRequiredService<IMoviesToSeeRepository>();
-
-			foreach (var movie in DataForSeeding.MoviesToSee)
-			{
-				await repository.AddMovie(movie, cancellationToken);
+				await databaseSeeder.SeedData(cancellationToken);
 			}
 		}
 	}

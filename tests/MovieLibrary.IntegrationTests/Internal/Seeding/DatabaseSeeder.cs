@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using MovieLibrary.Internal;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.UserManagement.Interfaces;
@@ -21,8 +22,10 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 
 		private readonly IIdGeneratorQueue idGeneratorQueue;
 
+		private readonly ILogger<DatabaseSeeder> logger;
+
 		public DatabaseSeeder(ISeedData seedData, IMoviesToGetService moviesToGetService, IMoviesToSeeService moviesToSeeService,
-			IUserService userService, IRoleService roleService, IIdGeneratorQueue idGeneratorQueue)
+			IUserService userService, IRoleService roleService, IIdGeneratorQueue idGeneratorQueue, ILogger<DatabaseSeeder> logger)
 		{
 			this.seedData = seedData ?? throw new ArgumentNullException(nameof(seedData));
 			this.moviesToGetService = moviesToGetService ?? throw new ArgumentNullException(nameof(moviesToGetService));
@@ -30,6 +33,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 			this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
 			this.roleService = roleService ?? throw new ArgumentNullException(nameof(roleService));
 			this.idGeneratorQueue = idGeneratorQueue ?? throw new ArgumentNullException(nameof(idGeneratorQueue));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task Initialize(CancellationToken cancellationToken)
@@ -53,7 +57,11 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 
 		private async Task SeedMoviesToGet(CancellationToken cancellationToken)
 		{
+			logger.LogInformation("Seeding movies to get ...");
+
 			var oldMovies = moviesToGetService.GetAllMovies().ToList();
+
+			logger.LogInformation("Deleting movies to get: {DeletedMoviesToGet}", oldMovies.Select(x => x.Id.Value));
 			foreach (var oldMovie in oldMovies)
 			{
 				await moviesToGetService.DeleteMovie(oldMovie.Id, cancellationToken);
@@ -68,7 +76,11 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 
 		private async Task SeedMoviesToSee(CancellationToken cancellationToken)
 		{
+			logger.LogInformation("Seeding movies to see ...");
+
 			var oldMovies = moviesToSeeService.GetAllMovies().ToList();
+
+			logger.LogInformation("Deleting movies to see: {DeletedMoviesToSee}", oldMovies.Select(x => x.Id.Value));
 			foreach (var oldMovie in oldMovies)
 			{
 				await moviesToSeeService.DeleteMovie(oldMovie.Id, cancellationToken);
