@@ -56,10 +56,13 @@ namespace MovieLibrary.Logic.IntegrationTests
 			var loggingConfiguration = new LoggingConfiguration();
 			loggingConfiguration.LoadSettings(loggingSettings);
 
-			var loggerFactory = new LoggerFactory();
-			loggingConfiguration.AddLogging(loggerFactory);
+			services.AddSingleton<ILoggerFactory>(_ =>
+			{
+				var loggerFactory = new LoggerFactory();
+				loggingConfiguration.AddLogging(loggerFactory);
+				return loggerFactory;
+			});
 
-			services.AddSingleton<ILoggerFactory>(loggerFactory);
 			services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
 		}
 

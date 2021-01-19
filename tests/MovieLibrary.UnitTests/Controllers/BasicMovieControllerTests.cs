@@ -70,7 +70,7 @@ namespace MovieLibrary.UnitTests.Controllers
 		{
 			// Arrange
 
-			var target = new ConcreteMoviesController(Enumerable.Empty<string>(), 2);
+			using var target = new ConcreteMoviesController(Enumerable.Empty<string>(), 2);
 
 			// Act
 
@@ -90,7 +90,7 @@ namespace MovieLibrary.UnitTests.Controllers
 		{
 			// Arrange
 
-			var target = new ConcreteMoviesController(Enumerable.Empty<string>(), 2);
+			using var target = new ConcreteMoviesController(Enumerable.Empty<string>(), 2);
 
 			// Act
 
@@ -107,7 +107,7 @@ namespace MovieLibrary.UnitTests.Controllers
 		{
 			// Arrange
 
-			var target = new ConcreteMoviesController(new[] { "Movie 1" }, 2);
+			using var target = new ConcreteMoviesController(new[] { "Movie 1" }, 2);
 
 			// Act
 
@@ -124,7 +124,7 @@ namespace MovieLibrary.UnitTests.Controllers
 		{
 			// Arrange
 
-			var target = new ConcreteMoviesController(new[] { "Movie 1", "Movie 2", "Movie 3" }, 2);
+			using var target = new ConcreteMoviesController(new[] { "Movie 1", "Movie 2", "Movie 3" }, 2);
 
 			// Act
 
@@ -141,7 +141,7 @@ namespace MovieLibrary.UnitTests.Controllers
 		{
 			// Arrange
 
-			var target = new ConcreteMoviesController(new[] { "Movie 1" }, 2);
+			using var target = new ConcreteMoviesController(new[] { "Movie 1" }, 2);
 
 			// Act
 
@@ -158,7 +158,7 @@ namespace MovieLibrary.UnitTests.Controllers
 		{
 			// Arrange
 
-			var target = new ConcreteMoviesController(new[] { "Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5" }, 2);
+			using var target = new ConcreteMoviesController(new[] { "Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5" }, 2);
 
 			// Act
 
@@ -178,7 +178,7 @@ namespace MovieLibrary.UnitTests.Controllers
 		{
 			// Arrange
 
-			var target = new ConcreteMoviesController(new[] { "Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5" }, 2);
+			using var target = new ConcreteMoviesController(new[] { "Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5" }, 2);
 
 			// Act
 
@@ -198,7 +198,7 @@ namespace MovieLibrary.UnitTests.Controllers
 		{
 			// Arrange
 
-			var target = new ConcreteMoviesController(new[] { "Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5" }, 2);
+			using var target = new ConcreteMoviesController(new[] { "Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5" }, 2);
 
 			// Act
 

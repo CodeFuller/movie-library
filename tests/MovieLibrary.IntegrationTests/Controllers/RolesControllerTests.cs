@@ -87,7 +87,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Name", "Some New Role"),
 				new KeyValuePair<string, string>("Permissions[0].Assigned", "true"),
@@ -131,7 +131,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Name", String.Empty),
 				new KeyValuePair<string, string>("Permissions[0].Assigned", "true"),
@@ -172,7 +172,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Name", "Some New Role"),
 				new KeyValuePair<string, string>("Permissions[0].Assigned", "true"),
@@ -247,7 +247,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				// Here we delete permission "Permissions.MoviesToGet.Add" and add permission "Permissions.MoviesToSee.Add".
 				new KeyValuePair<string, string>("Permissions[0].PermissionName", "Permissions.MoviesToGet.Add"),
@@ -299,7 +299,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Permissions[0].PermissionName", "Permissions.MoviesToGet.Add"),
 				new KeyValuePair<string, string>("Permissions[1].Assigned", "true"),
@@ -374,7 +374,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("id", "5eb995ef4083c272a80ca308"),
 			});
@@ -399,7 +399,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("id", "5eb995ef4083c272a80ca308"),
 			});

@@ -17,7 +17,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});

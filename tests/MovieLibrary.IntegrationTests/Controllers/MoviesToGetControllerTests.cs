@@ -68,7 +68,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
@@ -90,7 +90,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/13/"),
 			});
@@ -112,7 +112,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
@@ -134,7 +134,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", String.Empty),
 			});
@@ -156,7 +156,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Title", "Темный рыцарь"),
 				new KeyValuePair<string, string>("Year", "2008"),
@@ -204,7 +204,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Title", "New Movie Without Info"),
 				new KeyValuePair<string, string>("Year", String.Empty),
@@ -236,7 +236,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Title", "Темный рыцарь"),
 				new KeyValuePair<string, string>("Year", "2008"),
@@ -318,7 +318,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
 			});
@@ -345,7 +345,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
 			});
@@ -401,7 +401,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
 			});
@@ -426,7 +426,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("id", "5eac4f407a15596e90c09d7b"),
 			});

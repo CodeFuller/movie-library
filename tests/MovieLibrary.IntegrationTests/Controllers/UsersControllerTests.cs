@@ -87,7 +87,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Email", "SomeNewUser@test.com"),
 				new KeyValuePair<string, string>("Password", "Qwerty123!"),
@@ -114,7 +114,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Email", String.Empty),
 				new KeyValuePair<string, string>("Password", "Some Password"),
@@ -138,7 +138,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Email", "SomeNewUser@test.com"),
 				new KeyValuePair<string, string>("Password", "Qwerty123!"),
@@ -213,7 +213,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				// Here we delete role "Limited User" and add role "Privileged User".
 				new KeyValuePair<string, string>("Roles[0].RoleName", "Administrator"),
@@ -252,7 +252,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("Roles[0].RoleName", "Administrator"),
 				new KeyValuePair<string, string>("Roles[1].Assigned", "true"),
@@ -315,7 +315,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("id", "5eb7eb9f1fdada19f4eb59b1"),
 			});
@@ -340,7 +340,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			var formContent = new FormUrlEncodedContent(new[]
+			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("id", "5eb7eb9f1fdada19f4eb59b1"),
 			});
