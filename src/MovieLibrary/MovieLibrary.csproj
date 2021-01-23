@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -23,6 +23,13 @@
   <ItemGroup>
     <ProjectReference Include="..\MovieLibrary.Dal.MongoDB\MovieLibrary.Dal.MongoDB.csproj" />
     <ProjectReference Include="..\MovieLibrary.Logic\MovieLibrary.Logic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../LICENSE.txt" />
+    <None Update="../../LICENSE.txt" Link="LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
