@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CF.Library.Logging;
+using CodeFuller.Library.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -50,16 +50,11 @@ namespace MovieLibrary.Logic.IntegrationTests
 
 		private static void BootstrapLogging(IServiceCollection services, IConfiguration configuration)
 		{
-			var loggingSettings = new LoggingSettings();
-			configuration.Bind("logging", loggingSettings);
-
-			var loggingConfiguration = new LoggingConfiguration();
-			loggingConfiguration.LoadSettings(loggingSettings);
-
 			services.AddSingleton<ILoggerFactory>(_ =>
 			{
 				var loggerFactory = new LoggerFactory();
-				loggingConfiguration.AddLogging(loggerFactory);
+				loggerFactory.AddLogging(settings => configuration.Bind("logging", settings));
+
 				return loggerFactory;
 			});
 

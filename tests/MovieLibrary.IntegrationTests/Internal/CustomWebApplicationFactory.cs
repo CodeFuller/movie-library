@@ -5,7 +5,7 @@ using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using AspNetCore.Identity.Mongo.Model;
-using CF.Library.Logging;
+using CodeFuller.Library.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -70,14 +70,8 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 			builder.ConfigureLogging((hostingContext, loggingBuilder) =>
 			{
-				var loggingSettings = new LoggingSettings();
-				hostingContext.Configuration.Bind("logging", loggingSettings);
-
-				var loggingConfiguration = new LoggingConfiguration();
-				loggingConfiguration.LoadSettings(loggingSettings);
-
 				loggingBuilder.ClearProviders();
-				loggingConfiguration.AddLogging(loggingBuilder);
+				loggingBuilder.AddLogging(settings => hostingContext.Configuration.Bind("logging", settings));
 			});
 
 			builder.ConfigureServices(services =>

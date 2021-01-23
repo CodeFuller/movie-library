@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using CF.Library.Logging;
+using CodeFuller.Library.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -22,15 +22,8 @@ namespace MovieLibrary
 				})
 				.ConfigureLogging((hostingContext, loggingBuilder) =>
 				{
-					var loggingSettings = new LoggingSettings();
-					var configuration = hostingContext.Configuration;
-					configuration.Bind("logging", loggingSettings);
-
-					var loggingConfiguration = new LoggingConfiguration();
-					loggingConfiguration.LoadSettings(loggingSettings);
-
 					loggingBuilder.ClearProviders();
-					loggingConfiguration.AddLogging(loggingBuilder);
+					loggingBuilder.AddLogging(settings => hostingContext.Configuration.Bind("logging", settings));
 				});
 	}
 }
