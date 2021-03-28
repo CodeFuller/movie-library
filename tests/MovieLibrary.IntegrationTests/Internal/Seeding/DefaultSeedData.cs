@@ -6,7 +6,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
 	internal class DefaultSeedData : ISeedData
 	{
-		public IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToGet
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToGet
 		{
 			get
 			{
@@ -38,7 +38,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 			}
 		}
 
-		public IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToSee
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToSee
 		{
 			get
 			{

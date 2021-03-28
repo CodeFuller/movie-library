@@ -9,7 +9,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 		// We need 10 pages with 2 movies per page.
 		private const int MoviesNumber = 10 * 2;
 
-		public IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToGet
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToGet
 		{
 			get
 			{
@@ -26,7 +26,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 			}
 		}
 
-		public IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToSee
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToSee
 		{
 			get
 			{

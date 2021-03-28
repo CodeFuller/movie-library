@@ -6,9 +6,9 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
 	internal class NoMoviesSeedData : ISeedData
 	{
-		public IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToGet => Enumerable.Empty<(MovieId id, MovieInfoModel movieInfo)>();
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToGet => Enumerable.Empty<(MovieId Id, MovieInfoModel MovieInfo)>();
 
-		public IEnumerable<(MovieId id, MovieInfoModel movieInfo)> MoviesToSee => Enumerable.Empty<(MovieId id, MovieInfoModel movieInfo)>();
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToSee => Enumerable.Empty<(MovieId Id, MovieInfoModel MovieInfo)>();
 
 		public IEnumerable<RoleSeedData> Roles => SharedSeedData.ApplicationRoles;
 
