@@ -6,6 +6,11 @@
 @using MovieLibrary.Extensions
 @model MoviesToGetViewModel
 
+@if (!String.IsNullOrEmpty(Model.ErrorMessage))
+{
+    @await Html.PartialAsync("_AlertErrorPartial", Model.ErrorMessage)
+}
+
 @if (Model.AddedMovie)
 {
     @await Html.PartialAsync("_AlertSuccessPartial", "The movie was added successfully.")

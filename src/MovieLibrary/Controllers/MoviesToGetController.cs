@@ -26,8 +26,8 @@ namespace MovieLibrary.Controllers
 
 		protected override string ControllerName => "MoviesToGet";
 
-		public MoviesToGetController(IMoviesToGetService moviesToGetService, IMovieInfoService movieInfoService, IOptions<AppSettings> options)
-			: base(options)
+		public MoviesToGetController(IMoviesToGetService moviesToGetService, IMovieUniquenessChecker movieUniquenessChecker, IMovieInfoService movieInfoService, IOptions<AppSettings> options)
+			: base(movieUniquenessChecker, options)
 		{
 			this.moviesToGetService = moviesToGetService ?? throw new ArgumentNullException(nameof(moviesToGetService));
 			this.movieInfoService = movieInfoService ?? throw new ArgumentNullException(nameof(movieInfoService));
@@ -50,6 +50,13 @@ namespace MovieLibrary.Controllers
 			}
 
 			var newMovieToGet = model.NewMovieToGet;
+
+			var movieCheckModel = await CheckMovieUniqueness(newMovieToGet.MovieUri, model.Paging?.CurrentPageNumber ?? 1, cancellationToken);
+			if (movieCheckModel != null)
+			{
+				return movieCheckModel;
+			}
+
 			var movieInfo = await movieInfoService.LoadMovieInfoByUrl(newMovieToGet.MovieUri, cancellationToken);
 
 			return View("ConfirmMovieAdding", new InputMovieInfoViewModel(movieInfo));
@@ -57,9 +64,16 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(ApplicationPermissions.MoviesToGet.Add)]
-		public async Task<RedirectToActionResult> AddMovie([FromForm] InputMovieInfoViewModel model, CancellationToken cancellationToken)
+		public async Task<IActionResult> AddMovie([FromForm] InputMovieInfoViewModel model, CancellationToken cancellationToken)
 		{
 			var movieInfo = model.ToMovieInfo();
+
+			var movieCheckModel = await CheckMovieUniqueness(movieInfo.MovieUri, 1, cancellationToken);
+			if (movieCheckModel != null)
+			{
+				return movieCheckModel;
+			}
+
 			await moviesToGetService.AddMovie(movieInfo, cancellationToken);
 
 			TempData[TempDataAddedMovie] = true;
@@ -114,8 +128,9 @@ namespace MovieLibrary.Controllers
 
 		protected override MoviesToGetViewModel CreateMoviesPageViewModel(IEnumerable<MovieToGetModel> movies, int pageNumber, int totalPagesNumber)
 		{
-			return new MoviesToGetViewModel(movies, pageNumber, totalPagesNumber)
+			return new (movies, pageNumber, totalPagesNumber)
 			{
+				ErrorMessage = TempData.GetStringValue(TempDataErrorMessage),
 				AddedMovie = TempData.GetBooleanValue(TempDataAddedMovie),
 				MovedMovie = TempData.GetBooleanValue(TempDataMovedMovie),
 				DeletedMovie = TempData.GetBooleanValue(TempDataDeletedMovie),

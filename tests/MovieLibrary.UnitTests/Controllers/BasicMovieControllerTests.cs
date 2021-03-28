@@ -4,7 +4,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using MovieLibrary.Controllers;
+using MovieLibrary.Logic.Interfaces;
 
 namespace MovieLibrary.UnitTests.Controllers
 {
@@ -34,7 +36,7 @@ namespace MovieLibrary.UnitTests.Controllers
 			protected override string ControllerName => "ConcreteMovies";
 
 			public ConcreteMoviesController(IEnumerable<string> movies, int pageSize)
-				: base(CreateOptions(pageSize))
+				: base(Mock.Of<IMovieUniquenessChecker>(), CreateOptions(pageSize))
 			{
 				this.movies = movies?.ToList() ?? throw new ArgumentNullException(nameof(movies));
 			}
