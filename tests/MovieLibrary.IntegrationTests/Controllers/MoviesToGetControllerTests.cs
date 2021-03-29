@@ -152,6 +152,28 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
+		public async Task ConfirmMovieAdding_ForDuplicatedMovie_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			using var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/342/"),
+			});
+
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToGet/ConfirmMovieAdding"), formContent, CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
 		public async Task AddMovie_ForPrivilegedUserAndMovieWithAllInfoFilled_AddsMovieCorrectly()
 		{
 			// Arrange
@@ -265,6 +287,38 @@ namespace MovieLibrary.IntegrationTests.Controllers
 			});
 
 			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToGet/AddMovie"), formContent, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("/MoviesToGet", UriKind.Relative));
+
+			using var indexResponse = await client.GetAsync(new Uri("https://localhost:5001/MoviesToGet"), CancellationToken.None);
+			await ResponseAssert.VerifyPageLoaded(indexResponse);
+		}
+
+		[TestMethod]
+		public async Task AddMovie_ForDuplicatedMovie_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			using var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("Title", "New Movie Without Info"),
+				new KeyValuePair<string, string>("Year", String.Empty),
+				new KeyValuePair<string, string>("MovieUri", "https://www.kinopoisk.ru/film/777/"),
+				new KeyValuePair<string, string>("PosterUri", String.Empty),
+				new KeyValuePair<string, string>("RatingValue", String.Empty),
+				new KeyValuePair<string, string>("RatingVotesNumber", String.Empty),
+				new KeyValuePair<string, string>("Duration", String.Empty),
+				new KeyValuePair<string, string>("Summary", String.Empty),
+			});
+
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act

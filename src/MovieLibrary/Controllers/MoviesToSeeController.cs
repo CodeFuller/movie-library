@@ -16,20 +16,24 @@ namespace MovieLibrary.Controllers
 {
 	public class MoviesToSeeController : BasicMovieController<MovieToSeeModel, MoviesToSeeViewModel>
 	{
+		private const string TempDataErrorMessage = "Error";
 		private const string TempDataAddedMovie = "AddedMovie";
 		private const string TempDataMarkedMovieAsSeen = "MarkedMovieAsSeen";
 		private const string TempDataDeletedMovie = "DeletedMovie";
 
 		private readonly IMoviesToSeeService moviesToSeeService;
 
+		private readonly IMovieUniquenessChecker movieUniquenessChecker;
+
 		private readonly IMovieInfoService movieInfoService;
 
 		protected override string ControllerName => "MoviesToSee";
 
 		public MoviesToSeeController(IMoviesToSeeService moviesToSeeService, IMovieUniquenessChecker movieUniquenessChecker, IMovieInfoService movieInfoService, IOptions<AppSettings> options)
-			: base(movieUniquenessChecker, options)
+			: base(options)
 		{
 			this.moviesToSeeService = moviesToSeeService ?? throw new ArgumentNullException(nameof(moviesToSeeService));
+			this.movieUniquenessChecker = movieUniquenessChecker ?? throw new ArgumentNullException(nameof(movieUniquenessChecker));
 			this.movieInfoService = movieInfoService ?? throw new ArgumentNullException(nameof(movieInfoService));
 		}
 
@@ -51,10 +55,15 @@ namespace MovieLibrary.Controllers
 
 			var newMovieToSee = model.NewMovieToSee;
 
-			var movieCheckModel = await CheckMovieUniqueness(newMovieToSee.MovieUri, model.Paging?.CurrentPageNumber ?? 1, cancellationToken);
-			if (movieCheckModel != null)
+			var checkResult = await movieUniquenessChecker.CheckMovie(newMovieToSee.MovieUri, cancellationToken);
+			if (checkResult != MovieUniquenessCheckResult.MovieIsUnique)
 			{
-				return movieCheckModel;
+				// Clearing movie URL from the input.
+				ModelState.Clear();
+
+				FillDuplicatedMovieError(checkResult, newMovieToSee.MovieUri);
+
+				return MoviesPageView(model.Paging?.CurrentPageNumber ?? 1);
 			}
 
 			var movieInfo = await movieInfoService.LoadMovieInfoByUrl(newMovieToSee.MovieUri, cancellationToken);
@@ -68,10 +77,12 @@ namespace MovieLibrary.Controllers
 		{
 			var movieInfo = model.ToMovieInfo();
 
-			var movieCheckModel = await CheckMovieUniqueness(movieInfo.MovieUri, 1, cancellationToken);
-			if (movieCheckModel != null)
+			var checkResult = await movieUniquenessChecker.CheckMovie(movieInfo.MovieUri, cancellationToken);
+			if (checkResult != MovieUniquenessCheckResult.MovieIsUnique)
 			{
-				return movieCheckModel;
+				FillDuplicatedMovieError(checkResult, movieInfo.MovieUri);
+
+				return RedirectToAction("Index");
 			}
 
 			await moviesToSeeService.AddMovie(movieInfo, cancellationToken);
@@ -79,6 +90,11 @@ namespace MovieLibrary.Controllers
 			TempData[TempDataAddedMovie] = true;
 
 			return RedirectToAction("Index");
+		}
+
+		private void FillDuplicatedMovieError(MovieUniquenessCheckResult checkResult, Uri movieUri)
+		{
+			TempData[TempDataErrorMessage] = GetDuplicatedMovieError(checkResult, movieUri);
 		}
 
 		[HttpGet]

@@ -203,6 +203,28 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		}
 
 		[TestMethod]
+		public async Task ConfirmMovieAdding_ForDuplicatedMovie_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			using var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/474/"),
+			});
+
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToSee/ConfirmMovieAdding"), formContent, CancellationToken.None);
+
+			// Assert
+
+			await ResponseAssert.VerifyPageLoaded(response);
+		}
+
+		[TestMethod]
 		public async Task AddMovie_ForPrivilegedUserAndMovieWithAllInfoFilled_AddsMovieCorrectly()
 		{
 			// Arrange
@@ -308,6 +330,38 @@ namespace MovieLibrary.IntegrationTests.Controllers
 			// Assert
 
 			ResponseAssert.VerifyRedirect(response, new Uri("https://localhost:5001/Identity/Account/AccessDenied?ReturnUrl=%2FMoviesToSee%2FAddMovie"));
+		}
+
+		[TestMethod]
+		public async Task AddMovie_ForDuplicatedMovie_ReturnsCorrectPage()
+		{
+			// Arrange
+
+			using var formContent = new FormUrlEncodedContent(new[]
+			{
+				new KeyValuePair<string, string>("Title", "New Movie Without Info"),
+				new KeyValuePair<string, string>("Year", String.Empty),
+				new KeyValuePair<string, string>("MovieUri", "https://www.kinopoisk.ru/film/888/"),
+				new KeyValuePair<string, string>("PosterUri", String.Empty),
+				new KeyValuePair<string, string>("RatingValue", String.Empty),
+				new KeyValuePair<string, string>("RatingVotesNumber", String.Empty),
+				new KeyValuePair<string, string>("Duration", String.Empty),
+				new KeyValuePair<string, string>("Summary", String.Empty),
+			});
+
+			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			using var client = webApplicationFactory.CreateDefaultHttpClient();
+
+			// Act
+
+			using var response = await client.PostAsync(new Uri("https://localhost:5001/MoviesToSee/AddMovie"), formContent, CancellationToken.None);
+
+			// Assert
+
+			ResponseAssert.VerifyRedirect(response, new Uri("/MoviesToSee", UriKind.Relative));
+
+			using var indexResponse = await client.GetAsync(new Uri("https://localhost:5001/MoviesToSee"), CancellationToken.None);
+			await ResponseAssert.VerifyPageLoaded(indexResponse);
 		}
 
 		[TestMethod]

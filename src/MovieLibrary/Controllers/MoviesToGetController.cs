@@ -16,20 +16,24 @@ namespace MovieLibrary.Controllers
 {
 	public class MoviesToGetController : BasicMovieController<MovieToGetModel, MoviesToGetViewModel>
 	{
+		private const string TempDataErrorMessage = "Error";
 		private const string TempDataAddedMovie = "AddedMovie";
 		private const string TempDataMovedMovie = "MovedMovie";
 		private const string TempDataDeletedMovie = "DeletedMovie";
 
 		private readonly IMoviesToGetService moviesToGetService;
 
+		private readonly IMovieUniquenessChecker movieUniquenessChecker;
+
 		private readonly IMovieInfoService movieInfoService;
 
 		protected override string ControllerName => "MoviesToGet";
 
 		public MoviesToGetController(IMoviesToGetService moviesToGetService, IMovieUniquenessChecker movieUniquenessChecker, IMovieInfoService movieInfoService, IOptions<AppSettings> options)
-			: base(movieUniquenessChecker, options)
+			: base(options)
 		{
 			this.moviesToGetService = moviesToGetService ?? throw new ArgumentNullException(nameof(moviesToGetService));
+			this.movieUniquenessChecker = movieUniquenessChecker ?? throw new ArgumentNullException(nameof(movieUniquenessChecker));
 			this.movieInfoService = movieInfoService ?? throw new ArgumentNullException(nameof(movieInfoService));
 		}
 
@@ -51,10 +55,15 @@ namespace MovieLibrary.Controllers
 
 			var newMovieToGet = model.NewMovieToGet;
 
-			var movieCheckModel = await CheckMovieUniqueness(newMovieToGet.MovieUri, model.Paging?.CurrentPageNumber ?? 1, cancellationToken);
-			if (movieCheckModel != null)
+			var checkResult = await movieUniquenessChecker.CheckMovie(newMovieToGet.MovieUri, cancellationToken);
+			if (checkResult != MovieUniquenessCheckResult.MovieIsUnique)
 			{
-				return movieCheckModel;
+				// Clearing movie URL from the input.
+				ModelState.Clear();
+
+				FillDuplicatedMovieError(checkResult, newMovieToGet.MovieUri);
+
+				return MoviesPageView(model.Paging?.CurrentPageNumber ?? 1);
 			}
 
 			var movieInfo = await movieInfoService.LoadMovieInfoByUrl(newMovieToGet.MovieUri, cancellationToken);
@@ -64,14 +73,16 @@ namespace MovieLibrary.Controllers
 
 		[HttpPost]
 		[Authorize(ApplicationPermissions.MoviesToGet.Add)]
-		public async Task<IActionResult> AddMovie([FromForm] InputMovieInfoViewModel model, CancellationToken cancellationToken)
+		public async Task<RedirectToActionResult> AddMovie([FromForm] InputMovieInfoViewModel model, CancellationToken cancellationToken)
 		{
 			var movieInfo = model.ToMovieInfo();
 
-			var movieCheckModel = await CheckMovieUniqueness(movieInfo.MovieUri, 1, cancellationToken);
-			if (movieCheckModel != null)
+			var checkResult = await movieUniquenessChecker.CheckMovie(movieInfo.MovieUri, cancellationToken);
+			if (checkResult != MovieUniquenessCheckResult.MovieIsUnique)
 			{
-				return movieCheckModel;
+				FillDuplicatedMovieError(checkResult, movieInfo.MovieUri);
+
+				return RedirectToAction("Index");
 			}
 
 			await moviesToGetService.AddMovie(movieInfo, cancellationToken);
@@ -79,6 +90,11 @@ namespace MovieLibrary.Controllers
 			TempData[TempDataAddedMovie] = true;
 
 			return RedirectToAction("Index");
+		}
+
+		private void FillDuplicatedMovieError(MovieUniquenessCheckResult checkResult, Uri movieUri)
+		{
+			TempData[TempDataErrorMessage] = GetDuplicatedMovieError(checkResult, movieUri);
 		}
 
 		[HttpGet]
