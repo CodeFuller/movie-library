@@ -70,7 +70,7 @@ namespace MovieLibrary.Controllers
 			{
 				MovieUniquenessCheckResult.ExistsInMoviesToGet => $"Movie {movieUri} already exists among movies to get",
 				MovieUniquenessCheckResult.ExistsInMoviesToSee => $"Movie {movieUri} already exists among movies to see",
-				_ => throw new InvalidOperationException($"Unexpected value of movie check result: {checkResult}")
+				_ => throw new InvalidOperationException($"Unexpected value of movie check result: {checkResult}"),
 			};
 		}
 	}

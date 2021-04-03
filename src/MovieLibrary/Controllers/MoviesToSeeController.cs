@@ -144,7 +144,7 @@ namespace MovieLibrary.Controllers
 
 		protected override MoviesToSeeViewModel CreateMoviesPageViewModel(IEnumerable<MovieToSeeModel> movies, int pageNumber, int totalPagesNumber)
 		{
-			return new (movies, pageNumber, totalPagesNumber)
+			return new(movies, pageNumber, totalPagesNumber)
 			{
 				ErrorMessage = TempData.GetStringValue(TempDataErrorMessage),
 				AddedMovie = TempData.GetBooleanValue(TempDataAddedMovie),
