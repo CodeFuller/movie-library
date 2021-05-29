@@ -11,7 +11,12 @@ namespace MovieLibrary.Logic.Kinopoisk
 {
 	internal class KinopoiskMovieInfoParser : IMovieInfoParser
 	{
-		private static readonly Regex TitleRegex = new Regex(@"<h1 class=""styles_title_[^>]+? itemProp=""name""><span class=""styles_title_[^>]+?>([^<>]+?)(?:<!-- --> \(ТВ\))?</span>", RegexOptions.Compiled);
+		// For titles in Russian
+		private static readonly Regex TitleRegex1 = new Regex(@"<meta property=""og:title"" content=""«(.+?)» ", RegexOptions.Compiled);
+
+		// For titles with no translation to Russian, e.g. https://www.kinopoisk.ru/film/1359229/
+		private static readonly Regex TitleRegex2 = new Regex(@"<meta property=""og:title"" content=""(.+?), \d+", RegexOptions.Compiled);
+
 		private static readonly Regex YearRegex = new Regex(@"<a [^>]*?href=""/lists/navigator/(\d+)/\?quick_filters=films"">\1</a>", RegexOptions.Compiled);
 		private static readonly Regex MovieUriRegex = new Regex(@"<a class=""styles[^>]+?"" href=""(/film/\d+/)subscribe/"">", RegexOptions.Compiled);
 		private static readonly Regex PosterUriRegex = new Regex(@"<img class=""film-poster [^>]+? src=""(//avatars.mds.yandex.net/get-kinopoisk-image/[^>]+?)""", RegexOptions.Compiled);
@@ -49,7 +54,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 
 			foreach (var line in content.Split("\n"))
 			{
-				title ??= ParseValue(line, TitleRegex);
+				title ??= ParseValue(line, TitleRegex1) ?? ParseValue(line, TitleRegex2);
 				yearText ??= ParseValue(line, YearRegex);
 				movieUri ??= ParseValue(line, MovieUriRegex);
 				posterUri ??= ParseValue(line, PosterUriRegex);
