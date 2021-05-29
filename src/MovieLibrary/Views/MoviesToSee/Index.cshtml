@@ -44,6 +44,8 @@
 
 @if (User.HasPermission(ApplicationPermissions.MoviesToSee.Read))
 {
+    @await Html.PartialAsync("_PagingPartial", Model.Paging)
+
     <ul class="movies-list">
         @foreach (var movie in Model.Movies)
         {

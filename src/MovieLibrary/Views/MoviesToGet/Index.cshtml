@@ -33,17 +33,19 @@
             <div><span asp-validation-for="NewMovieToGet.MovieUri" class="text-danger"></span></div>
             <div class="input-group">
                 <div class="input-group-append">
-                    <input class="form-control" asp-for="NewMovieToGet.MovieUri" placeholder="Movie URL" aria-label="Movie URL" size="40"/>
+                    <input class="form-control" asp-for="NewMovieToGet.MovieUri" placeholder="Movie URL" aria-label="Movie URL" size="40" />
                     <button class="btn btn-primary" type="submit">Add</button>
                 </div>
             </div>
         </div>
-        <input type="hidden" asp-for="Paging.CurrentPageNumber"/>
+        <input type="hidden" asp-for="Paging.CurrentPageNumber" />
     </form>
 }
 
 @if (User.HasPermission(ApplicationPermissions.MoviesToGet.Read))
 {
+    @await Html.PartialAsync("_PagingPartial", Model.Paging)
+
     <ul class="movies-list">
         @foreach (var movie in Model.Movies)
         {
