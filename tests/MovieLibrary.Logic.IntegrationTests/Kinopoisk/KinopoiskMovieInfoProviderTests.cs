@@ -62,7 +62,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 			Assert.IsTrue(rating.VotesNumber > 400_000 && rating.VotesNumber < 10_000_000);
 
 			Assert.AreEqual(TimeSpan.FromMinutes(154), movieInfo.Duration);
-			CollectionAssert.AreEqual(new[] { "триллер", "комедия", "криминал", }, movieInfo.Genres?.ToList());
+			CollectionAssert.AreEqual(new[] { "криминал", "драма" }, movieInfo.Genres?.ToList());
 
 			var expectedSummary =
 				"Двое бандитов Винсент Вега и Джулс Винфилд ведут философские беседы в перерывах между разборками и решением проблем с должниками криминального босса Марселласа Уоллеса.\n\n"
