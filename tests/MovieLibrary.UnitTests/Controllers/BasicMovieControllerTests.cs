@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -78,11 +79,10 @@ namespace MovieLibrary.UnitTests.Controllers
 
 			// Assert
 
-			var viewModel = ExtractViewModel(actionResult);
+			var expectedViewModel = new MoviesPageViewModel(Array.Empty<string>(), 1, 0);
 
-			CollectionAssert.AreEqual(Array.Empty<string>(), viewModel.Movies.ToList());
-			Assert.AreEqual(1, viewModel.PageNumber);
-			Assert.AreEqual(0, viewModel.TotalPagesNumber);
+			var viewModel = ExtractViewModel(actionResult);
+			viewModel.Should().BeEquivalentTo(expectedViewModel, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -99,7 +99,7 @@ namespace MovieLibrary.UnitTests.Controllers
 			// Assert
 
 			var redirectPageNumber = ExtractRedirectPageNumber(actionResult);
-			Assert.IsNull(redirectPageNumber);
+			redirectPageNumber.Should().BeNull();
 		}
 
 		[TestMethod]
@@ -116,7 +116,7 @@ namespace MovieLibrary.UnitTests.Controllers
 			// Assert
 
 			var redirectPageNumber = ExtractRedirectPageNumber(actionResult);
-			Assert.AreEqual(1, redirectPageNumber);
+			redirectPageNumber.Should().Be(1);
 		}
 
 		[TestMethod]
@@ -133,7 +133,7 @@ namespace MovieLibrary.UnitTests.Controllers
 			// Assert
 
 			var redirectPageNumber = ExtractRedirectPageNumber(actionResult);
-			Assert.AreEqual(2, redirectPageNumber);
+			redirectPageNumber.Should().Be(2);
 		}
 
 		[TestMethod]
@@ -150,7 +150,7 @@ namespace MovieLibrary.UnitTests.Controllers
 			// Assert
 
 			var redirectPageNumber = ExtractRedirectPageNumber(actionResult);
-			Assert.IsNull(redirectPageNumber);
+			redirectPageNumber.Should().BeNull();
 		}
 
 		[TestMethod]
@@ -166,11 +166,10 @@ namespace MovieLibrary.UnitTests.Controllers
 
 			// Assert
 
-			var viewModel = ExtractViewModel(actionResult);
+			var expectedViewModel = new MoviesPageViewModel(new[] { "Movie 1", "Movie 2" }, 1, 3);
 
-			CollectionAssert.AreEqual(new[] { "Movie 1", "Movie 2" }, viewModel.Movies.ToList());
-			Assert.AreEqual(1, viewModel.PageNumber);
-			Assert.AreEqual(3, viewModel.TotalPagesNumber);
+			var viewModel = ExtractViewModel(actionResult);
+			viewModel.Should().BeEquivalentTo(expectedViewModel, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -186,11 +185,10 @@ namespace MovieLibrary.UnitTests.Controllers
 
 			// Assert
 
-			var viewModel = ExtractViewModel(actionResult);
+			var expectedViewModel = new MoviesPageViewModel(new[] { "Movie 3", "Movie 4" }, 2, 3);
 
-			CollectionAssert.AreEqual(new[] { "Movie 3", "Movie 4" }, viewModel.Movies.ToList());
-			Assert.AreEqual(2, viewModel.PageNumber);
-			Assert.AreEqual(3, viewModel.TotalPagesNumber);
+			var viewModel = ExtractViewModel(actionResult);
+			viewModel.Should().BeEquivalentTo(expectedViewModel, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -206,41 +204,36 @@ namespace MovieLibrary.UnitTests.Controllers
 
 			// Assert
 
-			var viewModel = ExtractViewModel(actionResult);
+			var expectedViewModel = new MoviesPageViewModel(new[] { "Movie 5" }, 3, 3);
 
-			CollectionAssert.AreEqual(new[] { "Movie 5" }, viewModel.Movies.ToList());
-			Assert.AreEqual(3, viewModel.PageNumber);
-			Assert.AreEqual(3, viewModel.TotalPagesNumber);
+			var viewModel = ExtractViewModel(actionResult);
+			viewModel.Should().BeEquivalentTo(expectedViewModel, x => x.WithStrictOrdering());
 		}
 
 		private static MoviesPageViewModel ExtractViewModel(IActionResult actionResult)
 		{
-			Assert.IsInstanceOfType(actionResult, typeof(ViewResult));
+			actionResult.Should().BeOfType<ViewResult>();
 			var viewResult = (ViewResult)actionResult;
 
-			Assert.IsInstanceOfType(viewResult.Model, typeof(MoviesPageViewModel));
+			viewResult.Model.Should().BeOfType<MoviesPageViewModel>();
 			return (MoviesPageViewModel)viewResult.Model;
 		}
 
 		private static int? ExtractRedirectPageNumber(IActionResult actionResult)
 		{
-			Assert.IsInstanceOfType(actionResult, typeof(RedirectToActionResult));
+			actionResult.Should().BeOfType<RedirectToActionResult>();
 			var redirectResult = (RedirectToActionResult)actionResult;
 
-			Assert.AreEqual("ConcreteMovies", redirectResult.ControllerName);
-			Assert.AreEqual("Index", redirectResult.ActionName);
+			redirectResult.ControllerName.Should().Be("ConcreteMovies");
+			redirectResult.ActionName.Should().Be("Index");
 
 			if (redirectResult.RouteValues == null)
 			{
 				return null;
 			}
 
-			Assert.AreEqual(1, redirectResult.RouteValues.Count);
-
-			var routeValue = redirectResult.RouteValues.Single();
-			Assert.AreEqual("pageNumber", routeValue.Key);
-
-			return (int)routeValue.Value;
+			redirectResult.RouteValues.Keys.Should().Equal("pageNumber");
+			return (int)redirectResult.RouteValues.Values.Single();
 		}
 	}
 }

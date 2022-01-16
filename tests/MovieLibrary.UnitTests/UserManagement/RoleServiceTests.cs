@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -92,11 +93,11 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Act
 
-			Task Call() => target.AssignRolePermissions("SomeRoleId", newPermissions, CancellationToken.None);
+			var call = () => target.AssignRolePermissions("SomeRoleId", newPermissions, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
 		[TestMethod]
@@ -211,11 +212,11 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Act
 
-			Task Call() => target.AssignRolePermissions("SomeRoleId", newPermissions, CancellationToken.None);
+			var call = () => target.AssignRolePermissions("SomeRoleId", newPermissions, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
 		[TestMethod]
@@ -286,11 +287,11 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Act
 
-			Task Call() => target.AssignRolePermissions("SomeRoleId", newPermissions, CancellationToken.None);
+			var call = () => target.AssignRolePermissions("SomeRoleId", newPermissions, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
 		[TestMethod]
@@ -311,11 +312,11 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Act
 
-			Task Call() => target.DeleteRole("SomeRoleId", CancellationToken.None);
+			var call = () => target.DeleteRole("SomeRoleId", CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
 		private static IList<Claim> ToClaims(IEnumerable<string> permissions)

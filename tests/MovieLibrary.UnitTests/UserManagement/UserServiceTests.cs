@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -11,6 +12,7 @@ using MovieLibrary.Authorization;
 using MovieLibrary.Exceptions;
 using MovieLibrary.UserManagement;
 using MovieLibrary.UserManagement.Interfaces;
+using MovieLibrary.UserManagement.Models;
 
 namespace MovieLibrary.UnitTests.UserManagement
 {
@@ -18,7 +20,7 @@ namespace MovieLibrary.UnitTests.UserManagement
 	public class UserServiceTests
 	{
 		[TestMethod]
-		public async Task GetAllUsers_ForDefaultAdministrator_SetsCanBeEditedToTrue()
+		public async Task GetAllUsers_ForDefaultAdministrator_SetsCanBeEditedToFalse()
 		{
 			// Arrange
 
@@ -55,8 +57,14 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Assert
 
-			Assert.AreEqual(SecurityConstants.DefaultAdministratorEmail, users[0].UserName);
-			Assert.IsFalse(users[0].CanBeEdited);
+			var expectedUser = new UserModel
+			{
+				Id = "Id1",
+				UserName = SecurityConstants.DefaultAdministratorEmail,
+				CanBeEdited = false,
+			};
+
+			users[0].Should().BeEquivalentTo(expectedUser, x => x.Excluding(y => y.CanBeDeleted));
 		}
 
 		[TestMethod]
@@ -91,7 +99,14 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Assert
 
-			Assert.IsTrue(users[0].CanBeEdited);
+			var expectedUser = new UserModel
+			{
+				Id = "Id1",
+				UserName = "Custom Admin",
+				CanBeEdited = true,
+			};
+
+			users[0].Should().BeEquivalentTo(expectedUser, x => x.Excluding(y => y.CanBeDeleted));
 		}
 
 		[TestMethod]
@@ -126,11 +141,23 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Assert
 
-			Assert.AreEqual(SecurityConstants.DefaultAdministratorEmail, users[0].UserName);
-			Assert.IsFalse(users[0].CanBeDeleted);
+			var expectedUsers = new[]
+			{
+				new UserModel
+				{
+					Id = "Id1",
+					UserName = SecurityConstants.DefaultAdministratorEmail,
+					CanBeDeleted = false,
+				},
+				new UserModel
+				{
+					Id = "Id2",
+					UserName = "Limited User",
+					CanBeDeleted = true,
+				},
+			};
 
-			Assert.AreEqual("Limited User", users[1].UserName);
-			Assert.IsTrue(users[1].CanBeDeleted);
+			users.Should().BeEquivalentTo(expectedUsers, x => x.WithStrictOrdering().Excluding(y => y.CanBeEdited));
 		}
 
 		[TestMethod]
@@ -165,11 +192,23 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Assert
 
-			Assert.AreEqual("Custom Admin", users[0].UserName);
-			Assert.IsFalse(users[0].CanBeDeleted);
+			var expectedUsers = new[]
+			{
+				new UserModel
+				{
+					Id = "Id1",
+					UserName = "Custom Admin",
+					CanBeDeleted = false,
+				},
+				new UserModel
+				{
+					Id = "Id2",
+					UserName = "Limited User",
+					CanBeDeleted = true,
+				},
+			};
 
-			Assert.AreEqual("Limited User", users[1].UserName);
-			Assert.IsTrue(users[1].CanBeDeleted);
+			users.Should().BeEquivalentTo(expectedUsers, x => x.WithStrictOrdering().Excluding(y => y.CanBeEdited));
 		}
 
 		[TestMethod]
@@ -204,8 +243,23 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Assert
 
-			Assert.IsTrue(users[0].CanBeDeleted);
-			Assert.IsTrue(users[1].CanBeDeleted);
+			var expectedUsers = new[]
+			{
+				new UserModel
+				{
+					Id = "Id1",
+					UserName = SecurityConstants.DefaultAdministratorEmail,
+					CanBeDeleted = true,
+				},
+				new UserModel
+				{
+					Id = "Id2",
+					UserName = "Custom Admin",
+					CanBeDeleted = true,
+				},
+			};
+
+			users.Should().BeEquivalentTo(expectedUsers, x => x.WithStrictOrdering().Excluding(y => y.CanBeEdited));
 		}
 
 		[TestMethod]
@@ -235,13 +289,22 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Assert
 
-			Assert.AreEqual(2, roles.Count);
+			var expectedRoles = new[]
+			{
+				new UserRoleModel
+				{
+					RoleName = SecurityConstants.AdministratorRole,
+					ReadOnly = true,
+				},
 
-			Assert.AreEqual(SecurityConstants.AdministratorRole, roles[0].RoleName);
-			Assert.IsTrue(roles[0].ReadOnly);
+				new UserRoleModel
+				{
+					RoleName = "Another Role",
+					ReadOnly = false,
+				},
+			};
 
-			Assert.AreEqual("Another Role", roles[1].RoleName);
-			Assert.IsFalse(roles[1].ReadOnly);
+			roles.Should().BeEquivalentTo(expectedRoles, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -271,13 +334,22 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Assert
 
-			Assert.AreEqual(2, roles.Count);
+			var expectedRoles = new[]
+			{
+				new UserRoleModel
+				{
+					RoleName = SecurityConstants.AdministratorRole,
+					ReadOnly = true,
+				},
 
-			Assert.AreEqual(SecurityConstants.AdministratorRole, roles[0].RoleName);
-			Assert.IsTrue(roles[0].ReadOnly);
+				new UserRoleModel
+				{
+					RoleName = "Another Role",
+					ReadOnly = false,
+				},
+			};
 
-			Assert.AreEqual("Another Role", roles[1].RoleName);
-			Assert.IsFalse(roles[1].ReadOnly);
+			roles.Should().BeEquivalentTo(expectedRoles, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -313,13 +385,22 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Assert
 
-			Assert.AreEqual(2, roles.Count);
+			var expectedRoles = new[]
+			{
+				new UserRoleModel
+				{
+					RoleName = SecurityConstants.AdministratorRole,
+					ReadOnly = false,
+				},
 
-			Assert.AreEqual(SecurityConstants.AdministratorRole, roles[0].RoleName);
-			Assert.IsFalse(roles[0].ReadOnly);
+				new UserRoleModel
+				{
+					RoleName = "Another Role",
+					ReadOnly = false,
+				},
+			};
 
-			Assert.AreEqual("Another Role", roles[1].RoleName);
-			Assert.IsFalse(roles[1].ReadOnly);
+			roles.Should().BeEquivalentTo(expectedRoles, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -355,13 +436,22 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Assert
 
-			Assert.AreEqual(2, roles.Count);
+			var expectedRoles = new[]
+			{
+				new UserRoleModel
+				{
+					RoleName = "Role #1",
+					ReadOnly = false,
+				},
 
-			Assert.AreEqual("Role #1", roles[0].RoleName);
-			Assert.IsFalse(roles[0].ReadOnly);
+				new UserRoleModel
+				{
+					RoleName = "Role #2",
+					ReadOnly = false,
+				},
+			};
 
-			Assert.AreEqual("Role #2", roles[1].RoleName);
-			Assert.IsFalse(roles[1].ReadOnly);
+			roles.Should().BeEquivalentTo(expectedRoles, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -442,11 +532,11 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Act
 
-			Task Call() => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
+			var call = () => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
 		[TestMethod]
@@ -564,11 +654,11 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Act
 
-			Task Call() => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
+			var call = () => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
 		[TestMethod]
@@ -638,11 +728,11 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Act
 
-			Task Call() => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
+			var call = () => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
 		[TestMethod]
@@ -676,11 +766,11 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Act
 
-			Task Call() => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
+			var call = () => target.AssignUserRoles("SomeUserId", newRoles, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
 		[TestMethod]
@@ -795,11 +885,11 @@ namespace MovieLibrary.UnitTests.UserManagement
 
 			// Act
 
-			Task Call() => target.DeleteUser("SomeId",  CancellationToken.None);
+			var call = () => target.DeleteUser("SomeId", CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<UserManagementException>(Call);
+			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
 		[TestMethod]
