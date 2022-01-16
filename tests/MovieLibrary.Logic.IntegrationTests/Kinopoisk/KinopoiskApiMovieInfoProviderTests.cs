@@ -117,6 +117,29 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 			movieInfo.Rating.VotesNumber.Should().BeLessThan(1000);
 		}
 
+		[TestMethod]
+		public async Task GetMovieInfo_IfCastContainsActorsInEnglish_LoadsMovieInfoCorrectly()
+		{
+			// Arrange
+
+			var target = CreateTestTarget();
+
+			// Act
+
+			var movieInfo = await target.GetMovieInfo(new Uri("https://www.kinopoisk.ru/film/1313568/"), CancellationToken.None);
+
+			// Assert
+
+			var expectedCast = new[]
+			{
+				"Чжоу Эньлай",
+				"Valko Chervenkov",
+				"Yumyaagiin Tsedenbal",
+			};
+
+			movieInfo.Cast.Should().Equal(expectedCast);
+		}
+
 		private static IMovieInfoProvider CreateTestTarget()
 		{
 			var services = new ServiceCollection();

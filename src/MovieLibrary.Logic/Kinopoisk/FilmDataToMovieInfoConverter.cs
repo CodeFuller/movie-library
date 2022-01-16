@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,8 +17,8 @@ namespace MovieLibrary.Logic.Kinopoisk
 				Title = data.NameInRussian,
 				Year = data.Year,
 				MovieUri = CreateHttpsUrl(data.WebUrl),
-				Directors = data.Creators.SelectMany(x => x).Where(x => x.ProfessionKey == "director").Select(x => x.NameInRussian).ToList(),
-				Cast = data.Creators.SelectMany(x => x).Where(x => x.ProfessionKey == "actor").Select(x => x.NameInRussian).ToList(),
+				Directors = GetCreators(data, "director"),
+				Cast = GetCreators(data, "actor"),
 				Rating = ParseFilmRating(data.RatingData),
 				Duration = ParseFilmLength(data.FilmLength),
 				Genres = data.Genre.Split(", ").Select(x => x.Trim()).ToList(),
@@ -31,6 +32,16 @@ namespace MovieLibrary.Logic.Kinopoisk
 		{
 			var httpsUrl = Regex.Replace(httpUrl, @"^http://(.+)", m => $"https://{m.Groups[1].Value}");
 			return new Uri(httpsUrl);
+		}
+
+		private static IReadOnlyCollection<string> GetCreators(FilmDetailViewDataContract data, string professionKey)
+		{
+			return data.Creators
+				.SelectMany(x => x)
+				.Where(x => x.ProfessionKey == professionKey)
+				.Select(x => x.Name)
+				.Where(x => x != null)
+				.ToList();
 		}
 
 		private static MovieRatingModel ParseFilmRating(FilmRatingDataContract ratingData)
