@@ -29,7 +29,7 @@ namespace MovieLibrary.Models
 
 		public IReadOnlyList<string> Genres { get; set; }
 
-		public string Summary { get; set; }
+		public IReadOnlyList<string> SummaryParagraphs { get; set; }
 
 		public InputMovieInfoViewModel()
 		{
@@ -49,7 +49,7 @@ namespace MovieLibrary.Models
 			RatingVotesNumber = model.Rating?.VotesNumber;
 			Duration = model.Duration;
 			Genres = model.Genres?.ToList() ?? new List<string>();
-			Summary = model.Summary;
+			SummaryParagraphs = model.SummaryParagraphs?.ToList() ?? new List<string>();
 		}
 
 		public MovieInfoModel ToMovieInfo()
@@ -65,7 +65,7 @@ namespace MovieLibrary.Models
 				Rating = RatingValue != null ? new MovieRatingModel(RatingValue.Value, RatingVotesNumber) : null,
 				Duration = Duration,
 				Genres = Genres,
-				Summary = Summary,
+				SummaryParagraphs = SummaryParagraphs,
 			};
 		}
 	}

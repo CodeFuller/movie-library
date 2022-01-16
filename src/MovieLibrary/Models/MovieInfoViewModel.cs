@@ -47,7 +47,7 @@ namespace MovieLibrary.Models
 
 		public IReadOnlyCollection<string> Genres => GetSafeCollection(movieInfo.Genres);
 
-		public IReadOnlyCollection<string> Summary => SplitSummary(movieInfo.Summary);
+		public IReadOnlyCollection<string> SummaryParagraphs => movieInfo.SummaryParagraphs ?? Array.Empty<string>();
 
 		public MovieInfoViewModel(MovieInfoModel movieInfo)
 		{
@@ -57,16 +57,6 @@ namespace MovieLibrary.Models
 		private static IReadOnlyCollection<string> GetSafeCollection(IReadOnlyCollection<string> source)
 		{
 			return source?.Take(MaxCollectionLength).ToArray() ?? new[] { MissingValue };
-		}
-
-		private static IReadOnlyCollection<string> SplitSummary(string summary)
-		{
-			if (String.IsNullOrWhiteSpace(summary))
-			{
-				return Array.Empty<string>();
-			}
-
-			return summary.Split(new[] { "\r\n\r\n", "\n\n" }, StringSplitOptions.None);
 		}
 	}
 }

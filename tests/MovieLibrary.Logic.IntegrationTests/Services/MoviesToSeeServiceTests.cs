@@ -35,7 +35,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 				Rating = new MovieRatingModel(8.499M, 463508),
 				Duration = TimeSpan.FromMinutes(152),
 				Genres = new[] { "фантастика", "боевик", "триллер", "криминал", "драма", },
-				Summary = "Бэтмен поднимает ставки в войне с криминалом...",
+				SummaryParagraphs = new[] { "Бэтмен поднимает ставки в войне с криминалом..." },
 			};
 
 			var serviceProvider = await BootstrapTests(seedData: true, StubClock(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3))));

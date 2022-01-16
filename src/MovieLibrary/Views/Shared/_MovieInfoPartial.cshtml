@@ -46,7 +46,7 @@
                 </tr>
             </tbody>
         </table>
-        @if (Model.Info.Summary.Any())
+        @if (Model.Info.SummaryParagraphs.Any())
         {
             var collapseId = $"collapseSummary-{Model.MovieId}";
             <div class="movie-info-summary">
@@ -55,7 +55,7 @@
                     <span class="if-not-collapsed">Hide summary</span>
                 </a>
                 <div id="@collapseId" class="collapse">
-                    @foreach (var paragraph in Model.Info.Summary)
+                    @foreach (var paragraph in Model.Info.SummaryParagraphs)
                     {
                         <p>
                             @paragraph

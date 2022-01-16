@@ -6,7 +6,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 {
 	internal static class DataForSeeding
 	{
-		public static MovieToGetModel MovieToGet1 => new MovieToGetModel
+		public static MovieToGetModel MovieToGet1 => new()
 		{
 			TimestampOfAddingToGetList = new DateTimeOffset(2019, 11, 28, 19, 23, 12, TimeSpan.FromHours(3)),
 			MovieInfo = new MovieInfoModel
@@ -20,13 +20,15 @@ namespace MovieLibrary.Logic.IntegrationTests
 				Rating = new MovieRatingModel(8.619M, 439744),
 				Duration = TimeSpan.FromMinutes(154),
 				Genres = new[] { "триллер", "комедия", "криминал", },
-				Summary = "Двое бандитов Винсент Вега и Джулс Винфилд ведут философские беседы в перерывах между разборками и решением проблем с должниками криминального босса Марселласа Уоллеса.\n\n"
-				          +
-				          "В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй рассказывается о боксёре Бутче Кулидже, купленном Уоллесом, чтобы сдать бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.",
+				SummaryParagraphs = new[]
+				{
+					"Двое бандитов Винсент Вега и Джулс Винфилд ведут философские беседы в перерывах между разборками и решением проблем с должниками криминального босса Марселласа Уоллеса.",
+					"В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй рассказывается о боксёре Бутче Кулидже, купленном Уоллесом, чтобы сдать бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.",
+				},
 			},
 		};
 
-		public static MovieToGetModel MovieToGet2 => new MovieToGetModel
+		public static MovieToGetModel MovieToGet2 => new()
 		{
 			TimestampOfAddingToGetList = new DateTimeOffset(2020, 04, 03, 08, 12, 23, TimeSpan.FromHours(3)),
 			MovieInfo = new MovieInfoModel
@@ -36,7 +38,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 			},
 		};
 
-		public static MovieToGetModel MovieToGet3 => new MovieToGetModel
+		public static MovieToGetModel MovieToGet3 => new()
 		{
 			TimestampOfAddingToGetList = new DateTimeOffset(2020, 05, 08, 08, 17, 54, TimeSpan.FromHours(3)),
 			MovieInfo = new MovieInfoModel
@@ -46,7 +48,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 			},
 		};
 
-		public static MovieToGetModel MovieToGet4 => new MovieToGetModel
+		public static MovieToGetModel MovieToGet4 => new()
 		{
 			TimestampOfAddingToGetList = new DateTimeOffset(2020, 05, 08, 08, 19, 37, TimeSpan.FromHours(3)),
 			MovieInfo = new MovieInfoModel
@@ -58,7 +60,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 
 		public static IReadOnlyCollection<MovieToGetModel> MoviesToGet { get; } = new[] { MovieToGet1, MovieToGet2, MovieToGet3, MovieToGet4, };
 
-		public static MovieToSeeModel MovieToSee1 => new MovieToSeeModel
+		public static MovieToSeeModel MovieToSee1 => new()
 		{
 			TimestampOfAddingToSeeList = new DateTimeOffset(2019, 04, 30, 12, 15, 47, TimeSpan.FromHours(3)),
 			MovieInfo = new MovieInfoModel
@@ -72,11 +74,14 @@ namespace MovieLibrary.Logic.IntegrationTests
 				Rating = new MovieRatingModel(8.576M, 378263),
 				Duration = TimeSpan.FromMinutes(155),
 				Genres = new[] { "боевик", "история", "драма", "приключения", },
-				Summary = "В великой Римской империи не было военачальника, равного генералу Максимусу...",
+				SummaryParagraphs = new[]
+				{
+					"В великой Римской империи не было военачальника, равного генералу Максимусу...",
+				},
 			},
 		};
 
-		public static MovieToSeeModel MovieToSee2 => new MovieToSeeModel
+		public static MovieToSeeModel MovieToSee2 => new()
 		{
 			TimestampOfAddingToSeeList = new DateTimeOffset(2019, 10, 23, 06, 31, 28, TimeSpan.FromHours(3)),
 			MovieInfo = new MovieInfoModel
@@ -86,7 +91,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 			},
 		};
 
-		public static MovieToSeeModel MovieToSee3 => new MovieToSeeModel
+		public static MovieToSeeModel MovieToSee3 => new()
 		{
 			TimestampOfAddingToSeeList = new DateTimeOffset(2020, 05, 08, 08, 33, 51, TimeSpan.FromHours(3)),
 			MovieInfo = new MovieInfoModel
@@ -96,7 +101,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 			},
 		};
 
-		public static MovieToSeeModel MovieToSee4 => new MovieToSeeModel
+		public static MovieToSeeModel MovieToSee4 => new()
 		{
 			TimestampOfAddingToSeeList = new DateTimeOffset(2020, 05, 08, 08, 34, 07, TimeSpan.FromHours(3)),
 			MovieInfo = new MovieInfoModel

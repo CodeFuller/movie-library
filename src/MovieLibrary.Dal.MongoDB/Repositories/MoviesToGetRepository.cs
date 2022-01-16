@@ -60,7 +60,7 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 						Rating = d.MovieInfo.RatingValue != null ? new MovieRatingModel(d.MovieInfo.RatingValue.Value, d.MovieInfo.RatingVotesNumber) : null,
 						Duration = d.MovieInfo.Duration,
 						Genres = d.MovieInfo.Genres,
-						Summary = d.MovieInfo.Summary,
+						SummaryParagraphs = d.MovieInfo.GetSummaryParagraphs(),
 					},
 					TimestampOfAddingToGetList = d.TimestampOfAddingToGetList,
 				})

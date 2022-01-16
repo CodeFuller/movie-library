@@ -19,7 +19,7 @@ namespace MovieLibrary.Dal.MongoDB.Extensions
 				RatingVotesNumber = model.Rating?.VotesNumber,
 				Duration = model.Duration,
 				Genres = model.Genres,
-				Summary = model.Summary,
+				SummaryParagraphs = model.SummaryParagraphs,
 			};
 		}
 
@@ -36,7 +36,7 @@ namespace MovieLibrary.Dal.MongoDB.Extensions
 				Rating = document.RatingValue != null ? new MovieRatingModel(document.RatingValue.Value, document.RatingVotesNumber) : null,
 				Duration = document.Duration,
 				Genres = document.Genres,
-				Summary = document.Summary,
+				SummaryParagraphs = document.GetSummaryParagraphs(),
 			};
 		}
 	}

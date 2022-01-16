@@ -203,7 +203,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Genres[2]", "триллер"),
 				new KeyValuePair<string, string>("Genres[3]", "криминал"),
 				new KeyValuePair<string, string>("Genres[4]", "драма"),
-				new KeyValuePair<string, string>("Summary", "Бэтмен поднимает ставки в войне с криминалом. С помощью лейтенанта Джима Гордона и прокурора Харви Дента он намерен очистить улицы от преступности, отравляющей город. Сотрудничество оказывается эффективным, но скоро они обнаружат себя посреди хаоса, развязанного восходящим криминальным гением, известным испуганным горожанам под именем Джокер."),
+				new KeyValuePair<string, string>("SummaryParagraphs[0]", "Бэтмен поднимает ставки в войне с криминалом."),
+				new KeyValuePair<string, string>("SummaryParagraphs[1]", "С помощью лейтенанта Джима Гордона и прокурора Харви Дента он намерен очистить улицы Готэма от преступности."),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
@@ -235,7 +236,6 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("RatingValue", String.Empty),
 				new KeyValuePair<string, string>("RatingVotesNumber", String.Empty),
 				new KeyValuePair<string, string>("Duration", String.Empty),
-				new KeyValuePair<string, string>("Summary", String.Empty),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
@@ -283,7 +283,8 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Genres[2]", "триллер"),
 				new KeyValuePair<string, string>("Genres[3]", "криминал"),
 				new KeyValuePair<string, string>("Genres[4]", "драма"),
-				new KeyValuePair<string, string>("Summary", "Бэтмен поднимает ставки в войне с криминалом. С помощью лейтенанта Джима Гордона и прокурора Харви Дента он намерен очистить улицы от преступности, отравляющей город. Сотрудничество оказывается эффективным, но скоро они обнаружат себя посреди хаоса, развязанного восходящим криминальным гением, известным испуганным горожанам под именем Джокер."),
+				new KeyValuePair<string, string>("SummaryParagraphs[0]", "Бэтмен поднимает ставки в войне с криминалом."),
+				new KeyValuePair<string, string>("SummaryParagraphs[1]", "С помощью лейтенанта Джима Гордона и прокурора Харви Дента он намерен очистить улицы Готэма от преступности."),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
@@ -315,7 +316,6 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("RatingValue", String.Empty),
 				new KeyValuePair<string, string>("RatingVotesNumber", String.Empty),
 				new KeyValuePair<string, string>("Duration", String.Empty),
-				new KeyValuePair<string, string>("Summary", String.Empty),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);

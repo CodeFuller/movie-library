@@ -23,6 +23,6 @@ namespace MovieLibrary.Logic.Models
 
 		public IReadOnlyCollection<string> Genres { get; set; }
 
-		public string Summary { get; set; }
+		public IReadOnlyCollection<string> SummaryParagraphs { get; set; }
 	}
 }
