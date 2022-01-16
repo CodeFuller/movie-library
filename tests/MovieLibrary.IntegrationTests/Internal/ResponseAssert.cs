@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -89,10 +90,10 @@ namespace MovieLibrary.IntegrationTests.Internal
 				if (!String.Equals(actualContent[i], expectedContent[i], StringComparison.Ordinal))
 				{
 					var messageBuilder = new StringBuilder();
-					messageBuilder.AppendLine($"Content differs at line {i + 1}:");
+					messageBuilder.AppendLine(CultureInfo.InvariantCulture, $"Content differs at line {i + 1}:");
 					messageBuilder.AppendLine();
-					messageBuilder.AppendLine($"Expected: '{expectedContent[i]}'");
-					messageBuilder.AppendLine($"Actual:   '{actualContent[i]}'");
+					messageBuilder.AppendLine(CultureInfo.InvariantCulture, $"Expected: '{expectedContent[i]}'");
+					messageBuilder.AppendLine(CultureInfo.InvariantCulture, $"Actual:   '{actualContent[i]}'");
 
 					Assert.Fail(messageBuilder.ToString());
 				}
