@@ -3,12 +3,14 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.Authorization;
 using MovieLibrary.IntegrationTests.Internal;
 using MovieLibrary.IntegrationTests.Internal.Seeding;
 using MovieLibrary.UserManagement.Interfaces;
+using MovieLibrary.UserManagement.Models;
 
 namespace MovieLibrary.IntegrationTests.Authorization
 {
@@ -20,7 +22,7 @@ namespace MovieLibrary.IntegrationTests.Authorization
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null, seedData: new EmptySeedData());
+			await using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null, seedData: new EmptySeedData());
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
@@ -29,20 +31,35 @@ namespace MovieLibrary.IntegrationTests.Authorization
 
 			// Assert
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+			var expectedUsers = new[]
+			{
+				new UserModel
+				{
+					UserName = SecurityConstants.DefaultAdministratorEmail,
+					CanBeEdited = false,
+					CanBeDeleted = false,
+				},
+			};
+
+			var expectedRoles = new[]
+			{
+				new RoleModel
+				{
+					RoleName = SecurityConstants.AdministratorRole,
+					ReadOnly = true,
+				},
+			};
 
 			using var scopeServiceProvider = webApplicationFactory.Services.CreateScope();
 			var userService = scopeServiceProvider.ServiceProvider.GetRequiredService<IUserService>();
 
 			var users = await userService.GetAllUsers(CancellationToken.None).ToListAsync();
-			Assert.AreEqual(1, users.Count);
-			var user = users.Single();
-			Assert.AreEqual(SecurityConstants.DefaultAdministratorEmail, user.UserName);
-			Assert.IsFalse(user.CanBeEdited);
-			Assert.IsFalse(user.CanBeDeleted);
+			users.Should().BeEquivalentTo(expectedUsers, x => x.WithStrictOrdering().Excluding(y => y.Id));
 
-			var roles = await userService.GetUserRoles(user.Id, CancellationToken.None);
-			CollectionAssert.AreEqual(new[] { SecurityConstants.AdministratorRole }, roles.Select(r => r.RoleName).ToList());
+			var roles = await userService.GetUserRoles(users.Single().Id, CancellationToken.None);
+			roles.Should().BeEquivalentTo(expectedRoles, x => x.WithStrictOrdering().Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -50,7 +67,7 @@ namespace MovieLibrary.IntegrationTests.Authorization
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
@@ -59,15 +76,19 @@ namespace MovieLibrary.IntegrationTests.Authorization
 
 			// Assert
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+			var expectedUsers = new[]
+			{
+				SharedSeedData.PrivilegedUserName,
+				SharedSeedData.LimitedUserName,
+			};
 
 			using var scopeServiceProvider = webApplicationFactory.Services.CreateScope();
 			var userService = scopeServiceProvider.ServiceProvider.GetRequiredService<IUserService>();
 
-			var users = (await userService.GetAllUsers(CancellationToken.None).ToListAsync())
-				.Select(u => u.UserName);
-
-			CollectionAssert.AreEqual(new[] { SharedSeedData.PrivilegedUserName, SharedSeedData.LimitedUserName, }, users.ToList());
+			var users = (await userService.GetAllUsers(CancellationToken.None).ToListAsync()).Select(x => x.UserName);
+			users.Should().BeEquivalentTo(expectedUsers, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -75,7 +96,7 @@ namespace MovieLibrary.IntegrationTests.Authorization
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: ApplicationUser.DefaultAdministrator, seedData: new EmptySeedData());
+			await using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: ApplicationUser.DefaultAdministrator, seedData: new EmptySeedData());
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act

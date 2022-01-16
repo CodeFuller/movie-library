@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.IntegrationTests.Internal;
 
@@ -15,7 +16,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory();
+			await using var webApplicationFactory = new CustomWebApplicationFactory();
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
@@ -24,8 +25,8 @@ namespace MovieLibrary.IntegrationTests
 
 			// Assert
 
-			Assert.AreEqual(HttpStatusCode.TemporaryRedirect, response.StatusCode);
-			Assert.AreEqual(new Uri("https://localhost:5001/Identity/Account/Login"), response.Headers.Location);
+			response.StatusCode.Should().Be(HttpStatusCode.TemporaryRedirect);
+			response.Headers.Location.Should().Be(new Uri("https://localhost:5001/Identity/Account/Login"));
 		}
 	}
 }

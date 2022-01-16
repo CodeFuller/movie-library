@@ -48,7 +48,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 			// This is required for testing of error pages.
 			builder.UseEnvironment(Environments.Production);
 
-			builder.ConfigureAppConfiguration((context, configBuilder) =>
+			builder.ConfigureAppConfiguration((_, configBuilder) =>
 			{
 				var jsonConfigSource = new JsonConfigurationSource
 				{

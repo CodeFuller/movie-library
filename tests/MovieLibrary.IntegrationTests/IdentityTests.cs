@@ -15,7 +15,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
@@ -32,7 +32,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
@@ -49,7 +49,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			using var content = new StringContent(String.Empty);
@@ -68,7 +68,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			using var content = new StringContent(String.Empty);
@@ -87,7 +87,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
@@ -104,7 +104,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act

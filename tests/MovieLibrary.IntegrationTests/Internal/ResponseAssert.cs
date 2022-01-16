@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -18,7 +17,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 		public static async Task VerifyPageLoaded(HttpResponseMessage response, HttpStatusCode expectedStatusCode = HttpStatusCode.OK,
 			[CallerFilePath] string callerFilePath = null, [CallerMemberName] string snapshotName = null)
 		{
-			Assert.AreEqual(expectedStatusCode, response.StatusCode);
+			response.StatusCode.Should().Be(expectedStatusCode);
 
 			var content = await response.Content.ReadAsStringAsync();
 			content = UnifyPageContent(content);
@@ -80,26 +79,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 			var actualContentLines = SplitContentIntoLines(actualContent);
 			var expectedContentLines = SplitContentIntoLines(expectedContent);
 
-			CompareContentLines(actualContentLines, expectedContentLines);
-		}
-
-		private static void CompareContentLines(IReadOnlyList<string> actualContent, IReadOnlyList<string> expectedContent)
-		{
-			for (var i = 0; i < Math.Min(actualContent.Count, expectedContent.Count); ++i)
-			{
-				if (!String.Equals(actualContent[i], expectedContent[i], StringComparison.Ordinal))
-				{
-					var messageBuilder = new StringBuilder();
-					messageBuilder.AppendLine(CultureInfo.InvariantCulture, $"Content differs at line {i + 1}:");
-					messageBuilder.AppendLine();
-					messageBuilder.AppendLine(CultureInfo.InvariantCulture, $"Expected: '{expectedContent[i]}'");
-					messageBuilder.AppendLine(CultureInfo.InvariantCulture, $"Actual:   '{actualContent[i]}'");
-
-					Assert.Fail(messageBuilder.ToString());
-				}
-			}
-
-			Assert.AreEqual(expectedContent.Count, actualContent.Count, "Content lengths differ");
+			actualContentLines.Should().BeEquivalentTo(expectedContentLines, x => x.WithStrictOrdering());
 		}
 
 		private static IReadOnlyList<string> SplitContentIntoLines(string content)
@@ -109,14 +89,14 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 		public static void VerifyRedirect(HttpResponseMessage response, Uri expectedRedirectUri)
 		{
-			Assert.AreEqual(HttpStatusCode.Redirect, response.StatusCode);
-			Assert.AreEqual(expectedRedirectUri, response.Headers.Location);
+			response.StatusCode.Should().Be(HttpStatusCode.Redirect);
+			response.Headers.Location.Should().Be(expectedRedirectUri);
 		}
 
 		public static void VerifyMovedPermanently(HttpResponseMessage response, Uri expectedRedirectUri)
 		{
-			Assert.AreEqual(HttpStatusCode.MovedPermanently, response.StatusCode);
-			Assert.AreEqual(expectedRedirectUri, response.Headers.Location);
+			response.StatusCode.Should().Be(HttpStatusCode.MovedPermanently);
+			response.Headers.Location.Should().Be(expectedRedirectUri);
 		}
 	}
 }

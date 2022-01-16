@@ -22,7 +22,7 @@ namespace MovieLibrary.IntegrationTests
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
 			});
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubFailingProvider);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubFailingProvider);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
@@ -39,7 +39,7 @@ namespace MovieLibrary.IntegrationTests
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubFailingProvider);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubFailingProvider);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act

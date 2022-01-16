@@ -14,7 +14,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(authenticatedUser: null);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
@@ -31,7 +31,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act
@@ -48,7 +48,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 		{
 			// Arrange
 
-			using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
+			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
 			using var client = webApplicationFactory.CreateDefaultHttpClient();
 
 			// Act

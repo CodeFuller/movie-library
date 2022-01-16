@@ -7,11 +7,11 @@ namespace MovieLibrary.IntegrationTests.Internal
 	{
 		public string Name { get; }
 
-		public static ApplicationUser PrivilegedUser => new ApplicationUser(SharedSeedData.PrivilegedUserName);
+		public static ApplicationUser PrivilegedUser => new(SharedSeedData.PrivilegedUserName);
 
-		public static ApplicationUser LimitedUser => new ApplicationUser(SharedSeedData.LimitedUserName);
+		public static ApplicationUser LimitedUser => new(SharedSeedData.LimitedUserName);
 
-		public static ApplicationUser DefaultAdministrator => new ApplicationUser(SecurityConstants.DefaultAdministratorEmail);
+		public static ApplicationUser DefaultAdministrator => new(SecurityConstants.DefaultAdministratorEmail);
 
 		private ApplicationUser(string userName)
 		{
