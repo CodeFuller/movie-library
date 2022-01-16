@@ -9,11 +9,10 @@ namespace MovieLibrary.Logic.Kinopoisk
 	{
 		public static IServiceCollection AddKinopoiskMovieInfoProvider(this IServiceCollection services)
 		{
-			services.AddSingleton<IMovieInfoProvider, KinopoiskMovieInfoProvider>();
-			services.AddSingleton<IMovieInfoParser, KinopoiskMovieInfoParser>();
+			services.AddSingleton<IFilmDataToMovieInfoConverter, FilmDataToMovieInfoConverter>();
 
 			services
-				.AddHttpClient<IHtmlContentProvider, KinopoiskHtmlContentProvider>()
+				.AddHttpClient<IMovieInfoProvider, KinopoiskApiMovieInfoProvider>()
 				.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
 				{
 					AllowAutoRedirect = false,
