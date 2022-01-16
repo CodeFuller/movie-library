@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.Logic.Interfaces;
@@ -26,7 +27,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			Assert.AreEqual(MovieUniquenessCheckResult.MovieIsUnique, result);
+			result.Should().Be(MovieUniquenessCheckResult.MovieIsUnique);
 		}
 
 		[TestMethod]
@@ -43,7 +44,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			Assert.AreEqual(MovieUniquenessCheckResult.ExistsInMoviesToGet, result);
+			result.Should().Be(MovieUniquenessCheckResult.ExistsInMoviesToGet);
 		}
 
 		[TestMethod]
@@ -60,7 +61,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			Assert.AreEqual(MovieUniquenessCheckResult.ExistsInMoviesToSee, result);
+			result.Should().Be(MovieUniquenessCheckResult.ExistsInMoviesToSee);
 		}
 	}
 }

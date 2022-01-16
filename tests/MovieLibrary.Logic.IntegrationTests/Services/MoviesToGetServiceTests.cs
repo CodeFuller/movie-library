@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.Logic.Exceptions;
@@ -46,14 +47,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var allMovies = target.GetAllMovies().ToList();
+			var expectedMovie = new MovieToGetModel
+			{
+				Id = newMovieId,
+				TimestampOfAddingToGetList = new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)),
+				MovieInfo = movieInfo,
+			};
 
-			var storedMovie = allMovies.SingleOrDefault(m => m?.MovieInfo.MovieUri == movieUri);
-			Assert.IsNotNull(storedMovie);
-
-			Assert.AreEqual(storedMovie.Id, newMovieId);
-			Assert.AreEqual(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)), storedMovie.TimestampOfAddingToGetList);
-			MovieAssert.AreEqual(movieInfo, storedMovie.MovieInfo);
+			var storedMovie = target.GetAllMovies().SingleOrDefault(m => m.MovieInfo.MovieUri == movieUri);
+			storedMovie.Should().BeEquivalentTo(expectedMovie);
 		}
 
 		[TestMethod]
@@ -79,14 +81,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var allMovies = target.GetAllMovies().ToList();
+			var expectedMovie = new MovieToGetModel
+			{
+				Id = newMovieId,
+				TimestampOfAddingToGetList = new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)),
+				MovieInfo = movieInfo,
+			};
 
-			var storedMovie = allMovies.SingleOrDefault(m => m?.MovieInfo.MovieUri == movieUri);
-			Assert.IsNotNull(storedMovie);
-
-			Assert.AreEqual(storedMovie.Id, newMovieId);
-			Assert.AreEqual(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)), storedMovie.TimestampOfAddingToGetList);
-			MovieAssert.AreEqual(movieInfo, storedMovie.MovieInfo);
+			var storedMovie = target.GetAllMovies().SingleOrDefault(m => m.MovieInfo.MovieUri == movieUri);
+			storedMovie.Should().BeEquivalentTo(expectedMovie);
 		}
 
 		[TestMethod]
@@ -103,11 +106,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			Assert.AreEqual(4, movies.Count);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet1, movies[0]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet2, movies[1]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet3, movies[2]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet4, movies[3]);
+			var expectedMovies = new[]
+			{
+				DataForSeeding.MovieToGet1,
+				DataForSeeding.MovieToGet2,
+				DataForSeeding.MovieToGet3,
+				DataForSeeding.MovieToGet4,
+			};
+
+			movies.Should().BeEquivalentTo(expectedMovies, x => x.WithStrictOrdering().Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -124,7 +131,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			CollectionAssert.AreEqual(Array.Empty<MovieToGetModel>(), movies);
+			movies.Should().BeEmpty();
 		}
 
 		// With default serialization of DateTimeOffset to array in MongoDB, the sorting by TimestampOfAddingToGetList works incorrectly.
@@ -146,9 +153,13 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			Assert.AreEqual(2, movies.Count);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet3, movies[0]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet4, movies[1]);
+			var expectedMovies = new[]
+			{
+				DataForSeeding.MovieToGet3,
+				DataForSeeding.MovieToGet4,
+			};
+
+			movies.Should().BeEquivalentTo(expectedMovies, x => x.WithStrictOrdering().Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -167,7 +178,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet1, movie);
+			movie.Should().BeEquivalentTo(DataForSeeding.MovieToGet1, x => x.Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -182,11 +193,11 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			Task Call() => target.GetMovie(movieId, CancellationToken.None);
+			Func<Task> call = () => target.GetMovie(movieId, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
+			await call.Should().ThrowAsync<NotFoundException>();
 		}
 
 		[TestMethod]
@@ -194,7 +205,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 		{
 			// Arrange
 
-			var serviceProvider = await BootstrapTests(seedData: true, StubClock(new DateTimeOffset(2020, 04, 27, 11, 41, 27, TimeSpan.FromHours(3))));
+			var serviceProvider = await BootstrapTests(seedData: true, StubClock(new DateTimeOffset(2022, 01, 16, 17, 30, 34, TimeSpan.FromHours(3))));
 			var target = serviceProvider.GetRequiredService<IMoviesToGetService>();
 
 			var movieId = GetMovieId(serviceProvider, DataForSeeding.MovieToGet1);
@@ -205,21 +216,34 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var movies = target.GetAllMovies().ToList();
+			var expectedMoviesToGet = new[]
+			{
+				DataForSeeding.MovieToGet2,
+				DataForSeeding.MovieToGet3,
+				DataForSeeding.MovieToGet4,
+			};
 
-			var oldMovie = movies.SingleOrDefault(m => m.Id == movieId);
-			Assert.IsNull(oldMovie);
+			var expectedMoviesToSee = new[]
+			{
+				DataForSeeding.MovieToSee1,
+				DataForSeeding.MovieToSee2,
+				DataForSeeding.MovieToSee3,
+				DataForSeeding.MovieToSee4,
+				new MovieToSeeModel
+				{
+					TimestampOfAddingToSeeList = new DateTimeOffset(2022, 01, 16, 17, 30, 34, TimeSpan.FromHours(3)),
+					MovieInfo = DataForSeeding.MovieToGet1.MovieInfo,
+				},
+			};
 
-			// Checking that movie presents among movies to see.
+			target.GetAllMovies().Should().BeEquivalentTo(expectedMoviesToGet, x => x.WithStrictOrdering().Excluding(y => y.Id));
+
 			var moviesToSeeService = serviceProvider.GetRequiredService<IMoviesToSeeService>();
-			var movieToSee = moviesToSeeService.GetAllMovies()
-				.SingleOrDefault(m => m.MovieInfo.MovieUri == DataForSeeding.MovieToGet1.MovieInfo.MovieUri);
-			Assert.IsNotNull(movieToSee);
+			moviesToSeeService.GetAllMovies().Should().BeEquivalentTo(expectedMoviesToSee, x => x.WithStrictOrdering().Excluding(y => y.Id));
 
 			// The new id must be generated for new movies list.
-			Assert.AreNotEqual(movieId, movieToSee.Id);
-			Assert.AreEqual(new DateTimeOffset(2020, 04, 27, 11, 41, 27, TimeSpan.FromHours(3)), movieToSee.TimestampOfAddingToSeeList);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet1.MovieInfo, movieToSee.MovieInfo);
+			var newMovieToSee = moviesToSeeService.GetAllMovies().SingleOrDefault(m => m.MovieInfo.MovieUri == DataForSeeding.MovieToGet1.MovieInfo.MovieUri);
+			newMovieToSee.Id.Should().NotBe(movieId);
 		}
 
 		[TestMethod]
@@ -234,11 +258,11 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			Task Call() => target.MoveToMoviesToSee(movieId, CancellationToken.None);
+			Func<Task> call = () => target.MoveToMoviesToSee(movieId, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
+			await call.Should().ThrowAsync<NotFoundException>();
 		}
 
 		[TestMethod]
@@ -257,12 +281,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var movies = target.GetAllMovies().ToList();
+			var expectedMovies = new[]
+			{
+				DataForSeeding.MovieToGet2,
+				DataForSeeding.MovieToGet3,
+				DataForSeeding.MovieToGet4,
+			};
 
-			Assert.AreEqual(3, movies.Count);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet2, movies[0]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet3, movies[1]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToGet4, movies[2]);
+			var movies = target.GetAllMovies().ToList();
+			movies.Should().BeEquivalentTo(expectedMovies, x => x.WithStrictOrdering().Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -277,11 +304,11 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			Task Call() => target.DeleteMovie(movieId, CancellationToken.None);
+			Func<Task> call = () => target.DeleteMovie(movieId, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
+			await call.Should().ThrowAsync<NotFoundException>();
 		}
 
 		private static MovieId GetMovieId(IServiceProvider serviceProvider, MovieToGetModel movie)

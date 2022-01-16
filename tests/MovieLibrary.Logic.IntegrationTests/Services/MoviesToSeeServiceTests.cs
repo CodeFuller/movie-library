@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MovieLibrary.Logic.Exceptions;
@@ -46,14 +47,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var allMovies = target.GetAllMovies().ToList();
+			var expectedMovie = new MovieToSeeModel
+			{
+				Id = newMovieId,
+				TimestampOfAddingToSeeList = new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)),
+				MovieInfo = movieInfo,
+			};
 
-			var storedMovie = allMovies.SingleOrDefault(m => m?.MovieInfo.MovieUri == movieUri);
-			Assert.IsNotNull(storedMovie);
-
-			Assert.AreEqual(storedMovie.Id, newMovieId);
-			Assert.AreEqual(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)), storedMovie.TimestampOfAddingToSeeList);
-			MovieAssert.AreEqual(movieInfo, storedMovie.MovieInfo);
+			var storedMovie = target.GetAllMovies().SingleOrDefault(m => m.MovieInfo.MovieUri == movieUri);
+			storedMovie.Should().BeEquivalentTo(expectedMovie);
 		}
 
 		[TestMethod]
@@ -79,13 +81,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var storedMovie = target.GetAllMovies()
-				.SingleOrDefault(m => m.MovieInfo.MovieUri == movieUri);
-			Assert.IsNotNull(storedMovie);
+			var expectedMovie = new MovieToSeeModel
+			{
+				Id = newMovieId,
+				TimestampOfAddingToSeeList = new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)),
+				MovieInfo = movieInfo,
+			};
 
-			Assert.AreEqual(storedMovie.Id, newMovieId);
-			Assert.AreEqual(new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)), storedMovie.TimestampOfAddingToSeeList);
-			MovieAssert.AreEqual(movieInfo, storedMovie.MovieInfo);
+			var storedMovie = target.GetAllMovies().SingleOrDefault(m => m.MovieInfo.MovieUri == movieUri);
+			storedMovie.Should().BeEquivalentTo(expectedMovie);
 		}
 
 		[TestMethod]
@@ -102,11 +106,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			Assert.AreEqual(4, movies.Count);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee1, movies[0]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee2, movies[1]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee3, movies[2]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee4, movies[3]);
+			var expectedMovies = new[]
+			{
+				DataForSeeding.MovieToSee1,
+				DataForSeeding.MovieToSee2,
+				DataForSeeding.MovieToSee3,
+				DataForSeeding.MovieToSee4,
+			};
+
+			movies.Should().BeEquivalentTo(expectedMovies, x => x.WithStrictOrdering().Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -123,7 +131,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			CollectionAssert.AreEqual(Array.Empty<MovieToSeeModel>(), movies);
+			movies.Should().BeEmpty();
 		}
 
 		// With default serialization of DateTimeOffset to array in MongoDB, the sorting by TimestampOfAddingToSeeList works incorrectly.
@@ -145,9 +153,13 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			Assert.AreEqual(2, movies.Count);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee3, movies[0]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee4, movies[1]);
+			var expectedMovies = new[]
+			{
+				DataForSeeding.MovieToSee3,
+				DataForSeeding.MovieToSee4,
+			};
+
+			movies.Should().BeEquivalentTo(expectedMovies, x => x.WithStrictOrdering().Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -166,7 +178,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee1, movie);
+			movie.Should().BeEquivalentTo(DataForSeeding.MovieToSee1, x => x.Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -181,11 +193,11 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			Task Call() => target.GetMovie(movieId, CancellationToken.None);
+			Func<Task> call = () => target.GetMovie(movieId, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
+			await call.Should().ThrowAsync<NotFoundException>();
 		}
 
 		[TestMethod]
@@ -204,12 +216,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var movies = target.GetAllMovies().ToList();
+			var expectedMovies = new[]
+			{
+				DataForSeeding.MovieToSee2,
+				DataForSeeding.MovieToSee3,
+				DataForSeeding.MovieToSee4,
+			};
 
-			Assert.AreEqual(3, movies.Count);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee2, movies[0]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee3, movies[1]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee4, movies[2]);
+			var movies = target.GetAllMovies();
+			movies.Should().BeEquivalentTo(expectedMovies, x => x.WithStrictOrdering().Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -224,11 +239,11 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			Task Call() => target.MarkMovieAsSeen(movieId, CancellationToken.None);
+			Func<Task> call = () => target.MarkMovieAsSeen(movieId, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
+			await call.Should().ThrowAsync<NotFoundException>();
 		}
 
 		[TestMethod]
@@ -247,12 +262,15 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Assert
 
-			var movies = target.GetAllMovies().ToList();
+			var expectedMovies = new[]
+			{
+				DataForSeeding.MovieToSee2,
+				DataForSeeding.MovieToSee3,
+				DataForSeeding.MovieToSee4,
+			};
 
-			Assert.AreEqual(3, movies.Count);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee2, movies[0]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee3, movies[1]);
-			MovieAssert.AreEqual(DataForSeeding.MovieToSee4, movies[2]);
+			var movies = target.GetAllMovies().ToList();
+			movies.Should().BeEquivalentTo(expectedMovies, x => x.WithStrictOrdering().Excluding(y => y.Id));
 		}
 
 		[TestMethod]
@@ -267,11 +285,11 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			Task Call() => target.DeleteMovie(movieId, CancellationToken.None);
+			Func<Task> call = () => target.DeleteMovie(movieId, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<NotFoundException>(Call);
+			await call.Should().ThrowAsync<NotFoundException>();
 		}
 
 		private static MovieId GetMovieId(IServiceProvider serviceProvider, MovieToSeeModel movie)
