@@ -81,12 +81,8 @@
         var list = source.ToList();
         for (var i = 0; i < list.Count; ++i)
         {
-            <span>@list[i]</span>
-
-            if (i + 1 < list.Count)
-            {
-                @:,
-            }
+            var delimiter = i + 1 < list.Count ? "," : String.Empty;
+            <span>@list[i]</span>@delimiter
         }
     }
 }
