@@ -13,6 +13,14 @@
                     <td class="movie-info-table-value">@Model.Info.Year</td>
                 </tr>
                 <tr>
+                    <td class="movie-info-table-key">Countries</td>
+                    <td class="movie-info-table-value">
+                        @{
+                            ProduceCollection(Model.Info.Countries);
+                        }
+                    </td>
+                </tr>
+                <tr>
                     <td class="movie-info-table-key">Genres</td>
                     <td class="movie-info-table-value">
                         @{

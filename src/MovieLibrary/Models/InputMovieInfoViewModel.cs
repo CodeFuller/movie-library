@@ -29,6 +29,8 @@ namespace MovieLibrary.Models
 
 		public IReadOnlyList<string> Genres { get; set; }
 
+		public IReadOnlyList<string> Countries { get; set; }
+
 		public IReadOnlyList<string> SummaryParagraphs { get; set; }
 
 		public InputMovieInfoViewModel()
@@ -49,6 +51,7 @@ namespace MovieLibrary.Models
 			RatingVotesNumber = model.Rating?.VotesNumber;
 			Duration = model.Duration;
 			Genres = model.Genres?.ToList() ?? new List<string>();
+			Countries = model.Countries?.ToList() ?? new List<string>();
 			SummaryParagraphs = model.SummaryParagraphs?.ToList() ?? new List<string>();
 		}
 
@@ -65,6 +68,7 @@ namespace MovieLibrary.Models
 				Rating = RatingValue != null ? new MovieRatingModel(RatingValue.Value, RatingVotesNumber) : null,
 				Duration = Duration,
 				Genres = Genres,
+				Countries = Countries,
 				SummaryParagraphs = SummaryParagraphs,
 			};
 		}

@@ -35,6 +35,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 				Rating = new MovieRatingModel(8.499M, 463508),
 				Duration = TimeSpan.FromMinutes(152),
 				Genres = new[] { "фантастика", "боевик", "триллер", "криминал", "драма", },
+				Countries = new[] { "США", "Великобритания", },
 				SummaryParagraphs = new[] { "Бэтмен поднимает ставки в войне с криминалом..." },
 			};
 

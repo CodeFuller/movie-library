@@ -26,6 +26,8 @@ namespace MovieLibrary.Dal.MongoDB.Documents
 
 		public IReadOnlyCollection<string> Genres { get; set; }
 
+		public IReadOnlyCollection<string> Countries { get; set; }
+
 		// TODO: Remove this property when there is no more old movies in the database.
 		[Obsolete($"Use {nameof(SummaryParagraphs)} property instead")]
 		public string Summary { get; set; }

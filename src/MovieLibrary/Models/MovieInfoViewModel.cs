@@ -47,6 +47,8 @@ namespace MovieLibrary.Models
 
 		public IReadOnlyCollection<string> Genres => GetSafeCollection(movieInfo.Genres);
 
+		public IReadOnlyCollection<string> Countries => GetSafeCollection(movieInfo.Countries);
+
 		public IReadOnlyCollection<string> SummaryParagraphs => movieInfo.SummaryParagraphs ?? Array.Empty<string>();
 
 		public MovieInfoViewModel(MovieInfoModel movieInfo)

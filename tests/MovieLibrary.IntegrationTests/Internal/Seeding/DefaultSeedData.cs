@@ -21,6 +21,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 					Rating = new MovieRatingModel(8.619M, 439744),
 					Duration = TimeSpan.FromMinutes(154),
 					Genres = new[] { "триллер", "комедия", "криминал", },
+					Countries = new[] { "США", },
 					SummaryParagraphs = new[]
 					{
 						"Двое бандитов Винсент Вега и Джулс Винфилд ведут философские беседы в перерывах между разборками и решением проблем с должниками криминального босса Марселласа Уоллеса.",
@@ -55,6 +56,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 					Rating = new MovieRatingModel(8.576M, 378263),
 					Duration = TimeSpan.FromMinutes(155),
 					Genres = new[] { "боевик", "история", "драма", "приключения", },
+					Countries = new[] { "США", "Великобритания", "Мальта", "Марокко", },
 					SummaryParagraphs = new[]
 					{
 						"В великой Римской империи не было военачальника, равного генералу Максимусу...",

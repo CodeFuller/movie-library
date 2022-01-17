@@ -22,6 +22,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 				Rating = ParseFilmRating(data.RatingData),
 				Duration = ParseFilmLength(data.FilmLength),
 				Genres = data.Genre.Split(", ").Select(x => x.Trim()).ToList(),
+				Countries = data.Country.Split(", ").Select(x => x.Trim()).ToList(),
 
 				// Sequence "\n\r" is quite strange but it happens for some movies, e.g. https://www.kinopoisk.ru/film/342/
 				SummaryParagraphs = data.Description?.Split(new[] { "\r\n\r\n", "\n\n", "\n\r" }, StringSplitOptions.None),

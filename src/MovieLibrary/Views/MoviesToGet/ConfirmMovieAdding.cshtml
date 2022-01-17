@@ -28,6 +28,10 @@
     <input type="hidden" asp-for="RatingValue" />
     <input type="hidden" asp-for="RatingVotesNumber" />
     <input type="hidden" asp-for="Duration" />
+    @for (var i = 0; i < Model.Countries.Count; ++i)
+    {
+        <input type="hidden" asp-for="Countries[i]" />
+    }
     @for (var i = 0; i < Model.Genres.Count; ++i)
     {
         <input type="hidden" asp-for="Genres[i]" />

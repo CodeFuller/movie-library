@@ -24,6 +24,9 @@ namespace MovieLibrary.Logic.Kinopoisk.DataContracts
 		[DataMember(Name = "genre")]
 		public string Genre { get; set; }
 
+		[DataMember(Name = "country")]
+		public string Country { get; set; }
+
 		[DataMember(Name = "description")]
 		public string Description { get; set; }
 
