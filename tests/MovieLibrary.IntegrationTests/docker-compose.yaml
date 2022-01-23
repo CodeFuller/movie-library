@@ -1,0 +1,16 @@
+# docker-compose -f docker-compose.yaml up
+
+version: '3.5'
+
+services:
+  mongo:
+    image: mongo:4.0.9
+    networks:
+      - movie-library-network
+    ports:
+      - "27017:27017"
+
+networks:
+  movie-library-network:
+    name: movie-library-network
+    driver: bridge
