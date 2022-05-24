@@ -116,8 +116,8 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 			var expectedCast = new[]
 			{
 				"Чжоу Эньлай",
-				"Valko Chervenkov",
 				"Yumyaagiin Tsedenbal",
+				"Valko Chervenkov",
 			};
 
 			movieInfo.Cast.Should().Equal(expectedCast);
