@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -82,7 +81,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 			actualContentLines.Should().BeEquivalentTo(expectedContentLines, x => x.WithStrictOrdering());
 		}
 
-		private static IReadOnlyList<string> SplitContentIntoLines(string content)
+		private static string[] SplitContentIntoLines(string content)
 		{
 			return content.Split(Environment.NewLine);
 		}

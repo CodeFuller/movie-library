@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Serialization;
 
 namespace MovieLibrary.Logic.Exceptions
 {
@@ -17,11 +16,6 @@ namespace MovieLibrary.Logic.Exceptions
 
 		public NotFoundException(string message, Exception innerException)
 			: base(message, innerException)
-		{
-		}
-
-		protected NotFoundException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-			: base(serializationInfo, streamingContext)
 		{
 		}
 	}

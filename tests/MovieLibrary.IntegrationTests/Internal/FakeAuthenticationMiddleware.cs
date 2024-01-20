@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal class FakeAuthenticationMiddleware<TUser>
+	internal sealed class FakeAuthenticationMiddleware<TUser>
 		where TUser : class
 	{
 		private readonly RequestDelegate next;

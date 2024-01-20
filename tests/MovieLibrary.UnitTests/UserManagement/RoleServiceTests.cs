@@ -319,7 +319,7 @@ namespace MovieLibrary.UnitTests.UserManagement
 			await call.Should().ThrowAsync<UserManagementException>();
 		}
 
-		private static IList<Claim> ToClaims(IEnumerable<string> permissions)
+		private static List<Claim> ToClaims(IEnumerable<string> permissions)
 		{
 			return permissions.Select(p => new Claim(SecurityConstants.PermissionClaimType, p))
 				.ToList();

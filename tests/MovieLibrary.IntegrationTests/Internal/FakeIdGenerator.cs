@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using MongoDB.Bson;
 using MovieLibrary.Logic.Interfaces;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal class FakeIdGenerator : IIdGeneratorQueue, IIdGenerator<ObjectId>
+	internal sealed class FakeIdGenerator : IIdGeneratorQueue, IIdGenerator<ObjectId>
 	{
 		private readonly Queue<string> idsQueue = new Queue<string>();
 
@@ -17,7 +16,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 		public void EnqueueIds(IEnumerable<string> ids)
 		{
-			if (idsQueue.Any())
+			if (idsQueue.Count > 0)
 			{
 				throw new InvalidOperationException("Previous fake ids were not used");
 			}
@@ -30,7 +29,7 @@ namespace MovieLibrary.IntegrationTests.Internal
 
 		public ObjectId GenerateId()
 		{
-			if (!idsQueue.Any())
+			if (idsQueue.Count == 0)
 			{
 				throw new InvalidOperationException("Fake id was not set");
 			}

@@ -10,6 +10,8 @@ namespace MovieLibrary.Logic.Kinopoisk
 {
 	internal class FilmDataToMovieInfoConverter : IFilmDataToMovieInfoConverter
 	{
+		private static readonly string[] NewLineSeparators = { "\r\n\r\n", "\n\n", "\n\r" };
+
 		public MovieInfoModel Convert(FilmDetailViewDataContract data)
 		{
 			return new()
@@ -25,7 +27,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 				Countries = data.Country.Split(", ").Select(x => x.Trim()).ToList(),
 
 				// Sequence "\n\r" is quite strange but it happens for some movies, e.g. https://www.kinopoisk.ru/film/342/
-				SummaryParagraphs = data.Description?.Split(new[] { "\r\n\r\n", "\n\n", "\n\r" }, StringSplitOptions.None),
+				SummaryParagraphs = data.Description?.Split(NewLineSeparators, StringSplitOptions.None),
 			};
 		}
 
@@ -35,7 +37,7 @@ namespace MovieLibrary.Logic.Kinopoisk
 			return new Uri(httpsUrl);
 		}
 
-		private static IReadOnlyCollection<string> GetCreators(FilmDetailViewDataContract data, string professionKey)
+		private static List<string> GetCreators(FilmDetailViewDataContract data, string professionKey)
 		{
 			return data.Creators
 				.SelectMany(x => x)

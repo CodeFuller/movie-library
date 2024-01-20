@@ -3,7 +3,7 @@ using MovieLibrary.IntegrationTests.Internal.Seeding;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal class ApplicationUser
+	internal sealed class ApplicationUser
 	{
 		public string Name { get; }
 

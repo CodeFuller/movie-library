@@ -8,7 +8,7 @@ using MovieLibrary.Logic.Interfaces;
 
 namespace MovieLibrary.Logic.IntegrationTests
 {
-	internal class DatabaseSeeder
+	internal sealed class DatabaseSeeder
 	{
 		private readonly IMoviesToGetRepository moviesToGetRepository;
 

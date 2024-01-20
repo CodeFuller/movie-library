@@ -4,7 +4,7 @@ using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
-	internal class PagingSeedData : ISeedData
+	internal sealed class PagingSeedData : ISeedData
 	{
 		// We need 10 pages with 2 movies per page.
 		private const int MoviesNumber = 10 * 2;

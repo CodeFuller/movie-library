@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MovieLibrary.Dal.MongoDB.Documents
 {
 	internal class MovieInfoDocument
 	{
+		private static readonly string[] NewLineSeparators = { "\r\n\r\n", "\n\n", "\n\r" };
+
 		public string Title { get; set; }
 
 		public int? Year { get; set; }
@@ -36,12 +37,14 @@ namespace MovieLibrary.Dal.MongoDB.Documents
 
 		public IReadOnlyCollection<string> GetSummaryParagraphs()
 		{
-			if (SummaryParagraphs?.Any() == true)
+			if (SummaryParagraphs?.Count > 0)
 			{
 				return SummaryParagraphs;
 			}
 
-			return Summary?.Split(new[] { "\r\n\r\n", "\n\n", "\n\r" }, StringSplitOptions.None);
+#pragma warning disable CS0618 // Type or member is obsolete
+			return Summary?.Split(NewLineSeparators, StringSplitOptions.None);
+#pragma warning restore CS0618 // Type or member is obsolete
 		}
 	}
 }

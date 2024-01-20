@@ -4,7 +4,7 @@ using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
-	internal class EmptySeedData : ISeedData
+	internal sealed class EmptySeedData : ISeedData
 	{
 		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToGet => Enumerable.Empty<(MovieId Id, MovieInfoModel MovieInfo)>();
 

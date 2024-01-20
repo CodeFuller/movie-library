@@ -193,7 +193,7 @@ namespace MovieLibrary.UserManagement
 
 		private async Task AddUserRoles(TUser user, IReadOnlyCollection<string> rolesToAdd)
 		{
-			if (!rolesToAdd.Any())
+			if (rolesToAdd.Count == 0)
 			{
 				return;
 			}
@@ -207,7 +207,7 @@ namespace MovieLibrary.UserManagement
 
 		private async Task RemoveUserRoles(TUser user, IReadOnlyCollection<string> rolesToRemove)
 		{
-			if (!rolesToRemove.Any())
+			if (rolesToRemove.Count == 0)
 			{
 				return;
 			}

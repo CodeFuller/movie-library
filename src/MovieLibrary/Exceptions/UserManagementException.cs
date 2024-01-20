@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Serialization;
 
 namespace MovieLibrary.Exceptions
 {
@@ -17,11 +16,6 @@ namespace MovieLibrary.Exceptions
 
 		public UserManagementException(string message, Exception innerException)
 			: base(message, innerException)
-		{
-		}
-
-		protected UserManagementException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-			: base(serializationInfo, streamingContext)
 		{
 		}
 	}

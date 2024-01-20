@@ -23,7 +23,7 @@ using MovieLibrary.Logic.Interfaces;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal class CustomWebApplicationFactory : WebApplicationFactory<Startup>
+	internal sealed class CustomWebApplicationFactory : WebApplicationFactory<Startup>
 	{
 		private readonly ApplicationUser authenticatedUser;
 

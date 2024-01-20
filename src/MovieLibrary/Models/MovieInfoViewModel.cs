@@ -56,9 +56,9 @@ namespace MovieLibrary.Models
 			this.movieInfo = movieInfo ?? throw new ArgumentNullException(nameof(movieInfo));
 		}
 
-		private static IReadOnlyCollection<string> GetSafeCollection(IReadOnlyCollection<string> source)
+		private static List<string> GetSafeCollection(IReadOnlyCollection<string> source)
 		{
-			return source?.Take(MaxCollectionLength).ToArray() ?? new[] { MissingValue };
+			return source?.Take(MaxCollectionLength).ToList() ?? new List<string> { MissingValue };
 		}
 	}
 }

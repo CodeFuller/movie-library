@@ -12,7 +12,7 @@ namespace MovieLibrary.UnitTests.Controllers
 	[TestClass]
 	public class BasicMovieControllerTests
 	{
-		private class MoviesPageViewModel
+		private sealed class MoviesPageViewModel
 		{
 			public IReadOnlyCollection<string> Movies { get; }
 
@@ -28,7 +28,7 @@ namespace MovieLibrary.UnitTests.Controllers
 			}
 		}
 
-		private class ConcreteMoviesController : BasicMovieController<string, MoviesPageViewModel>
+		private sealed class ConcreteMoviesController : BasicMovieController<string, MoviesPageViewModel>
 		{
 			private readonly List<string> movies;
 

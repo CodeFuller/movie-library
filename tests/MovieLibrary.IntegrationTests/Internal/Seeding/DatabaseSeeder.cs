@@ -10,7 +10,7 @@ using MovieLibrary.UserManagement.Models;
 
 namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
-	internal class DatabaseSeeder : IApplicationInitializer
+	internal sealed class DatabaseSeeder : IApplicationInitializer
 	{
 		private readonly ISeedData seedData;
 

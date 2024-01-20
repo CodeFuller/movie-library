@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
-	internal class UserSeedData
+	internal sealed class UserSeedData
 	{
 		public string Id { get; set; }
 

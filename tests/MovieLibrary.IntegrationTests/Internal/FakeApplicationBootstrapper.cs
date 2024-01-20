@@ -3,7 +3,7 @@ using MovieLibrary.Internal;
 
 namespace MovieLibrary.IntegrationTests.Internal
 {
-	internal class FakeApplicationBootstrapper<TUser> : IApplicationBootstrapper
+	internal sealed class FakeApplicationBootstrapper<TUser> : IApplicationBootstrapper
 		where TUser : class
 	{
 		private readonly ApplicationUser authenticatedUser;
