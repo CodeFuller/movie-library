@@ -1,4 +1,4 @@
-﻿using AspNetCore.Identity.Mongo.Model;
+using AspNetCore.Identity.Mongo.Model;
 using MovieLibrary.UserManagement.Interfaces;
 
 namespace MovieLibrary.UserManagement

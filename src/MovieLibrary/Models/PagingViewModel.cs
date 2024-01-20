@@ -1,4 +1,4 @@
-﻿namespace MovieLibrary.Models
+namespace MovieLibrary.Models
 {
 	public class PagingViewModel
 	{

@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("MovieLibrary.IntegrationTests")]
 [assembly: InternalsVisibleTo("MovieLibrary.UnitTests")]

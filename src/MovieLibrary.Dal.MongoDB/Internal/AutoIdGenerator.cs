@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MovieLibrary.Logic.Interfaces;
 
 namespace MovieLibrary.Dal.MongoDB.Internal

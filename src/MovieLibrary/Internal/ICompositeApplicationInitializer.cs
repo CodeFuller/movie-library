@@ -1,4 +1,4 @@
-﻿namespace MovieLibrary.Internal
+namespace MovieLibrary.Internal
 {
 	public interface ICompositeApplicationInitializer : IApplicationInitializer
 	{

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MovieLibrary.Logic.Interfaces;
 
 namespace MovieLibrary.Logic.Internal

@@ -1,4 +1,4 @@
-﻿namespace MovieLibrary.UserManagement.ViewModels.Roles
+namespace MovieLibrary.UserManagement.ViewModels.Roles
 {
 	public class RolePermissionViewModel
 	{

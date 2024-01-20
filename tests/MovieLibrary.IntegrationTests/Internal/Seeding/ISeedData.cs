@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.IntegrationTests.Internal.Seeding

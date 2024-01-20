@@ -1,4 +1,4 @@
-﻿using MovieLibrary.UserManagement.Models;
+using MovieLibrary.UserManagement.Models;
 
 namespace MovieLibrary.UserManagement.ViewModels.Users
 {

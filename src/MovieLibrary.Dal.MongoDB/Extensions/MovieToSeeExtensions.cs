@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MovieLibrary.Dal.MongoDB.Documents;
 using MovieLibrary.Logic.Models;
 

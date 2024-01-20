@@ -1,4 +1,4 @@
-﻿namespace MovieLibrary.Logic.Interfaces
+namespace MovieLibrary.Logic.Interfaces
 {
 	public interface IIdGenerator<out TId>
 	{

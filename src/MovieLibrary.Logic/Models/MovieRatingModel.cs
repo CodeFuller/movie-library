@@ -1,4 +1,4 @@
-﻿namespace MovieLibrary.Logic.Models
+namespace MovieLibrary.Logic.Models
 {
 	public class MovieRatingModel
 	{

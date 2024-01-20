@@ -1,4 +1,4 @@
-﻿namespace MovieLibrary.UserManagement.Interfaces
+namespace MovieLibrary.UserManagement.Interfaces
 {
 	internal interface IIdentityUserFactory<out TUser>
 	{

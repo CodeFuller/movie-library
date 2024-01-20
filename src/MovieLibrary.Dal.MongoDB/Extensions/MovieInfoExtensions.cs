@@ -1,4 +1,4 @@
-﻿using MovieLibrary.Dal.MongoDB.Documents;
+using MovieLibrary.Dal.MongoDB.Documents;
 using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Dal.MongoDB.Extensions

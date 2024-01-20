@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using MovieLibrary.Logic.Interfaces;
 using MovieLibrary.Logic.Internal;
 using MovieLibrary.Logic.Kinopoisk;

@@ -1,4 +1,4 @@
-﻿using AspNetCore.Identity.Mongo.Model;
+using AspNetCore.Identity.Mongo.Model;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MovieLibrary.UserManagement.Interfaces;

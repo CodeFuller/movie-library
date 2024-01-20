@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace MovieLibrary.Internal
 {

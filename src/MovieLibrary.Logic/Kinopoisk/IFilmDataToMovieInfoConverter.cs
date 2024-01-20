@@ -1,4 +1,4 @@
-﻿using MovieLibrary.Logic.Kinopoisk.DataContracts;
+using MovieLibrary.Logic.Kinopoisk.DataContracts;
 using MovieLibrary.Logic.Models;
 
 namespace MovieLibrary.Logic.Kinopoisk

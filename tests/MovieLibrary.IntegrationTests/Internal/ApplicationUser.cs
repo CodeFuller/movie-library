@@ -1,4 +1,4 @@
-﻿using MovieLibrary.Authorization;
+using MovieLibrary.Authorization;
 using MovieLibrary.IntegrationTests.Internal.Seeding;
 
 namespace MovieLibrary.IntegrationTests.Internal

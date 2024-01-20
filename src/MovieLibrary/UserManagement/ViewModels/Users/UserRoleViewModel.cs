@@ -1,4 +1,4 @@
-﻿namespace MovieLibrary.UserManagement.ViewModels.Users
+namespace MovieLibrary.UserManagement.ViewModels.Users
 {
 	public class UserRoleViewModel
 	{

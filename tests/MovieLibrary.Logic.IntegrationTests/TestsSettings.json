@@ -1,19 +1,19 @@
 {
-	"connectionStrings": {
-		// We use separate databases in MovieLibrary.IntegrationTests and MovieLibrary.Logic.IntegrationTests,
-		// because tests from different assemblies run in parallel.
-		"movieLibraryDatabaseIT2": "mongodb://localhost:27017/movieLibraryLogicIntegrationTestsDB"
-	},
+  "connectionStrings": {
+    // We use separate databases in MovieLibrary.IntegrationTests and MovieLibrary.Logic.IntegrationTests,
+    // because tests from different assemblies run in parallel.
+    "movieLibraryDatabaseIT2": "mongodb://localhost:27017/movieLibraryLogicIntegrationTestsDB"
+  },
 
-	"connectionStringName": "movieLibraryDatabaseIT2",
+  "connectionStringName": "movieLibraryDatabaseIT2",
 
-	"logging": {
-		"defaultLogLevel": "Information",
-		"targets": [
-			{
-				"type": "Console",
-				"logLevel": "Information"
-			}
-		]
-	}
+  "logging": {
+    "defaultLogLevel": "Information",
+    "targets": [
+      {
+        "type": "Console",
+        "logLevel": "Information"
+      }
+    ]
+  }
 }

@@ -1,4 +1,4 @@
-﻿namespace MovieLibrary
+namespace MovieLibrary
 {
 	public class AppSettings
 	{

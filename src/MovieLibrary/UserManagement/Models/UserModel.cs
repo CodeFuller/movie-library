@@ -1,4 +1,4 @@
-﻿namespace MovieLibrary.UserManagement.Models
+namespace MovieLibrary.UserManagement.Models
 {
 	public class UserModel
 	{
