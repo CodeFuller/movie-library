@@ -1,0 +1,11 @@
+<Project>
+
+  <ImportGroup Label="Properties">
+    <Import Project="MovieLibrary.props" />
+  </ImportGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\MovieLibrary.src.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+</Project>
