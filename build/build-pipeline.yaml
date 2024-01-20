@@ -9,7 +9,7 @@ variables:
     value: master
     readonly: true
   - name: TargetFramework
-    value: net6.0
+    value: net7.0
     readonly: true
   - name: PublishRuntimeIdentifier
     value: win-x64
@@ -57,12 +57,27 @@ stages:
         projects: MovieLibrary.sln
         arguments: --no-restore --configuration Release
 
+    - task: DockerCompose@0
+      displayName: Start IT Dependencies
+      inputs:
+        containerregistrytype: Container Registry
+        dockerComposeFile: tests/docker-compose.yaml
+        dockerComposeCommand: up
+        arguments: --detach
+
     - task: DotNetCoreCLI@2
       displayName: Run Tests
       inputs:
         command: test
         projects: MovieLibrary.sln
         arguments: --no-build --configuration Release --collect:"XPlat Code Coverage"
+
+    - task: DockerCompose@0
+      displayName: Stop IT Dependencies
+      inputs:
+        containerregistrytype: Container Registry
+        dockerComposeFile: tests/docker-compose.yaml
+        dockerComposeCommand: down
 
     - task: reportgenerator@5
       displayName: Merge Code Coverage Reports

@@ -9,6 +9,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieLibrary.Logic", "src\MovieLibrary.Logic\MovieLibrary.Logic.csproj", "{1C0E953A-3D46-4BF7-9288-3F57DA2AF8A9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{543ECA5C-BE2B-4777-81F3-B1377F044234}"
+	ProjectSection(SolutionItems) = preProject
+		tests\docker-compose.yaml = tests\docker-compose.yaml
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieLibrary.Logic.IntegrationTests", "tests\MovieLibrary.Logic.IntegrationTests\MovieLibrary.Logic.IntegrationTests.csproj", "{6A4D79DC-4C4E-403E-B66F-5DF233292B9E}"
 EndProject

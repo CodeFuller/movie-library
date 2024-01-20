@@ -4,7 +4,7 @@ version: '3.5'
 
 services:
   mongo:
-    image: mongo:4.0.9
+    image: mongo:5.0.6-windowsservercore
     networks:
       - movie-library-network
     ports:
@@ -13,4 +13,4 @@ services:
 networks:
   movie-library-network:
     name: movie-library-network
-    driver: bridge
+    driver: nat
