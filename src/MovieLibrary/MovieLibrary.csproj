@@ -27,6 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="MovieLibrary.IntegrationTests" />
+    <InternalsVisibleTo Include="MovieLibrary.UnitTests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="../../LICENSE.txt" />
     <None Update="../../LICENSE.txt" Link="LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

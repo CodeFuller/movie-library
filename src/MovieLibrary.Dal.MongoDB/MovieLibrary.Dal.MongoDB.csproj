@@ -21,4 +21,8 @@
     <ProjectReference Include="..\MovieLibrary.Logic\MovieLibrary.Logic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="MovieLibrary.Logic.IntegrationTests" />
+  </ItemGroup>
+
 </Project>

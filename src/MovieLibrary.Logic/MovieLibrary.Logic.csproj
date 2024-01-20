@@ -22,4 +22,10 @@
     <PackageReference Include="System.Linq.Async" Version="5.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="MovieLibrary.IntegrationTests" />
+    <InternalsVisibleTo Include="MovieLibrary.Logic.IntegrationTests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
 </Project>
