@@ -44,23 +44,21 @@
                 <h2>Use a local account to log in.</h2>
                 <hr />
                 
-                <div class="form-floating">
-                    <input class="form-control" autocomplete="username" aria-required="true" type="email" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Input_Email" name="Input.Email" value="" />
+                <div class="form-floating mb-3">
+                    <input class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" type="email" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Input_Email" name="Input.Email" value="" />
                     <label class="form-label" for="Input_Email">Email</label>
                     <span class="text-danger field-validation-valid" data-valmsg-for="Input.Email" data-valmsg-replace="true"></span>
                 </div>
-                <div class="form-floating">
-                    <input class="form-control" autocomplete="current-password" aria-required="true" type="password" data-val="true" data-val-required="The Password field is required." id="Input_Password" name="Input.Password" />
+                <div class="form-floating mb-3">
+                    <input class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" type="password" data-val="true" data-val-required="The Password field is required." id="Input_Password" name="Input.Password" />
                     <label class="form-label" for="Input_Password">Password</label>
                     <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
                 </div>
-                <div>
-                    <div class="checkbox">
-                        <label class="form-label" for="Input_RememberMe">
-                            <input class="form-check-input" type="checkbox" data-val="true" data-val-required="The Remember me? field is required." id="Input_RememberMe" name="Input.RememberMe" value="true" />
-                            Remember me?
-                        </label>
-                    </div>
+                <div class="checkbox mb-3">
+                    <label class="form-label" for="Input_RememberMe">
+                        <input class="form-check-input" type="checkbox" data-val="true" data-val-required="The Remember me? field is required." id="Input_RememberMe" name="Input.RememberMe" value="true" />
+                        Remember me?
+                    </label>
                 </div>
                 <div>
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
@@ -108,12 +106,12 @@
     
     
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js" crossorigin="anonymous" integrity="sha256-F6h55Qw6sweK+t7SiOJX+2bpSAa3b/fnlrVCJvmEj1A=">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" crossorigin="anonymous" integrity="sha256-JwUksNJ6/R07ZiLRoXbGeNrtlFZMFDKX4hemPiHOmCA=">
     </script>
-<script>(window.jQuery && window.jQuery.validator||document.write("\u003Cscript src=\u0022/Identity/lib/jquery-validation/dist/jquery.validate.min.js\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha256-F6h55Qw6sweK\u002Bt7SiOJX\u002B2bpSAa3b/fnlrVCJvmEj1A=\u0022\u003E\u003C/script\u003E"));</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js" crossorigin="anonymous" integrity="sha256-9GycpJnliUjJDVDqP0UEu/bsm9U+3dnQUH8+3W10vkY=">
+<script>(window.jQuery && window.jQuery.validator||document.write("\u003Cscript src=\u0022/Identity/lib/jquery-validation/dist/jquery.validate.min.js\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha256-JwUksNJ6/R07ZiLRoXbGeNrtlFZMFDKX4hemPiHOmCA=\u0022\u003E\u003C/script\u003E"));</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" crossorigin="anonymous" integrity="sha384-DU2a51mTHKDhpXhTyJQ++hP8L9L8Gc48TlvbzBmUof71V7kNVs4ELmaVJKPxcAGn">
     </script>
-<script>(window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive||document.write("\u003Cscript src=\u0022/Identity/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha256-9GycpJnliUjJDVDqP0UEu/bsm9U\u002B3dnQUH8\u002B3W10vkY=\u0022\u003E\u003C/script\u003E"));</script>
+<script>(window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive||document.write("\u003Cscript src=\u0022/Identity/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js\u0022 crossorigin=\u0022anonymous\u0022 integrity=\u0022sha384-DU2a51mTHKDhpXhTyJQ\u002B\u002BhP8L9L8Gc48TlvbzBmUof71V7kNVs4ELmaVJKPxcAGn\u0022\u003E\u003C/script\u003E"));</script>
 
 
 
