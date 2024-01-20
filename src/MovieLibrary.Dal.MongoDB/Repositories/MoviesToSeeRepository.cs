@@ -61,7 +61,7 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 						Duration = d.MovieInfo.Duration,
 						Genres = d.MovieInfo.Genres,
 						Countries = d.MovieInfo.Countries,
-						SummaryParagraphs = d.MovieInfo.GetSummaryParagraphs(),
+						SummaryParagraphs = d.MovieInfo.SummaryParagraphs,
 					},
 					TimestampOfAddingToSeeList = d.TimestampOfAddingToSeeList,
 				})

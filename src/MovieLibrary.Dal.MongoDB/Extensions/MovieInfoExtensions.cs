@@ -38,7 +38,7 @@ namespace MovieLibrary.Dal.MongoDB.Extensions
 				Duration = document.Duration,
 				Genres = document.Genres,
 				Countries = document.Countries,
-				SummaryParagraphs = document.GetSummaryParagraphs(),
+				SummaryParagraphs = document.SummaryParagraphs,
 			};
 		}
 	}
