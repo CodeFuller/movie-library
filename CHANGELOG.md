@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.4.0 - 2024-01-20
+- Upgraded to .NET 8.
+- Updated dependency packages.
+- Removed obsolete Summary document property.
+- Remove movies collection instantiation.
+
 ## 1.3.1 - 2022-01-17
 - Removed space before comma in lists.
 
