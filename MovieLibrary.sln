@@ -24,7 +24,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EAF464C3-2443-459B-AE8A-33566E8B8B54}"
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.md = CHANGELOG.md
-		Dockerfile = Dockerfile
 		MovieLibrary.props = MovieLibrary.props
 		MovieLibrary.src.props = MovieLibrary.src.props
 		MovieLibrary.tests.props = MovieLibrary.tests.props
