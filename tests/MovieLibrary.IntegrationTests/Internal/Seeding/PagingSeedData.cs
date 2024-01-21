@@ -9,7 +9,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 		// We need 10 pages with 2 movies per page.
 		private const int MoviesNumber = 10 * 2;
 
-		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToGet
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo, string Reference)> MoviesToGet
 		{
 			get
 			{
@@ -21,12 +21,12 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 						MovieUri = new Uri($"https://www.kinopoisk.ru/film/{i}/"),
 					};
 
-					yield return (new MovieId($"{i:D24}"), movieInfo);
+					yield return (new MovieId($"{i:D24}"), movieInfo, $"Test reference {i}");
 				}
 			}
 		}
 
-		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToSee
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo, string Reference)> MoviesToSee
 		{
 			get
 			{
@@ -38,7 +38,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 						MovieUri = new Uri($"https://www.kinopoisk.ru/film/{i}/"),
 					};
 
-					yield return (new MovieId($"{i:D24}"), movieInfo);
+					yield return (new MovieId($"{i:D24}"), movieInfo, $"Test reference{i}");
 				}
 			}
 		}

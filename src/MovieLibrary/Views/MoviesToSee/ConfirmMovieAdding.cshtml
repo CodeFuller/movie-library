@@ -9,7 +9,7 @@
 </div>
 
 <div class="single-movie-item">
-    @await Html.PartialAsync("_MovieInfoPartial", (Model.SourceMovieInfo, "new-movie"))
+    @await Html.PartialAsync("_MovieInfoPartial", (Model.SourceMovieInfo, "new-movie", Model.Reference))
 </div>
 
 <form method="post" asp-action="AddMovie">
@@ -40,6 +40,7 @@
     {
         <input type="hidden" asp-for="SummaryParagraphs[i]" />
     }
+    <input type="hidden" asp-for="Reference" />
     <button class="btn btn-primary" type="submit">Add</button>
     <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>

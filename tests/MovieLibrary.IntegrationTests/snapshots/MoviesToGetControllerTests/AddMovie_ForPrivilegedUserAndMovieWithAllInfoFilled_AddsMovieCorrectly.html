@@ -65,13 +65,17 @@
 
 
     <form method="post" action="/MoviesToGet/ConfirmMovieAdding">
-        <div class="form-group">
-            <div><span class="text-danger field-validation-valid" data-valmsg-for="NewMovieToGet.MovieUri" data-valmsg-replace="true"></span></div>
-            <div class="input-group">
-                <div class="input-group-append">
-                    <input class="form-control" placeholder="Movie URL" aria-label="Movie URL" size="40" type="text" data-val="true" data-val-required="Please enter movie URL" id="NewMovieToGet_MovieUri" name="NewMovieToGet.MovieUri" value="" />
-                    <button class="btn btn-primary" type="submit">Add</button>
-                </div>
+        <div><span class="text-danger field-validation-valid" data-valmsg-for="NewMovieToGet.MovieUri" data-valmsg-replace="true"></span></div>
+        <div><span class="text-danger field-validation-valid" data-valmsg-for="NewMovieToGet.Reference" data-valmsg-replace="true"></span></div>
+        <div class="form-row">
+            <div class="col">
+                <input class="form-control" placeholder="Movie URL" aria-label="Movie URL" size="40" type="text" data-val="true" data-val-required="Please enter movie URL" id="NewMovieToGet_MovieUri" name="NewMovieToGet.MovieUri" value="" />
+            </div>
+            <div class="col">
+                <input class="form-control" placeholder="Reference" aria-label="Reference" size="40" type="text" data-val="true" data-val-required="Please enter movie reference" id="NewMovieToGet_Reference" name="NewMovieToGet.Reference" value="" />
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" type="submit">Add</button>
             </div>
         </div>
         <input type="hidden" data-val="true" data-val-required="The CurrentPageNumber field is required." id="Paging_CurrentPageNumber" name="Paging.CurrentPageNumber" value="1" />
@@ -122,6 +126,12 @@
                 <tr>
                     <td class="movie-info-table-key">Duration</td>
                     <td class="movie-info-table-value">02:34</td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Reference</td>
+                    <td class="movie-info-table-value">
+            <a href="http://www.example.com/">http://www.example.com/</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -197,6 +207,12 @@
                     <td class="movie-info-table-key">Duration</td>
                     <td class="movie-info-table-value">N/A</td>
                 </tr>
+                <tr>
+                    <td class="movie-info-table-key">Reference</td>
+                    <td class="movie-info-table-value">
+            <span>N/A</span>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -256,6 +272,12 @@
                 <tr>
                     <td class="movie-info-table-key">Duration</td>
                     <td class="movie-info-table-value">02:32</td>
+                </tr>
+                <tr>
+                    <td class="movie-info-table-key">Reference</td>
+                    <td class="movie-info-table-value">
+            <span>Test reference</span>
+                    </td>
                 </tr>
             </tbody>
         </table>

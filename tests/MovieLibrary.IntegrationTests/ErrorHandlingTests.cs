@@ -20,6 +20,7 @@ namespace MovieLibrary.IntegrationTests
 			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToGet.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
+				new KeyValuePair<string, string>("NewMovieToGet.Reference", "Test reference"),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser, movieInfoProvider: FakeMovieInfoProvider.StubFailingProvider);

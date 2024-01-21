@@ -9,7 +9,7 @@
 </div>
 
 <div class="single-movie-item">
-    @await Html.PartialAsync("_MovieInfoPartial", (Model.MovieInfo, Model.Id.Value))
+    @await Html.PartialAsync("_MovieInfoPartial", (Model.MovieInfo, Model.Id.Value, Model.Reference))
 </div>
 
 <form method="post" asp-action="DeleteMovie">

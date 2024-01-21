@@ -13,6 +13,7 @@ namespace MovieLibrary.Dal.MongoDB.Extensions
 				Id = model.Id != null ? new ObjectId(model.Id.Value) : default,
 				TimestampOfAddingToGetList = model.TimestampOfAddingToGetList,
 				MovieInfo = model.MovieInfo.ToDocument(),
+				Reference = model.Reference,
 			};
 		}
 
@@ -26,6 +27,7 @@ namespace MovieLibrary.Dal.MongoDB.Extensions
 				Id = id,
 				TimestampOfAddingToGetList = document.TimestampOfAddingToGetList,
 				MovieInfo = movieInfo,
+				Reference = document.Reference,
 			};
 		}
 	}

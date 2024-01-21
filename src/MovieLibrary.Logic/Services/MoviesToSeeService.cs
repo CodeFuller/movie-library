@@ -23,7 +23,7 @@ namespace MovieLibrary.Logic.Services
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task<MovieId> AddMovie(MovieInfoModel movieInfo, CancellationToken cancellationToken)
+		public async Task<MovieId> AddMovie(MovieInfoModel movieInfo, string reference, CancellationToken cancellationToken)
 		{
 			logger.LogInformation("Adding movie to see '{SourceMovieUri}' ...", movieInfo.MovieUri);
 
@@ -31,6 +31,7 @@ namespace MovieLibrary.Logic.Services
 			{
 				TimestampOfAddingToSeeList = clock.Now,
 				MovieInfo = movieInfo,
+				Reference = reference,
 			};
 
 			return await repository.AddMovie(movieToSee, cancellationToken);

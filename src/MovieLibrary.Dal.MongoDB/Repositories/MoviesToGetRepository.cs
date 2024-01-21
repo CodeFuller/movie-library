@@ -61,6 +61,7 @@ namespace MovieLibrary.Dal.MongoDB.Repositories
 						SummaryParagraphs = d.MovieInfo.SummaryParagraphs,
 					},
 					TimestampOfAddingToGetList = d.TimestampOfAddingToGetList,
+					Reference = d.Reference,
 				});
 		}
 

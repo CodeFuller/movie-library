@@ -67,10 +67,10 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 				await moviesToGetService.DeleteMovie(oldMovie.Id, cancellationToken);
 			}
 
-			foreach (var (id, movieInfo) in seedData.MoviesToGet)
+			foreach (var (id, movieInfo, reference) in seedData.MoviesToGet)
 			{
 				idGeneratorQueue.EnqueueId(id.Value);
-				await moviesToGetService.AddMovie(movieInfo, cancellationToken);
+				await moviesToGetService.AddMovie(movieInfo, reference, cancellationToken);
 			}
 		}
 
@@ -86,10 +86,10 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 				await moviesToSeeService.DeleteMovie(oldMovie.Id, cancellationToken);
 			}
 
-			foreach (var (id, movieInfo) in seedData.MoviesToSee)
+			foreach (var (id, movieInfo, reference) in seedData.MoviesToSee)
 			{
 				idGeneratorQueue.EnqueueId(id.Value);
-				await moviesToSeeService.AddMovie(movieInfo, cancellationToken);
+				await moviesToSeeService.AddMovie(movieInfo, reference, cancellationToken);
 			}
 		}
 

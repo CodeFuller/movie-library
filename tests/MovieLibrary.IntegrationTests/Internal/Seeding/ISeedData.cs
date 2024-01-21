@@ -5,9 +5,9 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
 	internal interface ISeedData
 	{
-		IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToGet { get; }
+		IEnumerable<(MovieId Id, MovieInfoModel MovieInfo, string Reference)> MoviesToGet { get; }
 
-		IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToSee { get; }
+		IEnumerable<(MovieId Id, MovieInfoModel MovieInfo, string Reference)> MoviesToSee { get; }
 
 		IEnumerable<RoleSeedData> Roles { get; }
 

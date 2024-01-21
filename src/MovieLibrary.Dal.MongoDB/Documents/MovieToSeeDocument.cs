@@ -15,5 +15,7 @@ namespace MovieLibrary.Dal.MongoDB.Documents
 		public DateTimeOffset TimestampOfAddingToSeeList { get; set; }
 
 		public MovieInfoDocument MovieInfo { get; set; }
+
+		public string Reference { get; set; }
 	}
 }

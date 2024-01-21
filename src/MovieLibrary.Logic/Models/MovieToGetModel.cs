@@ -9,5 +9,7 @@ namespace MovieLibrary.Logic.Models
 		public DateTimeOffset TimestampOfAddingToGetList { get; set; }
 
 		public MovieInfoModel MovieInfo { get; set; }
+
+		public string Reference { get; set; }
 	}
 }

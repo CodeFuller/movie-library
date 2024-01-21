@@ -6,7 +6,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 {
 	internal sealed class DefaultSeedData : ISeedData
 	{
-		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToGet
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo, string Reference)> MoviesToGet
 		{
 			get
 			{
@@ -29,7 +29,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 					},
 				};
 
-				yield return (new MovieId("5eac4f407a15596e90c09d7b"), movieInfo1);
+				yield return (new MovieId("5eac4f407a15596e90c09d7b"), movieInfo1, "http://www.example.com/");
 
 				var movieInfo2 = new MovieInfoModel
 				{
@@ -37,11 +37,11 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 					MovieUri = new Uri("https://www.kinopoisk.ru/film/777/"),
 				};
 
-				yield return (new MovieId("5ead62931969f95b005c1f68"), movieInfo2);
+				yield return (new MovieId("5ead62931969f95b005c1f68"), movieInfo2, String.Empty);
 			}
 		}
 
-		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo)> MoviesToSee
+		public IEnumerable<(MovieId Id, MovieInfoModel MovieInfo, string Reference)> MoviesToSee
 		{
 			get
 			{
@@ -63,7 +63,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 					},
 				};
 
-				yield return (new MovieId("5ead62d14be68246b45bba82"), movieInfo1);
+				yield return (new MovieId("5ead62d14be68246b45bba82"), movieInfo1, "Фильм шёл в кинотеатрах");
 
 				var movieInfo2 = new MovieInfoModel
 				{
@@ -71,7 +71,7 @@ namespace MovieLibrary.IntegrationTests.Internal.Seeding
 					MovieUri = new Uri("https://www.kinopoisk.ru/film/888/"),
 				};
 
-				yield return (new MovieId("5ead645f6a24e267d02651d5"), movieInfo2);
+				yield return (new MovieId("5ead645f6a24e267d02651d5"), movieInfo2, null);
 			}
 		}
 

@@ -7,5 +7,8 @@ namespace MovieLibrary.Models
 	{
 		[Required(ErrorMessage = "Please enter movie URL")]
 		public Uri MovieUri { get; set; }
+
+		[Required(ErrorMessage = "Please enter movie reference")]
+		public string Reference { get; set; }
 	}
 }

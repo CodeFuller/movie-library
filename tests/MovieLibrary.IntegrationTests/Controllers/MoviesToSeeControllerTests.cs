@@ -122,6 +122,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
+				new KeyValuePair<string, string>("NewMovieToSee.Reference", "Test reference"),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
@@ -144,6 +145,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/13/"),
+				new KeyValuePair<string, string>("NewMovieToSee.Reference", "Test reference"),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
@@ -166,6 +168,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/111543/"),
+				new KeyValuePair<string, string>("NewMovieToSee.Reference", "Test reference"),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
@@ -188,6 +191,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", String.Empty),
+				new KeyValuePair<string, string>("NewMovieToSee.Reference", String.Empty),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoMissing);
@@ -210,6 +214,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 			using var formContent = new FormUrlEncodedContent(new[]
 			{
 				new KeyValuePair<string, string>("NewMovieToSee.MovieUri", "https://www.kinopoisk.ru/film/474/"),
+				new KeyValuePair<string, string>("NewMovieToSee.Reference", "Test reference"),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser, movieInfoProvider: FakeMovieInfoProvider.StubMovieInfoWithAllInfoFilled);
@@ -256,6 +261,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("Genres[4]", "драма"),
 				new KeyValuePair<string, string>("SummaryParagraphs[0]", "Бэтмен поднимает ставки в войне с криминалом."),
 				new KeyValuePair<string, string>("SummaryParagraphs[1]", "С помощью лейтенанта Джима Гордона и прокурора Харви Дента он намерен очистить улицы Готэма от преступности."),
+				new KeyValuePair<string, string>("Reference", "Test reference"),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
@@ -287,6 +293,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("RatingValue", String.Empty),
 				new KeyValuePair<string, string>("RatingVotesNumber", String.Empty),
 				new KeyValuePair<string, string>("Duration", String.Empty),
+				new KeyValuePair<string, string>("Reference", "Test reference"),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);
@@ -317,6 +324,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("RatingValue", String.Empty),
 				new KeyValuePair<string, string>("RatingVotesNumber", String.Empty),
 				new KeyValuePair<string, string>("Duration", String.Empty),
+				new KeyValuePair<string, string>("Reference", "Test reference"),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.LimitedUser);
@@ -345,6 +353,7 @@ namespace MovieLibrary.IntegrationTests.Controllers
 				new KeyValuePair<string, string>("RatingValue", String.Empty),
 				new KeyValuePair<string, string>("RatingVotesNumber", String.Empty),
 				new KeyValuePair<string, string>("Duration", String.Empty),
+				new KeyValuePair<string, string>("Reference", "Test reference"),
 			});
 
 			await using var webApplicationFactory = new CustomWebApplicationFactory(ApplicationUser.PrivilegedUser);

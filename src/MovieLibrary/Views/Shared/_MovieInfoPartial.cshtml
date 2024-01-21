@@ -1,4 +1,4 @@
-@model (MovieInfoViewModel Info, string MovieId)
+@model (MovieInfoViewModel Info, string MovieId, string Reference)
 
 <div class="movie-info">
     <a href="@Model.Info.MovieUri">
@@ -52,6 +52,14 @@
                     <td class="movie-info-table-key">Duration</td>
                     <td class="movie-info-table-value">@Model.Info.Duration</td>
                 </tr>
+                <tr>
+                    <td class="movie-info-table-key">Reference</td>
+                    <td class="movie-info-table-value">
+                        @{
+                            RenderMovieReference(@Model.Reference);
+                        }
+                    </td>
+                </tr>
             </tbody>
         </table>
         @if (Model.Info.SummaryParagraphs.Any())
@@ -85,6 +93,18 @@
             <span>@list[i]</span>@delimiter
         }
     }
+
+    void RenderMovieReference(string reference)
+    {
+        if (IsHttpUrl(reference))
+        {
+            <a href="@reference">@reference</a>
+        }
+        else
+        {
+            <span>@reference</span>
+        }
+    }
 }
 
 @functions
@@ -92,5 +112,10 @@
     private string GetSafePosterUri(Uri sourceUri)
     {
         return sourceUri?.OriginalString ?? Url.Content("~/img/no-poster.jpg");
+    }
+
+    private static bool IsHttpUrl(string s)
+    {
+        return Uri.TryCreate(s, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
     }
 }

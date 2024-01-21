@@ -4,13 +4,12 @@ using System.Globalization;
 using System.Linq;
 using MovieLibrary.Logic.Models;
 using static System.FormattableString;
+using static MovieLibrary.Models.Constants;
 
 namespace MovieLibrary.Models
 {
 	public class MovieInfoViewModel
 	{
-		private const string MissingValue = "N/A";
-
 		private const int MaxCollectionLength = 3;
 
 		private readonly MovieInfoModel movieInfo;

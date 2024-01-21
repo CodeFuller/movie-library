@@ -54,21 +54,22 @@ namespace MovieLibrary.Controllers
 			}
 
 			var newMovieToSee = model.NewMovieToSee;
+			var movieUri = newMovieToSee.MovieUri;
 
-			var checkResult = await movieUniquenessChecker.CheckMovie(newMovieToSee.MovieUri, cancellationToken);
+			var checkResult = await movieUniquenessChecker.CheckMovie(movieUri, cancellationToken);
 			if (checkResult != MovieUniquenessCheckResult.MovieIsUnique)
 			{
 				// Clearing movie URL from the input.
 				ModelState.Clear();
 
-				FillDuplicatedMovieError(checkResult, newMovieToSee.MovieUri);
+				FillDuplicatedMovieError(checkResult, movieUri);
 
 				return MoviesPageView(model.Paging?.CurrentPageNumber ?? 1);
 			}
 
-			var movieInfo = await movieInfoService.LoadMovieInfoByUrl(newMovieToSee.MovieUri, cancellationToken);
+			var movieInfo = await movieInfoService.LoadMovieInfoByUrl(movieUri, cancellationToken);
 
-			return View("ConfirmMovieAdding", new InputMovieInfoViewModel(movieInfo));
+			return View("ConfirmMovieAdding", new InputMovieInfoViewModel(movieInfo, newMovieToSee.Reference));
 		}
 
 		[HttpPost]
@@ -85,7 +86,7 @@ namespace MovieLibrary.Controllers
 				return RedirectToAction("Index");
 			}
 
-			await moviesToSeeService.AddMovie(movieInfo, cancellationToken);
+			await moviesToSeeService.AddMovie(movieInfo, model.Reference, cancellationToken);
 
 			TempData[TempDataAddedMovie] = true;
 

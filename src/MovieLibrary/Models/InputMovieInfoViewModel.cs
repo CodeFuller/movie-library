@@ -33,11 +33,13 @@ namespace MovieLibrary.Models
 
 		public IReadOnlyList<string> SummaryParagraphs { get; set; }
 
+		public string Reference { get; set; }
+
 		public InputMovieInfoViewModel()
 		{
 		}
 
-		public InputMovieInfoViewModel(MovieInfoModel model)
+		public InputMovieInfoViewModel(MovieInfoModel model, string reference)
 		{
 			SourceMovieInfo = new MovieInfoViewModel(model);
 
@@ -53,6 +55,8 @@ namespace MovieLibrary.Models
 			Genres = model.Genres?.ToList() ?? new List<string>();
 			Countries = model.Countries?.ToList() ?? new List<string>();
 			SummaryParagraphs = model.SummaryParagraphs?.ToList() ?? new List<string>();
+
+			Reference = reference;
 		}
 
 		public MovieInfoModel ToMovieInfo()

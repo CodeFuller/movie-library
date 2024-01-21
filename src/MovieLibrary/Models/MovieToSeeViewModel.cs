@@ -1,5 +1,6 @@
 using System;
 using MovieLibrary.Logic.Models;
+using static MovieLibrary.Models.Constants;
 
 namespace MovieLibrary.Models
 {
@@ -11,6 +12,8 @@ namespace MovieLibrary.Models
 
 		public MovieInfoViewModel MovieInfo { get; }
 
+		public string Reference { get; }
+
 		public MovieToSeeViewModel(MovieToSeeModel movie)
 		{
 			_ = movie ?? throw new ArgumentNullException(nameof(movie));
@@ -18,6 +21,7 @@ namespace MovieLibrary.Models
 			Id = movie.Id;
 			TimestampOfAddingToSeeList = movie.TimestampOfAddingToSeeList;
 			MovieInfo = new MovieInfoViewModel(movie.MovieInfo);
+			Reference = String.IsNullOrEmpty(movie.Reference) ? MissingValue : movie.Reference;
 		}
 	}
 }

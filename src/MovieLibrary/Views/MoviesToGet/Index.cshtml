@@ -29,13 +29,17 @@
 @if (User.HasPermission(ApplicationPermissions.MoviesToGet.Add))
 {
     <form method="post" asp-action="ConfirmMovieAdding">
-        <div class="form-group">
-            <div><span asp-validation-for="NewMovieToGet.MovieUri" class="text-danger"></span></div>
-            <div class="input-group">
-                <div class="input-group-append">
-                    <input class="form-control" asp-for="NewMovieToGet.MovieUri" placeholder="Movie URL" aria-label="Movie URL" size="40" />
-                    <button class="btn btn-primary" type="submit">Add</button>
-                </div>
+        <div><span asp-validation-for="NewMovieToGet.MovieUri" class="text-danger"></span></div>
+        <div><span asp-validation-for="NewMovieToGet.Reference" class="text-danger"></span></div>
+        <div class="form-row">
+            <div class="col">
+                <input class="form-control" asp-for="NewMovieToGet.MovieUri" placeholder="Movie URL" aria-label="Movie URL" size="40" />
+            </div>
+            <div class="col">
+                <input class="form-control" asp-for="NewMovieToGet.Reference" placeholder="Reference" aria-label="Reference" size="40" />
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" type="submit">Add</button>
             </div>
         </div>
         <input type="hidden" asp-for="Paging.CurrentPageNumber" />
@@ -51,7 +55,7 @@
         {
             <li id="movie-@movie.Id.Value" class="movies-list-item">
                 <div class="movie-info-and-actions">
-                    @await Html.PartialAsync("_MovieInfoPartial", (movie.MovieInfo, movie.Id.Value))
+                    @await Html.PartialAsync("_MovieInfoPartial", (movie.MovieInfo, movie.Id.Value, movie.Reference))
                     <div class="movie-actions">
                         @if (User.HasPermission(ApplicationPermissions.MoviesToGet.MoveToMoviesToSee))
                         {

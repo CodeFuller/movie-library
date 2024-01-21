@@ -27,6 +27,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 					"В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй рассказывается о боксёре Бутче Кулидже, купленном Уоллесом, чтобы сдать бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.",
 				},
 			},
+			Reference = "Известный фильм",
 		};
 
 		public static MovieToGetModel MovieToGet2 => new()
@@ -37,6 +38,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 				Title = "Movie to get with missing data",
 				MovieUri = new Uri("https://www.kinopoisk.ru/film/777/"),
 			},
+			Reference = "http://www.example.com/",
 		};
 
 		public static MovieToGetModel MovieToGet3 => new()
@@ -47,6 +49,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 				Title = "Movie to get with missing data 2",
 				MovieUri = new Uri("https://www.kinopoisk.ru/film/778/"),
 			},
+			Reference = null,
 		};
 
 		public static MovieToGetModel MovieToGet4 => new()
@@ -57,6 +60,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 				Title = "Movie to get with missing data 3",
 				MovieUri = new Uri("https://www.kinopoisk.ru/film/779/"),
 			},
+			Reference = null,
 		};
 
 		public static IReadOnlyCollection<MovieToGetModel> MoviesToGet { get; } = new[] { MovieToGet1, MovieToGet2, MovieToGet3, MovieToGet4, };
@@ -81,6 +85,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 					"В великой Римской империи не было военачальника, равного генералу Максимусу...",
 				},
 			},
+			Reference = "Классика",
 		};
 
 		public static MovieToSeeModel MovieToSee2 => new()
@@ -91,6 +96,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 				Title = "Movie to see with missing data",
 				MovieUri = new Uri("https://www.kinopoisk.ru/film/888/"),
 			},
+			Reference = "http://www.example.com/",
 		};
 
 		public static MovieToSeeModel MovieToSee3 => new()
@@ -101,6 +107,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 				Title = "Movie to see with missing data 2",
 				MovieUri = new Uri("https://www.kinopoisk.ru/film/889/"),
 			},
+			Reference = null,
 		};
 
 		public static MovieToSeeModel MovieToSee4 => new()
@@ -111,6 +118,7 @@ namespace MovieLibrary.Logic.IntegrationTests
 				Title = "Movie to see with missing data 3",
 				MovieUri = new Uri("https://www.kinopoisk.ru/film/890/"),
 			},
+			Reference = null,
 		};
 
 		public static IReadOnlyCollection<MovieToSeeModel> MoviesToSee { get; } = new[] { MovieToSee1, MovieToSee2, MovieToSee3, MovieToSee4, };

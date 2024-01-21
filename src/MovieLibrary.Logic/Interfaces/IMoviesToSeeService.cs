@@ -7,7 +7,7 @@ namespace MovieLibrary.Logic.Interfaces
 {
 	public interface IMoviesToSeeService
 	{
-		Task<MovieId> AddMovie(MovieInfoModel movieInfo, CancellationToken cancellationToken);
+		Task<MovieId> AddMovie(MovieInfoModel movieInfo, string reference, CancellationToken cancellationToken);
 
 		IQueryable<MovieToSeeModel> GetAllMovies();
 

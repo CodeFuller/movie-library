@@ -44,7 +44,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			var newMovieId = await target.AddMovie(movieInfo, CancellationToken.None);
+			var newMovieId = await target.AddMovie(movieInfo, "Сиквел", CancellationToken.None);
 
 			// Assert
 
@@ -53,6 +53,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 				Id = newMovieId,
 				TimestampOfAddingToGetList = new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)),
 				MovieInfo = movieInfo,
+				Reference = "Сиквел",
 			};
 
 			var storedMovie = target.GetAllMovies().SingleOrDefault(m => m.MovieInfo.MovieUri == movieUri);
@@ -78,7 +79,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 
 			// Act
 
-			var newMovieId = await target.AddMovie(movieInfo, CancellationToken.None);
+			var newMovieId = await target.AddMovie(movieInfo, String.Empty, CancellationToken.None);
 
 			// Assert
 
@@ -87,6 +88,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 				Id = newMovieId,
 				TimestampOfAddingToGetList = new DateTimeOffset(2020, 04, 26, 12, 55, 35, TimeSpan.FromHours(3)),
 				MovieInfo = movieInfo,
+				Reference = String.Empty,
 			};
 
 			var storedMovie = target.GetAllMovies().SingleOrDefault(m => m.MovieInfo.MovieUri == movieUri);
@@ -234,6 +236,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Services
 				{
 					TimestampOfAddingToSeeList = new DateTimeOffset(2022, 01, 16, 17, 30, 34, TimeSpan.FromHours(3)),
 					MovieInfo = DataForSeeding.MovieToGet1.MovieInfo,
+					Reference = DataForSeeding.MovieToGet1.Reference,
 				},
 			};
 
