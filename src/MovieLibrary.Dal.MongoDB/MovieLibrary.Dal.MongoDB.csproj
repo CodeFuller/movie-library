@@ -5,7 +5,7 @@
   </ImportGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.23.1" />
+    <PackageReference Include="MongoDB.Driver" Version="3.5.2" />
   </ItemGroup>
 
   <ItemGroup>

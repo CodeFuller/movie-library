@@ -28,7 +28,7 @@ namespace MovieLibrary.UnitTests.Internal
 		[DataRow(4, 6, 1, 2, 3, 4, 5, 6)]
 		[DataRow(5, 6, 1, 0, 4, 5, 6)]
 		[DataRow(6, 6, 1, 0, 5, 6)]
-		[DataTestMethod]
+		[TestMethod]
 		public void SelectButtonsPages_SelectsCorrectButtons(int currentPageNumber, int totalPagesNumber, params int[] expectedSelectedButtons)
 		{
 			// Arrange

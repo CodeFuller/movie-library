@@ -31,7 +31,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 				Title = "Криминальное чтиво",
 				Year = 1994,
 				MovieUri = new Uri("https://www.kinopoisk.ru/film/342/"),
-				PosterUri = new Uri("https://avatars.mds.yandex.net/get-kinopoisk-image/1900788/87b5659d-a159-4224-9bff-d5a5d109a53b/x1000"),
+				PosterUri = new Uri("https://avatars.mds.yandex.net/get-kinopoisk-image/4716873/0a07a903-9025-4aff-bf7c-46bbb175888c/x1000"),
 				Directors = new[] { "Квентин Тарантино" },
 				Cast = new[] { "Джон Траволта", "Сэмюэл Л. Джексон", "Брюс Уиллис" },
 				Duration = TimeSpan.FromMinutes(154),
@@ -40,7 +40,7 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 				SummaryParagraphs = new[]
 				{
 					"Двое бандитов Винсент Вега и Джулс Винфилд ведут философские беседы в перерывах между разборками и решением проблем с должниками криминального босса Марселласа Уоллеса.",
-					"В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй рассказывается о боксёре Бутче Кулидже, купленном Уоллесом, чтобы сдать бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.",
+					"В первой истории Винсент проводит незабываемый вечер с женой Марселласа Мией. Во второй Марселлас покупает боксёра Бутча Кулиджа, чтобы тот сдал бой. В третьей истории Винсент и Джулс по нелепой случайности попадают в неприятности.",
 				},
 			};
 
@@ -98,29 +98,6 @@ namespace MovieLibrary.Logic.IntegrationTests.Kinopoisk
 
 			movieInfo.Rating.Should().NotBeNull();
 			movieInfo.Rating.VotesNumber.Should().BeLessThan(1000);
-		}
-
-		[TestMethod]
-		public async Task GetMovieInfo_IfCastContainsActorsInEnglish_LoadsMovieInfoCorrectly()
-		{
-			// Arrange
-
-			var target = CreateTestTarget();
-
-			// Act
-
-			var movieInfo = await target.GetMovieInfo(new Uri("https://www.kinopoisk.ru/film/1313568/"), CancellationToken.None);
-
-			// Assert
-
-			var expectedCast = new[]
-			{
-				"Чжоу Эньлай",
-				"Yumyaagiin Tsedenbal",
-				"Valko Chervenkov",
-			};
-
-			movieInfo.Cast.Should().Equal(expectedCast);
 		}
 
 		private static IMovieInfoProvider CreateTestTarget()

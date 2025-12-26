@@ -1,7 +1,5 @@
 # docker-compose -f docker-compose.yaml up
 
-version: '3.5'
-
 services:
   mongo:
     image: mongo:5.0.6-windowsservercore

@@ -5,13 +5,18 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <Version>1.5.0</Version>
+    <Version>1.6.0</Version>
+    <!--
+    SelfContained property is required because publish is executed with no-build switch.
+    For more details see https://stackoverflow.com/a/78708163/5740031
+    -->
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.Identity.Mongo" Version="8.3.3" />
-    <PackageReference Include="CodeFuller.Library.Logging" Version="8.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.15" />
+    <PackageReference Include="AspNetCore.Identity.Mongo" Version="10.1.0" />
+    <PackageReference Include="CodeFuller.Library.Logging" Version="10.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
